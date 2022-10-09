@@ -125,6 +125,7 @@ const Tabs = () => {
                             />
                         </View>
                     ),
+                    headerShown: false,
                 }}
             ></Tab.Screen>
             <Tab.Screen 
