@@ -6,10 +6,10 @@ import {
   Button,
 } from 'react-native';
 
-const HomeScreen = ({navigation}) => {
+const VideoSubmissonHomePage = ({navigation}) => {
   return (
       <View style={styles.container}>
-          <Text>Home Screen PLACEHOLDER</Text>
+          <Text>Video Submission Screen PLACEHOLDER</Text>
           <Button
               title="Click Here"
               onPress={() => alert('Button Clicked!')}
@@ -18,7 +18,7 @@ const HomeScreen = ({navigation}) => {
   )
 };
 
-export default HomeScreen;
+export default VideoSubmissonHomePage;
 
 const styles = StyleSheet.create({
   container: {
@@ -28,4 +28,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffffff'
   },
 });
+ 
 
+ 

@@ -6,10 +6,10 @@ import {
   Button,
 } from 'react-native';
 
-const SideDrawerScreen = ({navigation}) => {
+const ProjectPlanHomePage = ({navigation}) => {
   return (
       <View style={styles.container}>
-          <Text>Side Drawer Screen PLACEHOLDER</Text>
+          <Text>Home Screen PLACEHOLDER</Text>
           <Button
               title="Click Here"
               onPress={() => alert('Button Clicked!')}
@@ -18,7 +18,7 @@ const SideDrawerScreen = ({navigation}) => {
   )
 };
 
-export default SideDrawerScreen;
+export default ProjectPlanHomePage;
 
 const styles = StyleSheet.create({
   container: {
@@ -28,4 +28,4 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffffff'
   },
 });
- 
+

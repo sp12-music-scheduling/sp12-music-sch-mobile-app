@@ -1,9 +1,9 @@
 import {StyleSheet, Text, View, Image, TouchableOpacity} from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
-import HomeScreen from '../screens/teacher/HomeScreen';
-import VideoSubmissonScreen from '../screens/teacher/VideoSubmissonScreen';
-import SideDrawerScreen from '../screens/teacher/SideDrawerScreen';
+import ProjectPlanHomePage from '../pages/teacher/ProjectPlanHomePage';
+import VideoSubmissonHomePage from '../pages/teacher/VideoSubmissonHomePage';
+import SideDrawerPage from '../pages/teacher/SideDrawerPage';
 
 const Tab = createBottomTabNavigator();
 
@@ -37,7 +37,7 @@ const Tabs = () => {
     return(
         <Tab.Navigator
             screenOptions={{
-                initialRouteName: "Home",  // TODO: Figure out how to make HOME the default bottom tab. This line is not working.
+                initialRouteName: "ProjectPlanHome",  // TODO: Figure out how to make HOME the default bottom tab. This line is not working.
                 tabBarShowLabel: false,
                 tabBarStyle: {
                     position: 'absolute',
@@ -55,7 +55,7 @@ const Tabs = () => {
         >
             <Tab.Screen 
                 name="SideDrawer" 
-                component={SideDrawerScreen} 
+                component={SideDrawerPage} 
                 options={{
                     tabBarIcon: ({focused}) => (
                         <View
@@ -107,8 +107,8 @@ const Tabs = () => {
                 }}
             ></Tab.Screen> */}
             <Tab.Screen 
-                name="Home" 
-                component={HomeScreen} 
+                name="ProjectPlanHome" 
+                component={ProjectPlanHomePage} 
                 options={{
                     tabBarIcon: ({focused}) => (
                         <View
@@ -129,7 +129,7 @@ const Tabs = () => {
             ></Tab.Screen>
             <Tab.Screen 
                 name="VideoSubmission" 
-                component={VideoSubmissonScreen}
+                component={VideoSubmissonHomePage}
                 options={{
                     tabBarIcon: ({focused}) => (
                         <View
