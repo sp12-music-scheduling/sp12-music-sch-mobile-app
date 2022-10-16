@@ -1,5 +1,5 @@
 import {NavigationContainer} from '@react-navigation/native';
-import Tabs from './navigation/tabs';
+import Tabs from './src/navigation/tabs';
 
 const App = () => {
   return (
