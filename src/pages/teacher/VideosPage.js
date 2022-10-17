@@ -6,10 +6,10 @@ import {
   Button,
 } from 'react-native';
 
-const SideDrawerPage = ({navigation}) => {
+const VideosPage = ({navigation}) => {
   return (
       <View style={styles.container}>
-          <Text>Side Drawer Screen PLACEHOLDER</Text>
+          <Text>Video Submission Screen PLACEHOLDER</Text>
           <Button
               title="Click Here"
               onPress={() => alert('Button Clicked!')}
@@ -18,7 +18,7 @@ const SideDrawerPage = ({navigation}) => {
   )
 };
 
-export default SideDrawerPage;
+export default VideosPage;
 
 const styles = StyleSheet.create({
   container: {
@@ -28,4 +28,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffffff'
   },
 });
+ 
+
  

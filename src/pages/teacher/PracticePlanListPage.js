@@ -14,10 +14,9 @@ import PracticePlan from '../../components/PracticePlan';
 
 const device_height = Dimensions.get('window').height
 
-const ProjectPlanHomePage = ({navigation}) => {
+const PracticePlanListPage = ({navigation}) => {
   return (
       <View style={styles.container}>
-        <Text style={styles.sectionTitle}>Practice Plan</Text>
         <View style={styles.sectionItems}>
           <FlatList
             data={[
@@ -26,16 +25,16 @@ const ProjectPlanHomePage = ({navigation}) => {
               {name: 'Etude 1', type: 'Etudes', duraction_weeks: '2', },
               {name: 'Solo 1', type: 'Solos', duraction_weeks: '3', },
               {name: 'Solo 1', type: 'Solos', duraction_weeks: '3', },
-              {name: 'Soflo 1', type: 'Solos', duraction_weeks: '3', },
-              {name: 'Soflo 1', type: 'Solos', duraction_weeks: '3', },
-              {name: 'Solfo 1', type: 'Solos', duraction_weeks: '3', },
-              {name: 'Solo 1', type: 'Solos', duraction_weeks: '3', },
-              {name: 'f 1', type: 'Solos', duraction_weeks: '3', },
-              {name: 'Solo 1', type: 'Solos', duraction_weeks: '3', },
-              {name: 'Sfolo 1', type: 'Solos', duraction_weeks: '3', },
+              // {name: 'Soflo 1', type: 'Solos', duraction_weeks: '3', },
+              // {name: 'Soflo 1', type: 'Solos', duraction_weeks: '3', },
+              // {name: 'Solfo 1', type: 'Solos', duraction_weeks: '3', },
+              // {name: 'Solo 1', type: 'Solos', duraction_weeks: '3', },
+              // {name: 'f 1', type: 'Solos', duraction_weeks: '3', },
+              // {name: 'Solo 1', type: 'Solos', duraction_weeks: '3', },
+              // {name: 'Sfolo 1', type: 'Solos', duraction_weeks: '3', },
             ]}
             renderItem={({item}) =>
-              <TouchableOpacity onPress={() => alert('I work!')}>
+              <TouchableOpacity onPress={()=>navigation.navigate('Exercises')}  >
                 <PracticePlan name={item.name} type={item.type} duraction_weeks={item.duraction_weeks}/>
               </TouchableOpacity> 
             }
@@ -48,7 +47,7 @@ const ProjectPlanHomePage = ({navigation}) => {
   )
 };
 
-export default ProjectPlanHomePage;
+export default PracticePlanListPage;
 
 const styles = StyleSheet.create({
   container: {
@@ -58,13 +57,13 @@ const styles = StyleSheet.create({
     height: device_height - 115
 
   },
-  sectionTitle: {
-    fontSize: 30,
-    fontWeight: 'bold',
-    color: '#754747',
-  },
+  // sectionTitle: {
+  //   fontSize: 30,
+  //   fontWeight: 'bold',
+  //   color: '#754747',
+  // },
   sectionItems: {
-    marginTop: 30,
+    marginTop: -10,
     
   },
 });

@@ -6,10 +6,10 @@ import {
   Button,
 } from 'react-native';
 
-const VideoSubmissonHomePage = ({navigation}) => {
+const StudentManagementPage = ({navigation}) => {
   return (
       <View style={styles.container}>
-          <Text>Video Submission Screen PLACEHOLDER</Text>
+          <Text> Student Management Screen PLACEHOLDER</Text>
           <Button
               title="Click Here"
               onPress={() => alert('Button Clicked!')}
@@ -18,7 +18,7 @@ const VideoSubmissonHomePage = ({navigation}) => {
   )
 };
 
-export default VideoSubmissonHomePage;
+export default StudentManagementPage;
 
 const styles = StyleSheet.create({
   container: {
