@@ -1,10 +1,10 @@
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 
-import PracticePlanListPage from '../pages/teacher/PracticePlanListPage';
-import ExercisesPage from '../pages/teacher/ExercisesPage';
-import VideosPage from '../pages/teacher/VideosPage';
-import StudentManagementPage from '../pages/teacher/StudentManagementPage'
+import PracticePlanListPage from '../../pages/teacher/PracticePlanListPage';
+import ExercisesPage from '../../pages/teacher/ExercisesPage';
+import VideosPage from '../../pages/teacher/VideosPage';
+import StudentManagementPage from '../../pages/teacher/StudentManagementPage'
 
 const Stack = createStackNavigator();
 

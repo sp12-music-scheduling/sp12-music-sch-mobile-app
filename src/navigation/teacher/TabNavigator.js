@@ -37,7 +37,7 @@ const BottomTabNavigator = () => {
                   }}
               >
                   <Image
-                      source={require('../assets/icons/bars-solid.png')}
+                      source={require('../../assets/icons/bars-solid.png')}
                       resizeMode='contain'
                       style={{
                           width: 35,
@@ -58,7 +58,7 @@ const BottomTabNavigator = () => {
                   style={{alignItems: 'center', justifyContent: 'center', top:10}}
               >
                   <Image
-                      source={require('../assets/icons/house-solid.png')}
+                      source={require('../../assets/icons/house-solid.png')}
                       resizeMode='contain'
                       style={{
                           width: 45,
@@ -83,7 +83,7 @@ const BottomTabNavigator = () => {
                       }}
               >
                   <Image
-                      source={require('../assets/icons/video-solid.png')}
+                      source={require('../../assets/icons/video-solid.png')}
                       resizeMode='contain'
                       style={{
                           width: 35,
