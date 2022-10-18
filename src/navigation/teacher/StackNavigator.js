@@ -4,7 +4,8 @@ import { createStackNavigator } from "@react-navigation/stack";
 import PracticePlanListPage from '../../pages/teacher/PracticePlanListPage';
 import ExercisesPage from '../../pages/teacher/ExercisesPage';
 import VideosPage from '../../pages/teacher/VideosPage';
-import StudentManagementPage from '../../pages/teacher/StudentManagementPage'
+import StudentManagementPage from '../../pages/teacher/StudentManagementPage';
+import CreatePracticePlanForm from '../../pages/teacher/CreatePracticePlanForm';
 
 const Stack = createStackNavigator();
 
@@ -21,6 +22,7 @@ const MainStackNavigator = () => {
     <Stack.Navigator screenOptions={screenOptionStyle}>
       <Stack.Screen name="Practice Plans" component={PracticePlanListPage} />
       <Stack.Screen name="Exercises" component={ExercisesPage} />
+      <Stack.Screen name="Create Practice Plan" component={CreatePracticePlanForm} />
     </Stack.Navigator>
   );
 }

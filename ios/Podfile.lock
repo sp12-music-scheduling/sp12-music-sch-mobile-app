@@ -661,7 +661,7 @@ SPEC CHECKSUMS:
   ReactNativeNavigation: 76d2483f8e84b5af708cd8b85d70cf29c304593a
   RNCMaskedView: 0e1bc4bfa8365eba5fbbb71e07fbdc0555249489
   RNGestureHandler: 7673697e7c0e9391adefae4faa087442bc04af33
-  RNReanimated: 00710753f89e18c9a51fffa8b6c0efd7fabbfb12
+  RNReanimated: 406fe1a215de32a271e0de26a193afa6665c0f05
   RNScreens: f3230dd008a7d0ce5c0a8bc78ff12cf2315bda24
   RNSVG: 1869ad9534459f24caaa0416a4764548c2aeedad
   RNVectorIcons: fcc2f6cb32f5735b586e66d14103a74ce6ad61f8
