@@ -22,7 +22,6 @@ const PracticePlanListPage = ({navigation}) => {
         {name: 'Solo 1', type: 'Solos', duraction_weeks: '3', },
         {name: 'Soflo 1', type: 'Solos', duraction_weeks: '3', },
         {name: 'Soflo 1', type: 'Solos', duraction_weeks: '3', },
-        // {name: 'Solfo 1', type: 'Solos', duraction_weeks: '3', },
         {name: 'Solo 1', type: 'Solos', duraction_weeks: '3', },
         {name: 'f 1', type: 'Solos', duraction_weeks: '3', },
         {name: 'Solo 1', type: 'Solos', duraction_weeks: '3', },
@@ -38,10 +37,14 @@ const PracticePlanListPage = ({navigation}) => {
       <View style={styles.container}>
         <View style={styles.sectionItems}>
           <FlatList
-            data={getPracticePlanList()}
-            renderItem={({item}) =>
-              <TouchableOpacity onPress={()=>navigation.navigate('Exercises')}  >
-                <PracticePlan name={item.name} type={item.type} duraction_weeks={item.duraction_weeks}/>
+          data={getPracticePlanList()}
+          renderItem={({item}) =>
+              <TouchableOpacity 
+              onPress={()=>navigation.navigate('Exercises')}  >
+                <PracticePlan 
+                name={item.name} 
+                type={item.type} 
+                duraction_weeks={item.duraction_weeks} />
               </TouchableOpacity> 
             }
             maintainVisibleContentPosition={{
@@ -50,7 +53,8 @@ const PracticePlanListPage = ({navigation}) => {
           />
         </View>
         <View style={styles.fab}>
-            <FloatingPlusButton onPress={onFloatingPlusButtonPressed()} />
+            <FloatingPlusButton 
+            onPress={onFloatingPlusButtonPressed()} />
         </View>
       </View>
       
