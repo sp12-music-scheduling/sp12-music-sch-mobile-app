@@ -1,7 +1,7 @@
 import React, {useCallback, useEffect } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import DrawerNavigator from "./src/navigation/teacher/DrawerNavigator";
-import { getDBConnection, createTables } from "./src/testing/services/database";
+import { getDBConnection, createTables } from "./src/services/database";
 
  const App = () => {
   
