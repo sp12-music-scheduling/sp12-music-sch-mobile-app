@@ -72,6 +72,9 @@ export const initPracticeTypes = async (db: SQLiteDatabase) => {
         VALUES 
             ('Fundamental', 'Flow'),
             ('Fundamental', 'Fingers'),
+            ('Fundamental', 'Freedom'),
+            ('Fundamental', 'Fronts'),
+            ('Fundamental', 'Flex'),
             ('Solo', ''),
             ('Etude', '')
     ;`;

@@ -1,16 +1,33 @@
-import React, { useState } from 'react'
+import React, { useState, useCallback, useEffect } from 'react'
 import { View, StyleSheet } from 'react-native'
 import FormTextInput from '../../components/form/FormTextInput'
 import FormButton from '../../components/form/FormButton'
 import FormSelectInput from '../../components/form/FormSelectInput'
+import { getDBConnection, createTables, clearDatabase, getPracticeTypes, initPracticeTypes } from "../../services/database";
 
 
 const CreatePracticePlanForm = ({navigation}) => {
     
+    const [practicePlanTypeOptions, setPracticePlanTypeOptions] = useState('');
+
     const [practicePlanName, setPracticePlanName] = useState('');
     const [practicePlanDurationDays, setPracticePlanDurationDays] = useState('');
     const [practicePlanCode, setPracticePlanCode] = useState('');
     const [practicePlanType, setPracticePlanType] = useState(''); // This will be the ID
+
+    const loadDataCallback = useCallback(async () => {
+        try {
+        //   const db = await getDBConnection();
+        //   const practice_types = await getPracticeTypes(db);
+          
+        } catch (error) {
+          console.error(error);
+        }
+      }, []);
+      
+      useEffect(() => {
+        loadDataCallback();
+      }, [loadDataCallback]);
 
     const onCreatePressed = () => {
         // Validate Input
