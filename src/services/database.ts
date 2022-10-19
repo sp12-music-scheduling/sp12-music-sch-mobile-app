@@ -35,7 +35,7 @@ export const createTables = async (db: SQLiteDatabase) => {
     const create_practice_type_table = `
         CREATE TABLE IF NOT EXISTS "practice_type" (
             "id"	INTEGER NOT NULL UNIQUE,
-            "name"	TEXT NOT NULL UNIQUE,
+            "name"	TEXT NOT NULL,
             "sub_type"	TEXT,
             PRIMARY KEY("id" AUTOINCREMENT)
         );`;
@@ -53,20 +53,45 @@ export const createTables = async (db: SQLiteDatabase) => {
     await db.executeSql(create_practice_plan_table);
 };
 
+const deleteTable = async (db: SQLiteDatabase, tableName: string) => {
+    const query = `drop table ${tableName}`;
+    await db.executeSql(query);
+};
+
+export const clearDatabase = async (db: SQLiteDatabase) => {
+    const tables = [
+        'practice_plan', 
+        'practice_type',
+    ];
+    tables.forEach(table => deleteTable(db, table));
+};
+
+export const initPracticeTypes = async (db: SQLiteDatabase) => {
+    const insertQuery = `
+        INSERT INTO "practice_type" ("name", "sub_type") 
+        VALUES 
+            ('Fundamental', 'Flow'),
+            ('Fundamental', 'Fingers'),
+            ('Solo', ''),
+            ('Etude', '')
+    ;`;
+    return db.executeSql(insertQuery);
+};
+
 // https://blog.logrocket.com/using-sqlite-with-react-native/
 
-// export const getTodoItems = async (db: SQLiteDatabase): Promise<ToDoItem[]> => {
-//     try {
-//       const todoItems: ToDoItem[] = [];
-//       const results = await db.executeSql(`SELECT rowid as id,value FROM ${tableName}`);
-//       results.forEach(result => {
-//         for (let index = 0; index < result.rows.length; index++) {
-//           todoItems.push(result.rows.item(index))
-//         }
-//       });
-//       return todoItems;
-//     } catch (error) {
-//       console.error(error);
-//       throw Error('Failed to get todoItems !!!');
-//     }
-//   };
+export const getPracticeTypes = async (db: SQLiteDatabase): Promise<PracticeType[]> => {
+    try {
+        const practice_types: PracticeType[] = [];
+        const results = await db.executeSql(`SELECT * FROM practice_type;`);
+        results.forEach(result => {
+            for (let index = 0; index < result.rows.length; index++) {
+                practice_types.push(result.rows.item(index))
+            }
+        });
+        return practice_types;
+    } catch (error) {
+        console.error(error);
+        throw Error('Failed to get PracticeTypes !!!');
+    }
+};
