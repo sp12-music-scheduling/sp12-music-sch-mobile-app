@@ -15,6 +15,7 @@ const device_height = Dimensions.get('window').height
 
 const PracticePlanListPage = ({navigation}) => {
   const [practicePlanTypeLookup, setPracticePlanTypeLookup] = useState({});
+  const [practicePlanTypeOptions, setPracticePlanTypeOptions] = useState([]);
   const [practicePlanPlans, setPracticePlanPlans] = useState([]);
 
   const loadDataCallback = useCallback(async () => {
@@ -23,6 +24,7 @@ const PracticePlanListPage = ({navigation}) => {
       const practice_plans = await getPracticePlans(db);
       setPracticePlanPlans(practice_plans);
       const practice_types = await getPracticeTypes(db);
+      setPracticePlanTypeOptions(practice_types);
       const practice_type_lookup = {};
       practice_types.forEach(dict => {
         practice_type_lookup[dict["id"]] = dict["name"];
@@ -43,15 +45,31 @@ const PracticePlanListPage = ({navigation}) => {
   const getPracticePlanList = () => {
     const data = [];
     practicePlanPlans.forEach(dict => data.push({
-          'name': dict["name"],
-          'duration_days': dict['duration_days'],
-          'type': practicePlanTypeLookup[dict['practice_type_id']]
+          'name': dict.name,
+          'duration_days': dict.duration_days,
+          'code': dict.code,
+          'practice_type_id': dict.practice_type_id,
+          'type': practicePlanTypeLookup[dict.practice_type_id]
       }));
-    return data
+    return data;
   }
 
-  const onFloatingPlusButtonPressed = () => {
-    return () =>  navigation.push('Create Practice Plan');
+  const navigateToCreatePracticePlan = () => {
+    return () =>  navigation.push('Create Practice Plan', {
+      'practicePlanTypes': practicePlanTypeOptions,
+    });
+  }
+  const navigateToUpdateOrDeletePracticePlan = (item) => {
+    return () =>  navigation.push('Update or Delete Practice Plan',{
+      "name": item.name,
+      "code": item.code,
+      "duration_days": item.duration_days,
+      "practice_type": {
+        "key": item.practice_type_id.toString(),
+        "value": practicePlanTypeLookup[item.practice_type_id]
+      },
+      'practicePlanTypes': practicePlanTypeOptions,
+    });
   }
 
   return (
@@ -61,11 +79,12 @@ const PracticePlanListPage = ({navigation}) => {
           data={getPracticePlanList()}
           renderItem={({item}) =>
               <TouchableOpacity 
+              onLongPress={navigateToUpdateOrDeletePracticePlan(item)}
               onPress={()=>navigation.navigate('Exercises')}  >
-                <PracticePlan 
-                name={item.name} 
-                type={item.type} 
-                duration_days={item.duration_days} />
+                  <PracticePlan 
+                  name={item.name} 
+                  type={item.type} 
+                  duration_days={item.duration_days} />
               </TouchableOpacity> 
             }
             maintainVisibleContentPosition={{
@@ -75,7 +94,7 @@ const PracticePlanListPage = ({navigation}) => {
         </View>
         <View style={styles.fab}>
             <FloatingPlusButton 
-            onPress={onFloatingPlusButtonPressed()} />
+            onPress={navigateToCreatePracticePlan()} />
         </View>
       </View>
       
@@ -90,14 +109,12 @@ const styles = StyleSheet.create({
     paddingTop: 80,
     paddingHorizontal: 20,
     height: device_height - 115
-
   },
   fab: {
     flex: 1,
     backgroundColor: "#fff",
   },
   sectionItems: {
-    marginTop: -30,
-    
+    marginTop: -30,    
   },
 });

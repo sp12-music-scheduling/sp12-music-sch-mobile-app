@@ -6,6 +6,7 @@ import ExercisesPage from '../../pages/teacher/ExercisesPage';
 import VideosPage from '../../pages/teacher/VideosPage';
 import StudentManagementPage from '../../pages/teacher/StudentManagementPage';
 import CreatePracticePlanForm from '../../pages/teacher/CreatePracticePlanForm';
+import UpdateOrDeletePracticePlanForm from "../../pages/teacher/UpdateOrDeletePracticePlanForm";
 
 const Stack = createStackNavigator();
 
@@ -23,6 +24,8 @@ const MainStackNavigator = () => {
       <Stack.Screen name="Practice Plans" component={PracticePlanListPage} />
       <Stack.Screen name="Exercises" component={ExercisesPage} />
       <Stack.Screen name="Create Practice Plan" component={CreatePracticePlanForm} />
+      <Stack.Screen name="Update or Delete Practice Plan" component={UpdateOrDeletePracticePlanForm} />
+
     </Stack.Navigator>
   );
 }

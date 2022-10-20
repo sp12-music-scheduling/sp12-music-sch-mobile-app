@@ -85,6 +85,17 @@ export const getPracticePlans = async (db: SQLiteDatabase): Promise<PracticePlan
     return practice_plans;
 };
 
+export const isPracticePlanCodeAvailable = async (db: SQLiteDatabase, code: string): Promise<boolean> => {
+    const practice_plans: PracticePlan[] = [];
+    const results = await db.executeSql(`SELECT id FROM practice_plan WHERE code == "${code}" LIMIT 1;`);
+    results.forEach(result => {
+        for (let index = 0; index < result.rows.length; index++) {
+            practice_plans.push(result.rows.item(index))
+        }
+    });
+    return practice_plans.length == 0;
+};
+
 export const insertDefaultPracticeTypes = async (db: SQLiteDatabase) => {
     const insertQuery = `
         INSERT INTO "practice_type" ("name", "sub_type") 
