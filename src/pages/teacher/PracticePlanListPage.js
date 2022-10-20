@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useCallback, useEffect } from 'react'
 import {
   StyleSheet,
   View,
@@ -8,25 +8,39 @@ import {
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import PracticePlan from '../../components/PracticePlan';
 import FloatingPlusButton from '../../components/FloatingPlusButton';
+import { getDBConnection, getPracticePlans } from "../../services/database";
+
 
 const device_height = Dimensions.get('window').height
 
 const PracticePlanListPage = ({navigation}) => {
+  const [practicePlanPlans, setPracticePlanPlans] = useState([]);
+
+  const loadDataCallback = useCallback(async () => {
+    // TODO: Figure out how to get this to reload after a
+    //       new row has been inserted.
+    try {
+      const db = await getDBConnection();
+      const practice_plans = await getPracticePlans(db);
+      setPracticePlanPlans(practice_plans);
+    } catch (error) {
+      console.error(error);
+    }
+  }, []);
+  
+  useEffect(() => {
+    loadDataCallback();
+  }, [loadDataCallback]);
 
   const getPracticePlanList = () => {
-    // Temporarily return STATIC DATA for testing
-    return [
-        {name: 'Fund 1', type: 'Fundamentals', duraction_weeks: '6', },
-        {name: 'Etude 1', type: 'Etudes', duraction_weeks: '2', },
-        {name: 'Solo 1', type: 'Solos', duraction_weeks: '3', },
-        {name: 'Solo 1', type: 'Solos', duraction_weeks: '3', },
-        {name: 'Soflo 1', type: 'Solos', duraction_weeks: '3', },
-        {name: 'Soflo 1', type: 'Solos', duraction_weeks: '3', },
-        {name: 'Solo 1', type: 'Solos', duraction_weeks: '3', },
-        {name: 'f 1', type: 'Solos', duraction_weeks: '3', },
-        {name: 'Solo 1', type: 'Solos', duraction_weeks: '3', },
-        {name: 'Sfolo 1', type: 'Solos', duraction_weeks: '3', },
-      ]
+    // TODO: Figure out how to go from TYPE ID to TYPE NAME
+    const data = [];
+    practicePlanPlans.forEach(dict => data.push({
+          'name': dict["name"],
+          'duraction_weeks': dict['duration_days'],
+          'type': 'Etude' // <-- FIX ME I AM MANUALLY SET!
+      }));
+    return data
   }
 
   const onFloatingPlusButtonPressed = () => {
@@ -80,6 +94,3 @@ const styles = StyleSheet.create({
     
   },
 });
-
-
-

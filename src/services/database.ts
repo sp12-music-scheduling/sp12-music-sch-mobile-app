@@ -20,7 +20,7 @@ export type PracticePlan = {
     name: string;
     duration_days: number;
     code: string;
-    practice_type: PracticeType;
+    practice_type_id: number;
 };
 
 //
@@ -66,7 +66,27 @@ export const clearDatabase = async (db: SQLiteDatabase) => {
     tables.forEach(table => deleteTable(db, table));
 };
 
-export const initPracticeTypes = async (db: SQLiteDatabase) => {
+export const insertPracticePlanRow = async (db: SQLiteDatabase, practice_plan: PracticePlan) => {
+    const insertQuery = `
+        INSERT INTO "practice_plan" ("name", "duration_days", "code", "practice_type_id") 
+        VALUES ("${practice_plan.name}", ${practice_plan.duration_days}, "${practice_plan.code}", ${practice_plan.practice_type_id})
+    ;`;
+    console.log(insertQuery);
+    return db.executeSql(insertQuery);
+};
+
+export const getPracticePlans = async (db: SQLiteDatabase): Promise<PracticePlan[]> => {
+    const practice_plans: PracticePlan[] = [];
+    const results = await db.executeSql(`SELECT * FROM practice_plan;`);
+    results.forEach(result => {
+        for (let index = 0; index < result.rows.length; index++) {
+            practice_plans.push(result.rows.item(index))
+        }
+    });
+    return practice_plans;
+};
+
+export const insertDefaultPracticeTypes = async (db: SQLiteDatabase) => {
     const insertQuery = `
         INSERT INTO "practice_type" ("name", "sub_type") 
         VALUES 
@@ -84,17 +104,12 @@ export const initPracticeTypes = async (db: SQLiteDatabase) => {
 // https://blog.logrocket.com/using-sqlite-with-react-native/
 
 export const getPracticeTypes = async (db: SQLiteDatabase): Promise<PracticeType[]> => {
-    try {
-        const practice_types: PracticeType[] = [];
-        const results = await db.executeSql(`SELECT * FROM practice_type;`);
-        results.forEach(result => {
-            for (let index = 0; index < result.rows.length; index++) {
-                practice_types.push(result.rows.item(index))
-            }
-        });
-        return practice_types;
-    } catch (error) {
-        console.error(error);
-        throw Error('Failed to get PracticeTypes !!!');
-    }
+    const practice_types: PracticeType[] = [];
+    const results = await db.executeSql(`SELECT * FROM practice_type;`);
+    results.forEach(result => {
+        for (let index = 0; index < result.rows.length; index++) {
+            practice_types.push(result.rows.item(index))
+        }
+    });
+    return practice_types;
 };

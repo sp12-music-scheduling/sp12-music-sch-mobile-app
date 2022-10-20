@@ -1,14 +1,14 @@
 import React, { useState, useCallback, useEffect } from 'react'
-import { View, StyleSheet } from 'react-native'
+import { View, StyleSheet, Text, TextInput } from 'react-native'
 import FormTextInput from '../../components/form/FormTextInput'
 import FormButton from '../../components/form/FormButton'
 import FormSelectInput from '../../components/form/FormSelectInput'
-import { getDBConnection, createTables, clearDatabase, getPracticeTypes, initPracticeTypes } from "../../services/database";
+import { getDBConnection, getPracticeTypes, insertPracticePlanRow, PracticePlan, PracticeType } from "../../services/database";
 
 
 const CreatePracticePlanForm = ({navigation}) => {
     
-    const [practicePlanTypeOptions, setPracticePlanTypeOptions] = useState('');
+    const [practicePlanTypeOptions, setPracticePlanTypeOptions] = useState([]);
 
     const [practicePlanName, setPracticePlanName] = useState('');
     const [practicePlanDurationDays, setPracticePlanDurationDays] = useState('');
@@ -17,9 +17,9 @@ const CreatePracticePlanForm = ({navigation}) => {
 
     const loadDataCallback = useCallback(async () => {
         try {
-        //   const db = await getDBConnection();
-        //   const practice_types = await getPracticeTypes(db);
-          
+          const db = await getDBConnection();
+          const practice_types = await getPracticeTypes(db);
+          setPracticePlanTypeOptions(practice_types);
         } catch (error) {
           console.error(error);
         }
@@ -51,27 +51,32 @@ const CreatePracticePlanForm = ({navigation}) => {
             return false;
         } else if (practicePlanCode.trim() == "") {
             return false;
-        }else if (practicePlanType.trim() == "") {
+        }else if (practicePlanType.toString().trim() == "") {
             return false;
         }
         return true;
     }
 
-    const createPracticePlan = () => {
-        // DB INSERT
+    const createPracticePlan = async () => {
+       const practice_plan = {
+        'name': practicePlanName,
+        'duration_days': Number(practicePlanDurationDays),
+        'code': practicePlanCode,
+        'practice_type_id': practicePlanType
+       };
+       console.log('CREATE -> ');
+       console.log(practice_plan);
+       const db = await getDBConnection();
+       await insertPracticePlanRow(db, practice_plan);
     }
 
     const getPracticePlanTypes = () => {
-        // Temporarily return STATIC DATA for testing
-        return [
-            {key:'1',value:'Etude'},
-            {key:'2',value:'Solo'},
-            {key:'3',value:'Fundamental: Fingers'},
-            {key:'4',value:'Fundamental: Flow'},
-            {key:'5',value:'Fundamental: Flex'},
-            {key:'6',value:'Fundamental: Freedom'},
-            {key:'7',value:'Fundamental: Front'},
-          ]
+        const data = [];
+        practicePlanTypeOptions.forEach(dict => data.push({
+            'key': dict["id"],
+            'value': dict['sub_type'] == "" ? dict["name"] : dict["name"] + ": " + dict["sub_type"]
+        }));
+        return data
     }
 
     return (
