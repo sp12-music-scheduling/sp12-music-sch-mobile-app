@@ -37,7 +37,7 @@ const PracticePlanListPage = ({navigation}) => {
     const data = [];
     practicePlanPlans.forEach(dict => data.push({
           'name': dict["name"],
-          'duraction_weeks': dict['duration_days'],
+          'duration_days': dict['duration_days'],
           'type': 'Etude' // <-- FIX ME I AM MANUALLY SET!
       }));
     return data
@@ -58,7 +58,7 @@ const PracticePlanListPage = ({navigation}) => {
                 <PracticePlan 
                 name={item.name} 
                 type={item.type} 
-                duraction_weeks={item.duraction_weeks} />
+                duration_days={item.duration_days} />
               </TouchableOpacity> 
             }
             maintainVisibleContentPosition={{
