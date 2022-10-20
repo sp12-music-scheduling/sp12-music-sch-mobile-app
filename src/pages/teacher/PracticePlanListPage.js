@@ -8,43 +8,50 @@ import {
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import PracticePlan from '../../components/PracticePlan';
 import FloatingPlusButton from '../../components/FloatingPlusButton';
-import { getDBConnection, getPracticePlans } from "../../services/database";
+import { getDBConnection, getPracticePlans, getPracticeTypes } from "../../services/database";
 
 
 const device_height = Dimensions.get('window').height
 
 const PracticePlanListPage = ({navigation}) => {
+  const [practicePlanTypeLookup, setPracticePlanTypeLookup] = useState({});
   const [practicePlanPlans, setPracticePlanPlans] = useState([]);
 
   const loadDataCallback = useCallback(async () => {
-    // TODO: Figure out how to get this to reload after a
-    //       new row has been inserted.
     try {
       const db = await getDBConnection();
       const practice_plans = await getPracticePlans(db);
       setPracticePlanPlans(practice_plans);
+      const practice_types = await getPracticeTypes(db);
+      const practice_type_lookup = {};
+      practice_types.forEach(dict => {
+        practice_type_lookup[dict["id"]] = dict["name"];
+      });
+      setPracticePlanTypeLookup(practice_type_lookup);
     } catch (error) {
       console.error(error);
     }
   }, []);
   
   useEffect(() => {
-    loadDataCallback();
-  }, [loadDataCallback]);
+    const unsubscribe = navigation.addListener('focus', () => {
+          loadDataCallback();
+    });
+    return unsubscribe;
+  }, []);
 
   const getPracticePlanList = () => {
-    // TODO: Figure out how to go from TYPE ID to TYPE NAME
     const data = [];
     practicePlanPlans.forEach(dict => data.push({
           'name': dict["name"],
           'duration_days': dict['duration_days'],
-          'type': 'Etude' // <-- FIX ME I AM MANUALLY SET!
+          'type': practicePlanTypeLookup[dict['practice_type_id']]
       }));
     return data
   }
 
   const onFloatingPlusButtonPressed = () => {
-    return () =>  navigation.navigate('Create Practice Plan');
+    return () =>  navigation.push('Create Practice Plan');
   }
 
   return (

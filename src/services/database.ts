@@ -71,7 +71,6 @@ export const insertPracticePlanRow = async (db: SQLiteDatabase, practice_plan: P
         INSERT INTO "practice_plan" ("name", "duration_days", "code", "practice_type_id") 
         VALUES ("${practice_plan.name}", ${practice_plan.duration_days}, "${practice_plan.code}", ${practice_plan.practice_type_id})
     ;`;
-    console.log(insertQuery);
     return db.executeSql(insertQuery);
 };
 

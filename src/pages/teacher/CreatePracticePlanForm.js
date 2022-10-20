@@ -27,7 +27,7 @@ const CreatePracticePlanForm = ({navigation}) => {
       
       useEffect(() => {
         loadDataCallback();
-      }, [loadDataCallback]);
+      }, []);
 
     const onCreatePressed = () => {
         // Validate Input
