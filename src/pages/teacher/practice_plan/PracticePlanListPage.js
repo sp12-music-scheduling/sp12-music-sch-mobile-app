@@ -2,9 +2,9 @@ import React, { useState, useCallback, useEffect } from 'react'
 import { StyleSheet,View,FlatList,Dimensions } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
-import PracticePlan from '../../components/PracticePlan';
-import FloatingPlusButton from '../../components/FloatingPlusButton';
-import { getDBConnection, getPracticePlans, getPracticeTypes } from "../../services/database";
+import PracticePlan from '../../../components/PracticePlan';
+import FloatingPlusButton from '../../../../components/FloatingPlusButton';
+import { getDBConnection, getPracticePlans, getPracticeTypes } from "../../../services/database";
 
 
 const device_height = Dimensions.get('window').height
