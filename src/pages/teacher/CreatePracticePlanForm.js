@@ -19,7 +19,7 @@ const CreatePracticePlanForm = ({route, navigation}) => {
         This option takes as input a list of dict such as [{'key': '', 'value': ''} ...]
         */
         const types = [];
-        route.params.practicePlanTypes.forEach(dict => types.push({
+        route.params.availablePracticePlanTypes.forEach(dict => types.push({
             'key': dict.id,
             'value': dict.sub_type == "" ? dict.name : dict.name + ": " + dict.sub_type
         }));
@@ -87,8 +87,8 @@ const CreatePracticePlanForm = ({route, navigation}) => {
             'code': practicePlanCode,
             'practice_type_id': practicePlanType
         };
-       const db = await getDBConnection();
-       await insertPracticePlanRow(db, practice_plan);
+        const db = await getDBConnection();
+        await insertPracticePlanRow(db, practice_plan);
     }
 
     return (

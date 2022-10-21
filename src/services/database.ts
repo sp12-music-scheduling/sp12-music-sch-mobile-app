@@ -74,6 +74,19 @@ export const insertPracticePlanRow = async (db: SQLiteDatabase, practice_plan: P
     return db.executeSql(insertQuery);
 };
 
+export const updatePracticePlanRow = async (db: SQLiteDatabase, practice_plan: PracticePlan) => {
+    const replaceQuery = `
+    REPLACE INTO "practice_plan" (id, "name", "duration_days", "code", "practice_type_id") 
+        VALUES (${practice_plan.id}, "${practice_plan.name}", ${practice_plan.duration_days}, "${practice_plan.code}", ${practice_plan.practice_type_id})
+    ;`;
+    return db.executeSql(replaceQuery);
+};
+
+export const deletePracticePlanRow = async (db: SQLiteDatabase, practice_plan: PracticePlan) => {
+    const insertQuery = `DELETE FROM practice_plan WHERE id == ${practice_plan.id};`;
+    return db.executeSql(insertQuery);
+};
+
 export const getPracticePlans = async (db: SQLiteDatabase): Promise<PracticePlan[]> => {
     const practice_plans: PracticePlan[] = [];
     const results = await db.executeSql(`SELECT * FROM practice_plan;`);

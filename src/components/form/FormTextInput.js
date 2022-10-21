@@ -1,14 +1,15 @@
 import React from 'react';
 import { View, Text, TextInput, StyleSheet } from 'react-native';
 
-const FormTextInput = ({fieldName, value, setValue}) => {
+const FormTextInput = ({fieldName, value, setValue, editable = true}) => {
     return (
         <View style={styles.container}>
           <Text>{fieldName}</Text>
           <TextInput
             onChangeText={setValue}
             value={value}
-            style={styles.input_box}
+            style={editable == true ? styles.input_box : [styles.input_box, styles.editable_false] }
+            editable={editable}
           />
         </View>
     );
@@ -28,5 +29,8 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         paddingHorizontal: 10,
         marginVertical: 5, 
+    },
+    editable_false: {
+        backgroundColor: '#ADAAAA',
     },
 })
