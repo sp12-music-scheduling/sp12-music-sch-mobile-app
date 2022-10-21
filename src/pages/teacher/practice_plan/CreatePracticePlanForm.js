@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
 import { View, StyleSheet } from 'react-native'
-import FormTextInput from '../../components/form/FormTextInput'
-import FormButton from '../../components/form/FormButton'
-import FormSelectInput from '../../components/form/FormSelectInput'
-import { getDBConnection, isPracticePlanCodeAvailable, insertPracticePlanRow} from "../../services/database";
+import FormTextInput from '../../../components/form/FormTextInput'
+import FormButton from '../../../components/form/FormButton'
+import FormSelectInput from '../../../components/form/FormSelectInput'
+import { getDBConnection, isPracticePlanCodeAvailable, insertPracticePlanRow} from "../../../services/database";
 
 
 const CreatePracticePlanForm = ({route, navigation}) => {
