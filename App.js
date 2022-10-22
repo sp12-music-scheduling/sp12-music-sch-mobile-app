@@ -1,7 +1,7 @@
 import React, {useCallback, useEffect } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import DrawerNavigator from "./src/navigation/teacher/DrawerNavigator";
-import { getDBConnection, createTables, clearDatabase, getPracticeTypes, insertInitPracticeTypes } from "./src/services/database";
+import { getDBConnection, createTables, clearDatabase, getPracticeTypes, insertDefaultPracticeTypes } from "./src/services/database";
 
  const App = () => {
   
@@ -12,7 +12,7 @@ import { getDBConnection, createTables, clearDatabase, getPracticeTypes, insertI
       // await clearDatabase(db);
       await createTables(db);
       const practice_types = await getPracticeTypes(db);
-      if (!practice_types.length) {
+      if (practice_types.length == 0) {
         await insertDefaultPracticeTypes(db);
       }
     } catch (error) {

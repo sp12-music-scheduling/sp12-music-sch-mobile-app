@@ -97,6 +97,8 @@ const PracticePlanListPage = ({navigation}) => {
     Function to navigate to the UPDATE_OR_CREATE form with
     required parameters.
     */
+
+    //TODO: Strange vehavior when the practice plan names are the same!!! DANGER
     return () =>  navigation.push('Update or Delete Practice Plan', {
       "id": item.id,
       "name": item.name,

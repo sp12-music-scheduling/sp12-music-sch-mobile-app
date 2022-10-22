@@ -9,6 +9,19 @@ enablePromise(true);
 // MODELS
 //
 
+export type UserRole = {
+    id: number;
+    name: string;
+};
+
+export type User = {
+    id: number;
+    username: string;
+    email: string;
+    password: string;
+    user_role_id: number;
+};
+
 export type PracticeType = {
     id: number;
     name: string;
@@ -32,6 +45,24 @@ export const getDBConnection = async () => {
 };
 
 export const createTables = async (db: SQLiteDatabase) => {
+    const create_user_role = `
+        CREATE TABLE "user_role" (
+            "id"	INTEGER NOT NULL UNIQUE,
+            "name"	TEXT NOT NULL UNIQUE,
+            PRIMARY KEY("id" AUTOINCREMENT)
+        );`;
+    await db.executeSql(create_user_role);
+    const create_user = `
+        CREATE TABLE "user" (
+            "id"	INTEGER NOT NULL UNIQUE,
+            "username"	TEXT NOT NULL,
+            "email"	TEXT NOT NULL UNIQUE,
+            "password"	TEXT NOT NULL,
+            "user_role_id"	INTEGER NOT NULL,
+            PRIMARY KEY("id" AUTOINCREMENT),
+            FOREIGN KEY("user_role_id") REFERENCES "user_role"("id")
+        );`;
+    await db.executeSql(create_user);
     const create_practice_type_table = `
         CREATE TABLE IF NOT EXISTS "practice_type" (
             "id"	INTEGER NOT NULL UNIQUE,
