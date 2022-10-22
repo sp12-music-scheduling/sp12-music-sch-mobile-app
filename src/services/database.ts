@@ -46,14 +46,14 @@ export const getDBConnection = async () => {
 
 export const createTables = async (db: SQLiteDatabase) => {
     const create_user_role = `
-        CREATE TABLE "user_role" (
+        CREATE TABLE IF NOT EXISTS "user_role" (
             "id"	INTEGER NOT NULL UNIQUE,
             "name"	TEXT NOT NULL UNIQUE,
             PRIMARY KEY("id" AUTOINCREMENT)
         );`;
     await db.executeSql(create_user_role);
     const create_user = `
-        CREATE TABLE "user" (
+        CREATE TABLE IF NOT EXISTS "user" (
             "id"	INTEGER NOT NULL UNIQUE,
             "username"	TEXT NOT NULL,
             "email"	TEXT NOT NULL UNIQUE,
