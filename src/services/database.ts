@@ -16,7 +16,7 @@ export type UserRole = {
 
 export type User = {
     id: number;
-    username: string;
+    name: string;
     email: string;
     password: string;
     user_role_id: number;
@@ -55,7 +55,7 @@ export const createTables = async (db: SQLiteDatabase) => {
     const create_user = `
         CREATE TABLE IF NOT EXISTS "user" (
             "id"	INTEGER NOT NULL UNIQUE,
-            "username"	TEXT NOT NULL,
+            "name"	TEXT NOT NULL,
             "email"	TEXT NOT NULL UNIQUE,
             "password"	TEXT NOT NULL,
             "user_role_id"	INTEGER NOT NULL,
@@ -93,6 +93,8 @@ export const clearDatabase = async (db: SQLiteDatabase) => {
     const tables = [
         'practice_plan', 
         'practice_type',
+        'user',
+        'user_role',
     ];
     tables.forEach(table => deleteTable(db, table));
 };
@@ -155,7 +157,16 @@ export const insertDefaultPracticeTypes = async (db: SQLiteDatabase) => {
     return db.executeSql(insertQuery);
 };
 
-// https://blog.logrocket.com/using-sqlite-with-react-native/
+export const insertDefaultUserRoles = async (db: SQLiteDatabase) => {
+    const insertQuery = `
+        INSERT INTO "user_role" ("name") 
+        VALUES 
+            ('Teacher'),
+            ('Student')
+    ;`;
+    return db.executeSql(insertQuery);
+};
+
 
 export const getPracticeTypes = async (db: SQLiteDatabase): Promise<PracticeType[]> => {
     const practice_types: PracticeType[] = [];
@@ -166,4 +177,15 @@ export const getPracticeTypes = async (db: SQLiteDatabase): Promise<PracticeType
         }
     });
     return practice_types;
+};
+
+export const getUserRoles = async (db: SQLiteDatabase): Promise<UserRole[]> => {
+    const user_roles: UserRole[] = [];
+    const results = await db.executeSql(`SELECT * FROM user_role;`);
+    results.forEach(result => {
+        for (let index = 0; index < result.rows.length; index++) {
+            user_roles.push(result.rows.item(index))
+        }
+    });
+    return user_roles;
 };
