@@ -144,7 +144,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     paddingTop: 80,
     paddingHorizontal: 20,
-    height: device_height - 115
+    height: device_height - 210
   },
   fab: {
     flex: 1,
