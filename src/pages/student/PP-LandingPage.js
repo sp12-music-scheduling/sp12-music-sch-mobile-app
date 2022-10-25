@@ -1,16 +1,12 @@
-import React from "react";
-import {
-  StyleSheet,
-  Text,
-  View,
-  Image,
-  TouchableOpacity,
-  SafeAreaView,
-  Button
-} from "react-native";
-import Roundbutton from './button-round'
+import * as React from "react";
+import {StyleSheet,Text, View, Image, TouchableOpacity, SafeAreaView, Button, Alert} from "react-native";
+import {NavigatorContainer} from '@react-navigation/native';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import Roundbutton from '././components/button-round'
+import AddButton from '././components/button-add'
+import BottomTabNavigator from '././navigation/teacher/TabNavigator'
 
-export default function App() {
+export default function App({navigation}) {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.StudentViewMenu}>
@@ -24,18 +20,20 @@ export default function App() {
           style={{
             color: "#754747",
             textAlign: "center",
-            fontSize: 32,
+            fontSize: 38,
             padding: 20
           }}
         >
           Practice Plan
         </Text>
         <View style= {styles.buttonViewStyle}>
-        <Roundbutton title ='Plan A' style = {{backgroundColor: 'white'}}/>
-        <Roundbutton title ='Plan B' style = {{backgroundColor: 'white'}}/>
+        <Roundbutton title ='Plan A' onPress = {() => navigation.navigate('Exercises')}/>
+        <Roundbutton title ='Plan B' onPress = {() => navigation.navigate('Exercises')}/>
         </View>
-      </View>
-      <View>
+        <View>
+        <AddButton onPress = {() => Alert.alert('Button pressed')}/>
+        </View>
+        <BottomTabNavigator />
       </View>
     </SafeAreaView>
   );

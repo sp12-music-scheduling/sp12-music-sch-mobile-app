@@ -1,30 +1,27 @@
-import React from "react";
-import {
-  StyleSheet,
-  Text,
-  View,
-  Image,
-  TouchableOpacity,
-  SafeAreaView,
-  Button
-} from "react-native";
-import Roundbutton from './button-round'
-
-export default function App() {
+import * as React from "react";
+import {StyleSheet, Text, View, Image, TouchableOpacity, SafeAreaView, Button} from "react-native";
+import {NavigatorContainer} from '@react-navigation/native';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import Roundbutton from '././components/button-round'
+import BottomTabNavigator from '././navigation/teacher/TabNavigator'
+export default function App({navigation}) {
   return (
     <SafeAreaView style={styles.container}>
       <View>
+      <View style = {styles.topSection}>
+      <TouchableOpacity onPress ={() => navigation.goBack()}>
+        <Image style= {styles.backArrow} source= {require('././assets/icons/backArrow.png')} />
+        </TouchableOpacity>
         <Text style={styles.ExerciseTitle}>
           Exercises
         </Text>
-        <View style= {styles.buttonViewStyle}>
-        <Roundbutton title ='Exercise-1' style = {{backgroundColor: 'white'}}/>
-        <Roundbutton title ='Exercise-2' style = {{backgroundColor: 'white'}}/>
-        <Roundbutton title ='Exercise-3' style = {{backgroundColor: 'white'}}/>
         </View>
-
-      </View>
-      <View>
+        <View style= {styles.buttonViewStyle}>
+        <Roundbutton title ='Exercise-1' />
+        <Roundbutton title ='Exercise-2'/>
+        <Roundbutton title ='Exercise-3' />
+        </View>
+        <BottomTabNavigator />
       </View>
     </SafeAreaView>
   );
@@ -36,6 +33,13 @@ const styles = StyleSheet.create({
     backgroundColor: "#F5F5F5",
     fontFamily: 'Inter',
   },
+//  topSection: {
+//  flexDirection: "column",
+//   justifyContent: "space-between",
+//  },
+backArrow:{
+margin: 20,
+},
   StudentViewMenu: {
     flexDirection: "row",
     justifyContent: "space-around",
