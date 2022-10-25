@@ -1,8 +1,8 @@
 import React from 'react';
 import {StyleSheet, TouchableOpacity, Text} from 'react-native';
-const Roundbutton = (props) => {
+const Roundbutton = (props, {style}) => {
 return(
-<TouchableOpacity style = {{
+<TouchableOpacity style = {[{
 width: 254,
 height: 40,
 borderRadius: 52,
@@ -11,9 +11,11 @@ margin: 20,
 flexDirection:'column',
 justifyContent: 'center',
 alignItems: 'center',
-}}
+},
+style,
+]}
 >
-<Text style = {{color: 'white'}}>{props.title}</Text>
+<Text>{props.title}</Text>
 </TouchableOpacity>
 );
 };

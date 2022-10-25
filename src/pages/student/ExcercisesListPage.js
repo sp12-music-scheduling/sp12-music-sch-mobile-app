@@ -8,11 +8,22 @@ export default function App({navigation}) {
   return (
     <SafeAreaView style={styles.container}>
       <View>
+<<<<<<< HEAD
       <View style = {styles.topSection}>
       <TouchableOpacity onPress ={() => navigation.goBack()}>
         <Image style= {styles.backArrow} source= {require('././assets/icons/backArrow.png')} />
         </TouchableOpacity>
         <Text style={styles.ExerciseTitle}>
+=======
+        <Text
+          style={{
+            color: "#754747",
+            textAlign: "center",
+            fontSize: 32,
+            padding: 20
+          }}
+        >
+>>>>>>> 532bf95f5602b9603d5ca6f818a064577e04492f
           Exercises
         </Text>
         </View>
@@ -50,12 +61,6 @@ margin: 20,
   color: "#754747",
   fontSize: 21,
   },
-  ExerciseTitle:{
-    color: "#754747",
-    textAlign: "center",
-    fontSize: 32,
-    padding: 20,
-    },
   buttonViewStyle: {
   flexDirection:'column',
   justifyContent: 'center',

@@ -15,11 +15,19 @@ const DrawerNavigator = () => {
         },
         drawerActiveBackgroundColor: '#754747',
         drawerActiveTintColor: 'white',
-      }}
-    >
-      <Drawer.Screen name="Home" component={TabNavigator} initialParams={{screen:'Home'}} />
-      <Drawer.Screen name="Videos" component={TabNavigator} initialParams={{screen:'Video'}}/>
-      <Drawer.Screen name="Student Management" component={TabNavigator} initialParams={{screen:'StudentManagement'}}/>
+      }}>
+      <Drawer.Screen 
+      name="Home" 
+      component={TabNavigator} 
+      initialParams={{screen:'Home'}} />
+      <Drawer.Screen 
+      name="Videos" 
+      component={TabNavigator} 
+      initialParams={{screen:'Video'}}/>
+      <Drawer.Screen 
+      name="Student Management" 
+      component={TabNavigator} 
+      initialParams={{screen:'StudentManagement'}}/>
     </Drawer.Navigator>
   );
 }
