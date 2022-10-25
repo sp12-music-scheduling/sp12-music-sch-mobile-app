@@ -93,10 +93,12 @@ export const clearDatabase = async (db: SQLiteDatabase) => {
     const tables = [
         'practice_plan', 
         'practice_type',
-        'user',
         'user_role',
+        'user',
     ];
-    tables.forEach(table => deleteTable(db, table));
+    tables.forEach(table => 
+        deleteTable(db, table)
+        );
 };
 
 export const insertPracticePlanRow = async (db: SQLiteDatabase, practice_plan: PracticePlan) => {
@@ -188,4 +190,45 @@ export const getUserRoles = async (db: SQLiteDatabase): Promise<UserRole[]> => {
         }
     });
     return user_roles;
+};
+
+export const insertUser = async (db: SQLiteDatabase, user: User) => {
+    const insertQuery = `
+        INSERT INTO "user" ("name", "email", "password", "user_role_id") 
+        VALUES ("${user.name}", "${user.email}", "${user.password}", ${user.user_role_id})
+    ;`;
+    return db.executeSql(insertQuery);
+};
+
+
+export const createDemoTeacherUser = async (db: SQLiteDatabase) => {
+    const user: User = {
+        id: NaN, // Defined at creation
+        name: 'Demo Usr',
+        email: 'demo.usr@kennesaw.edu',
+        password: 'pwd',
+        user_role_id: 1
+    };
+    return insertUser(db, user);
+};
+
+export const getDemoTeacherUser = async (db: SQLiteDatabase): Promise<User> => {
+    const demo_usr: User[] = [];
+    const results = await db.executeSql(`
+        SELECT * FROM user
+        WHERE email == "demo.usr@kennesaw.edu" 
+    ;`);
+    results.forEach(result => {
+        for (let index = 0; index < result.rows.length; index++) {
+            demo_usr.push(result.rows.item(index))
+        }
+    });
+    if (demo_usr.length == 0){
+        await createDemoTeacherUser(db);
+        return getDemoTeacherUser(db); // Recursive
+    }
+    else{
+        return demo_usr[0];
+
+    }
 };

@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
 import { View, Text, StyleSheet, useWindowDimensions } from 'react-native'
-import CustomInput from '../../components/CustomInput'
-import CustomButton from '../../components/CustomButton/CustomButton';
+import CustomInput from '../../../components/login/CustomInput/CustomInput';
+import CustomButton from '../../../components/login/CustomButton/CustomButton';
 import { useNavigation } from '@react-navigation/native';
-import Navigation from '../../navigation';
+import Navigation from '../../../navigation/login';
 
 const SignUpScreen = () => {
     const [username, setUsername] = useState('');

@@ -14,7 +14,14 @@ export default function App() {
   return (
     <SafeAreaView style={styles.container}>
       <View>
-        <Text style={styles.ExerciseTitle}>
+        <Text
+          style={{
+            color: "#754747",
+            textAlign: "center",
+            fontSize: 32,
+            padding: 20
+          }}
+        >
           Exercises
         </Text>
         <View style= {styles.buttonViewStyle}>
@@ -46,12 +53,6 @@ const styles = StyleSheet.create({
   color: "#754747",
   fontSize: 21,
   },
-  ExerciseTitle:{
-    color: "#754747",
-    textAlign: "center",
-    fontSize: 32,
-    padding: 20,
-    },
   buttonViewStyle: {
   flexDirection:'column',
   justifyContent: 'center',

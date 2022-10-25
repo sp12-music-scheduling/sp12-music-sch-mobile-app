@@ -3,12 +3,12 @@ import React, { Component } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import SignInScreen from '../screens/SignInScreen';
-import SignUpScreen from '../screens/SignUpScreen';
-import ConfirmEmailScreen from '../screens/ConfirmEmailScreen/ConfirmEmailScreen';
-import ForgotPasswordScreen from '../screens/ForgotPasswordScreen';
-import ResetPasswordScreen from '../screens/ResetPasswordScreen/ResetPasswordScreen';
-import HomePage from '../screens/HomePage/HomePage';
+import SignInScreen from '../../pages/login/SignInScreen';
+import SignUpScreen from '../../pages/login/SignUpScreen';
+import ConfirmEmailScreen from '../../pages/login/ConfirmEmailScreen';
+import ForgotPasswordScreen from '../../pages/login/ForgotPasswordScreen';
+import ResetPasswordScreen from '../../pages/login/ResetPasswordScreen';
+import HomePage from '../../pages/login/HomePage';
 
 
 const Stack = createNativeStackNavigator();

@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
 import { View, Text, Image, StyleSheet, useWindowDimensions } from 'react-native'
-import Logo from '../../../assets/images/Logo.png' // import logo
-import CustomInput from '../../components/CustomInput'
-import CustomButton from '../../components/CustomButton/CustomButton';
+import Logo from '../../../assets/icons/Logo.png' // import logo
+import CustomInput from '../../../components/login/CustomInput';
+import CustomButton from '../../../components/login/CustomButton/CustomButton';
 import { useNavigation } from '@react-navigation/native';
 
 const SignInScreen = () => {
