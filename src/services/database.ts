@@ -9,19 +9,6 @@ enablePromise(true);
 // MODELS
 //
 
-export type UserRole = {
-    id: number;
-    name: string;
-};
-
-export type User = {
-    id: number;
-    name: string;
-    email: string;
-    password: string;
-    user_role_id: number;
-};
-
 export type PracticeType = {
     id: number;
     name: string;
@@ -45,24 +32,6 @@ export const getDBConnection = async () => {
 };
 
 export const createTables = async (db: SQLiteDatabase) => {
-    const create_user_role = `
-        CREATE TABLE IF NOT EXISTS "user_role" (
-            "id"	INTEGER NOT NULL UNIQUE,
-            "name"	TEXT NOT NULL UNIQUE,
-            PRIMARY KEY("id" AUTOINCREMENT)
-        );`;
-    await db.executeSql(create_user_role);
-    const create_user = `
-        CREATE TABLE IF NOT EXISTS "user" (
-            "id"	INTEGER NOT NULL UNIQUE,
-            "name"	TEXT NOT NULL,
-            "email"	TEXT NOT NULL UNIQUE,
-            "password"	TEXT NOT NULL,
-            "user_role_id"	INTEGER NOT NULL,
-            PRIMARY KEY("id" AUTOINCREMENT),
-            FOREIGN KEY("user_role_id") REFERENCES "user_role"("id")
-        );`;
-    await db.executeSql(create_user);
     const create_practice_type_table = `
         CREATE TABLE IF NOT EXISTS "practice_type" (
             "id"	INTEGER NOT NULL UNIQUE,
@@ -93,8 +62,6 @@ export const clearDatabase = async (db: SQLiteDatabase) => {
     const tables = [
         'practice_plan', 
         'practice_type',
-        'user_role',
-        'user',
     ];
     tables.forEach(table => 
         deleteTable(db, table)
@@ -159,16 +126,6 @@ export const insertDefaultPracticeTypes = async (db: SQLiteDatabase) => {
     return db.executeSql(insertQuery);
 };
 
-export const insertDefaultUserRoles = async (db: SQLiteDatabase) => {
-    const insertQuery = `
-        INSERT INTO "user_role" ("name") 
-        VALUES 
-            ('Teacher'),
-            ('Student')
-    ;`;
-    return db.executeSql(insertQuery);
-};
-
 
 export const getPracticeTypes = async (db: SQLiteDatabase): Promise<PracticeType[]> => {
     const practice_types: PracticeType[] = [];
@@ -179,56 +136,4 @@ export const getPracticeTypes = async (db: SQLiteDatabase): Promise<PracticeType
         }
     });
     return practice_types;
-};
-
-export const getUserRoles = async (db: SQLiteDatabase): Promise<UserRole[]> => {
-    const user_roles: UserRole[] = [];
-    const results = await db.executeSql(`SELECT * FROM user_role;`);
-    results.forEach(result => {
-        for (let index = 0; index < result.rows.length; index++) {
-            user_roles.push(result.rows.item(index))
-        }
-    });
-    return user_roles;
-};
-
-export const insertUser = async (db: SQLiteDatabase, user: User) => {
-    const insertQuery = `
-        INSERT INTO "user" ("name", "email", "password", "user_role_id") 
-        VALUES ("${user.name}", "${user.email}", "${user.password}", ${user.user_role_id})
-    ;`;
-    return db.executeSql(insertQuery);
-};
-
-
-export const createDemoTeacherUser = async (db: SQLiteDatabase) => {
-    const user: User = {
-        id: NaN, // Defined at creation
-        name: 'Demo Usr',
-        email: 'demo.usr@kennesaw.edu',
-        password: 'pwd',
-        user_role_id: 1
-    };
-    return insertUser(db, user);
-};
-
-export const getDemoTeacherUser = async (db: SQLiteDatabase): Promise<User> => {
-    const demo_usr: User[] = [];
-    const results = await db.executeSql(`
-        SELECT * FROM user
-        WHERE email == "demo.usr@kennesaw.edu" 
-    ;`);
-    results.forEach(result => {
-        for (let index = 0; index < result.rows.length; index++) {
-            demo_usr.push(result.rows.item(index))
-        }
-    });
-    if (demo_usr.length == 0){
-        await createDemoTeacherUser(db);
-        return getDemoTeacherUser(db); // Recursive
-    }
-    else{
-        return demo_usr[0];
-
-    }
 };
