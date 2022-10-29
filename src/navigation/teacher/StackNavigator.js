@@ -11,7 +11,7 @@ import UpdateOrDeletePracticePlanForm from "../../pages/teacher/practice_plan/Up
 import ExercisesPage from '../../pages/teacher/exercise/ExercisesPage';
 import CreateExerciseForm from '../../pages/teacher/exercise/CreateExerciseForm';
 import UpdateOrDeleteExerciseForm from "../../pages/teacher/exercise/UpdateOrDeleteExerciseForm";
-
+import ExerciseEnrollmentPage from "../../pages/teacher/exercise/ExerciseEnrollmentPage";
 
 const Stack = createStackNavigator();
 
@@ -32,6 +32,7 @@ const MainStackNavigator = () => {
       <Stack.Screen name="Exercises" component={ExercisesPage} />
       <Stack.Screen name="Create Exercise" component={CreateExerciseForm} />
       <Stack.Screen name="Update or Delete Exercise" component={UpdateOrDeleteExerciseForm} />
+      <Stack.Screen name="Exercise Entrollment" component={ExerciseEnrollmentPage} />
     </Stack.Navigator>
   );
 }
