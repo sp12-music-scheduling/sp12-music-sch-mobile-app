@@ -18,7 +18,7 @@ const styles = StyleSheet.create({
         alignItems: "center",
         borderRadius: 10,
         position: "absolute",
-        bottom: 150,
+        bottom: 90,
         right: 0,
         backgroundColor: "#754747",
         paddingHorizontal: 20,
