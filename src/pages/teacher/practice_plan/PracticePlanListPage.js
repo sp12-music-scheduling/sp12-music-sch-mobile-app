@@ -69,6 +69,16 @@ const PracticePlanListPage = ({navigation}) => {
     });
   }
 
+  const navigateToExercises = (item) => {
+    /*
+    Function to navigate to the CREATE form with
+    required parameters.
+    */
+    return () =>  navigation.push('Exercises', {
+      'practice_plan': item,
+    });
+  }
+
   const searchPracticePlanTypes = (id) => {
     /*
     Function that returns a dict whose key mathces
@@ -117,7 +127,7 @@ const PracticePlanListPage = ({navigation}) => {
           renderItem={({item}) =>
               <TouchableOpacity 
               onLongPress={navigateToUpdateOrDeletePracticePlan(item)}
-              onPress={()=>navigation.navigate('Exercises')}  >
+              onPress={navigateToExercises(item)}  >
                   <PracticePlan 
                   name={item.name} 
                   type={item.type} 
