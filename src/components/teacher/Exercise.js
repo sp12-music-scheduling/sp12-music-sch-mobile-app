@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, Text, View, Image} from 'react-native';
 
 const Exercise = ({name, user_count}) => {
     return (
@@ -7,7 +7,17 @@ const Exercise = ({name, user_count}) => {
             <View style={styles.itemleft}>
                 <Text style={styles.itemText}>{name}</Text>
             </View>
-            <View style={{alignItems: 'flex-end'}}>
+            <View style={{alignItems: 'flex-end', flexDirection: 'row'}}>
+                <Image
+                source={require('../../assets/icons/user-solid.png')}
+                resizeMode='contain'
+                style={{
+                    width: 15,
+                    height: 15,
+                    tintColor: '#754747',
+                    paddingRight: 20,
+                }}
+                />
                 <Text style={styles.itemRight}>{user_count}</Text>
             </View>
         </View>
