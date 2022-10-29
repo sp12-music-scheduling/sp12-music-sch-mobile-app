@@ -1,8 +1,8 @@
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 
-import VideosPage from '../../pages/teacher/VideosPage';
-import StudentManagementPage from '../../pages/teacher/StudentManagementPage';
+import VideosPage from '../../pages/teacher/video/VideosPage';
+import StudentManagementPage from '../../pages/teacher/student_management/StudentManagementPage';
 
 import PracticePlanListPage from '../../pages/teacher/practice_plan/PracticePlanListPage';
 import CreatePracticePlanForm from '../../pages/teacher/practice_plan/CreatePracticePlanForm';
