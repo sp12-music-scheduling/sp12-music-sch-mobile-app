@@ -15,6 +15,10 @@ import CreateExerciseForm from '../../pages/teacher/exercise/CreateExerciseForm'
 import UpdateOrDeleteExerciseForm from "../../pages/teacher/exercise/UpdateOrDeleteExerciseForm";
 import ExerciseEnrollmentPage from "../../pages/teacher/exercise/ExerciseEnrollmentPage";
 
+import PracticeTypeHomePage from "../../pages/teacher/practice_type/PracticeTypeHomePage";
+import CreatePracticeTypeForm from "../../pages/teacher/practice_type/CreatePracticeTypeForm";
+import UpdateOrDeletePracticeTypeForm from "../../pages/teacher/practice_type/UpdateOrDeletePracticeTypeForm";
+
 const Stack = createStackNavigator();
 
 const screenOptionStyle = {
@@ -56,4 +60,14 @@ const StudentManagementStackNavigator = () => {
   );
 }
 
-export { MainStackNavigator, VideosStackNavigator, StudentManagementStackNavigator };
+const ManagePracticeTypeStackNavigator = () => {
+  return (
+    <Stack.Navigator screenOptions={screenOptionStyle}>
+      <Stack.Screen name="Manage Practice Types" component={PracticeTypeHomePage} />
+      <Stack.Screen name="Create Practice Type" component={CreatePracticeTypeForm} />
+      <Stack.Screen name="Update or Delete Practice Type" component={UpdateOrDeletePracticeTypeForm} />
+    </Stack.Navigator>
+  );
+}
+
+export { MainStackNavigator, VideosStackNavigator, StudentManagementStackNavigator, ManagePracticeTypeStackNavigator };

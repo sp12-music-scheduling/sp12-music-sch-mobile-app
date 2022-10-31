@@ -106,6 +106,27 @@ const createPracticeTypeTable = async (db: SQLiteDatabase) => {
     await db.executeSql(table_sql);
 };
 
+export const insertPracticeTypeRow = async (db: SQLiteDatabase, practice_type: PracticeType) => {
+    const insertQuery = `
+        INSERT INTO "practice_type" ("name", "sub_type") 
+        VALUES ("${practice_type.name}", "${practice_type.sub_type}")
+    ;`;
+    return db.executeSql(insertQuery);
+};
+
+export const updatePracticeTypeRow = async (db: SQLiteDatabase, practice_type: PracticeType) => {
+    const replaceQuery = `
+        REPLACE INTO "practice_type" (id, "name", "sub_type") 
+        VALUES (${practice_type.id}, "${practice_type.name}", "${practice_type.sub_type}")
+    ;`;
+    return db.executeSql(replaceQuery);
+};
+
+export const deletePracticeTypeRow = async (db: SQLiteDatabase, practice_type: PracticeType) => {
+    const insertQuery = `DELETE FROM practice_type WHERE id == ${practice_type.id};`;
+    return db.executeSql(insertQuery);
+};
+
 export const insertDefaultPracticeTypes = async (db: SQLiteDatabase) => {
     const insertQuery = `
         INSERT INTO "practice_type" ("name", "sub_type") 
