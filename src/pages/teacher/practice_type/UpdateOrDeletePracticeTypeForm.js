@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { View, StyleSheet } from 'react-native'
+
 import FormTextInput from '../../../components/form/FormTextInput'
 import FormButton from '../../../components/form/FormButton'
 import { getDBConnection, updatePracticeTypeRow, deletePracticeTypeRow } from "../../../services/database";
@@ -29,7 +30,7 @@ const UpdateOrDeletePracticeTypeForm = ({route, navigation}) => {
         if (validationEmptyValues() == false) {
             alert('Please fill all fields!');
         } else {
-            await updatePracticeType();
+            await updateOnDatabase();
             navigation.navigate('Manage Practice Types');
         }
     }
@@ -45,7 +46,7 @@ const UpdateOrDeletePracticeTypeForm = ({route, navigation}) => {
         }
     }
 
-    const updatePracticeType = async () => {
+    const updateOnDatabase = async () => {
         /*
         Calls a database function to update a Practice Type.
         */
@@ -60,6 +61,7 @@ const UpdateOrDeletePracticeTypeForm = ({route, navigation}) => {
 
     return (
         <View style={styles.container}>
+            {/* Field(s) */}
             <FormTextInput 
             fieldName="Name"
             value={name} 
@@ -68,6 +70,7 @@ const UpdateOrDeletePracticeTypeForm = ({route, navigation}) => {
             fieldName="Sub-Type (optional)"
             value={subType} 
             setValue={setSubType} />
+            {/* Action(s) */}
             <FormButton 
             text="Update"
             onPress={onUpdatePressed} />

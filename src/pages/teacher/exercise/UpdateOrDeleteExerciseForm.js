@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { View, StyleSheet } from 'react-native'
+
 import FormTextInput from '../../../components/form/FormTextInput'
 import FormButton from '../../../components/form/FormButton'
 import FormSelectInput from '../../../components/form/FormSelectInput'
@@ -15,16 +16,6 @@ const UpdateOrDeleteExerciseForm = ({route, navigation}) => {
     const [start_tempo, setStartTempo] = useState(route.params.exercise.start_tempo.toString());
     const [goal_tempo, setGoalTempo] = useState(route.params.exercise.goal_tempo.toString());
     const [tempo_progression, setTempoProgression] = useState(route.params.exercise.tempo_progression);
-
-    const getTempoProgressionOptions = () => {
-        /*
-        Return a list of Tempo Progression(s)
-        */
-        const options = [
-            {'key': 'linear','value': 'Linear'},
-        ];
-        return options;
-    }
 
     const onDeletePressed = async () => {
         /*
@@ -49,7 +40,7 @@ const UpdateOrDeleteExerciseForm = ({route, navigation}) => {
         } else if (validationGoalTempoIsNumber() == false) {
             alert('Goal Tempo must be a number!');
         } else {
-            await updateExercise();
+            await updateOnDatabase();
             navigation.navigate('Exercises', {practice_plan});
         }
     }
@@ -85,7 +76,7 @@ const UpdateOrDeleteExerciseForm = ({route, navigation}) => {
         return !isNaN(Number(goal_tempo.trim()));
     }
 
-    const updateExercise = async () => {
+    const updateOnDatabase = async () => {
         /*
         Calls a database function to update an Exercise.
         */
@@ -103,8 +94,19 @@ const UpdateOrDeleteExerciseForm = ({route, navigation}) => {
         await updateExerciseRow(db, exercise);
     }
 
+    const getTempoProgressionOptions = () => {
+        /*
+        Return a list of Tempo Progression(s)
+        */
+        const options = [
+            {'key': 'linear','value': 'Linear'},
+        ];
+        return options;
+    }
+
     return (
         <View style={styles.container}>
+            {/* Field(s) */}
             <FormTextInput 
             fieldName="Practice Plan Name"
             value={route.params.practice_plan.name} 
@@ -134,6 +136,7 @@ const UpdateOrDeleteExerciseForm = ({route, navigation}) => {
             defaultOption={{'key': 'linear','value': 'Linear'}} 
             setValue={setTempoProgression}
             options={getTempoProgressionOptions()} />
+            {/* Action(s) */}
             <FormButton 
             text="Update"
             onPress={onUpdatePressed} />

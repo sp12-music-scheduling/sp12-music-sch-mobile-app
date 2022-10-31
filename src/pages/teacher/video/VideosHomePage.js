@@ -6,7 +6,7 @@ import {
   Button,
 } from 'react-native';
 
-const VideosPage = ({navigation}) => {
+const VideosHomePage = ({navigation}) => {
   return (
       <View style={styles.container}>
           <Text>Coming Soon!</Text>
@@ -15,7 +15,7 @@ const VideosPage = ({navigation}) => {
   )
 };
 
-export default VideosPage;
+export default VideosHomePage;
 
 const styles = StyleSheet.create({
   container: {

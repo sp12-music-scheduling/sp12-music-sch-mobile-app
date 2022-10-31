@@ -1,7 +1,7 @@
 import React from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 
-const StudentRow = ({name, email, is_selected = false}) => {
+const ExerciseEntrollmentRow = ({name, email, is_selected = false}) => {
     return (
         <View style={[styles.item, {backgroundColor: is_selected == false ? '#C3AAAA' : 'black'}]}>
             <View style={styles.itemleft}>
@@ -41,4 +41,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default StudentRow;
+export default ExerciseEntrollmentRow;

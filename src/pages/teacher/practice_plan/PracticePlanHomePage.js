@@ -2,14 +2,14 @@ import React, { useState, useCallback, useEffect } from 'react'
 import { StyleSheet,View,FlatList,Dimensions } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
-import PracticePlan from '../../../components/teacher/PracticePlan';
+import PracticePlanRow from '../../../components/teacher/PracticePlanRow';
 import FloatingPlusButton from '../../../components/teacher/FloatingPlusButton';
 import { getDBConnection, getPracticePlans, getPracticeTypes } from "../../../services/database";
 
 
 const device_height = Dimensions.get('window').height
 
-const PracticePlanListPage = ({navigation}) => {
+const PracticePlanHomePage = ({navigation}) => {
 
   const [practicePlanTypeLookup, setPracticePlanTypeLookup] = useState({});
   const [practicePlanTypeOptions, setPracticePlanTypeOptions] = useState([]);
@@ -128,7 +128,7 @@ const PracticePlanListPage = ({navigation}) => {
               <TouchableOpacity 
               onLongPress={navigateToUpdateOrDeletePracticePlan(item)}
               onPress={navigateToExercises(item)}  >
-                  <PracticePlan 
+                  <PracticePlanRow 
                   name={item.name} 
                   type={item.type} 
                   duration_days={item.duration_days} />
@@ -147,7 +147,7 @@ const PracticePlanListPage = ({navigation}) => {
   )
 };
 
-export default PracticePlanListPage;
+export default PracticePlanHomePage;
 
 const styles = StyleSheet.create({
   container: {

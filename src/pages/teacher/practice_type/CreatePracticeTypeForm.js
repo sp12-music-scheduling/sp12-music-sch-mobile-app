@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { View, StyleSheet } from 'react-native'
+
 import FormTextInput from '../../../components/form/FormTextInput'
 import FormButton from '../../../components/form/FormButton'
 import { getDBConnection, insertPracticeTypeRow} from "../../../services/database";
@@ -21,7 +22,7 @@ const CreatePracticeTypeForm = ({navigation}) => {
             alert('Please fill all fields!');
         }
         else {
-            createPracticeType();
+            createOnDatabase();
             navigation.navigate('Manage Practice Types');
         }
     }
@@ -37,9 +38,9 @@ const CreatePracticeTypeForm = ({navigation}) => {
         }
     }
 
-    const createPracticeType = async () => {
+    const createOnDatabase = async () => {
         /*
-        Calls a database function to create a new Practice Plan.
+        Calls a database function to create a new Practice Type.
         */
         const practice_type = {
             'name': name.trim(),
@@ -51,6 +52,7 @@ const CreatePracticeTypeForm = ({navigation}) => {
 
     return (
         <View style={styles.container}>
+            {/* Field(s) */}
             <FormTextInput 
             fieldName="Name"
             value={name} 
@@ -59,6 +61,7 @@ const CreatePracticeTypeForm = ({navigation}) => {
             fieldName="Sub-Type (optional)"
             value={subType} 
             setValue={setSubType} />
+            {/* Action(s) */}
             <FormButton 
             text="Create"
             onPress={onCreatePressed} />

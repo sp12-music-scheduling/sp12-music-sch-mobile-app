@@ -1,15 +1,9 @@
 import React, {useState, useCallback, useEffect } from 'react';
-import {
-  StyleSheet,
-  Text,
-  View,
-  Dimensions,
-  FlatList,
-} from 'react-native';
+import { StyleSheet, Text, View, Dimensions, FlatList } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import SwitchSelector from 'react-native-switch-selector';
 
-import StudentRow from '../../../components/teacher/StudentRow';
+import StudentRow from '../../../components/teacher/ExerciseEntrollmentRow';
 import { 
   getDBConnection,
   getUsers,
@@ -22,11 +16,10 @@ const VIEWS = [
 
 const DEVICE_HEIGHT = Dimensions.get('window').height
 
-
-const StudentManagementPage = ({navigation}) => {
+const StudentManagementHomePage = ({navigation}) => {
 
   const [currentSwitchSelection, setCurrentSwitchSelection] = useState(1);
-  const [available_students, setAvailableStudents] = useState([]);
+  const [availableStudents, setAvailableStudents] = useState([]);
 
   useEffect(() => {
     /*
@@ -41,8 +34,7 @@ const StudentManagementPage = ({navigation}) => {
 
   const loadDataCallback = useCallback(async () => {
     /*
-    This function is used to populate athis exercises Student
-    Enrollment.
+    Pulls data required to load this page.
     */
     const db = await getDBConnection();
     const students = await getUsers(db);
@@ -59,11 +51,12 @@ const StudentManagementPage = ({navigation}) => {
 
   const getEnrollmentViews = () => {
     /*
+    VIEW when the Student Enrollment Toggle is Selected.
     */
    return <View style={styles.enrollment_container}>
             <View style={styles.enrollment_section_items}>
               <FlatList
-              data={available_students}
+              data={availableStudents}
               renderItem={({item}) =>
                   <TouchableOpacity 
                   onPress={navigateToEnrollmentRowSelect(item)}  >
@@ -83,7 +76,7 @@ const StudentManagementPage = ({navigation}) => {
 
   const navigateToEnrollmentRowSelect = (item) => {
     /*
-    
+    Navigates to the Enrollement exercises by the selected Student User.
     */
     return () =>  navigation.push('Student Management Enrollment', {
       'user': item,
@@ -92,11 +85,12 @@ const StudentManagementPage = ({navigation}) => {
 
   const getStudentProgresstViews = () => {
     /*
+    VIEW when the Student Progress Toggle is Selected.
+    < PLACEHOLDER >
     */
     return <View style={styles.student_progress_container}>
       <Text>Coming soon!</Text>
     </View>
-
   }
 
   return (
@@ -116,7 +110,7 @@ const StudentManagementPage = ({navigation}) => {
   )
 };
 
-export default StudentManagementPage;
+export default StudentManagementHomePage;
 
 const styles = StyleSheet.create({
   container: {
@@ -140,6 +134,3 @@ const styles = StyleSheet.create({
     height: DEVICE_HEIGHT - 210
   },
 });
- 
-
- 

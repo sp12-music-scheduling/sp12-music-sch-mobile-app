@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { View, StyleSheet } from 'react-native'
+
 import FormTextInput from '../../../components/form/FormTextInput'
 import FormButton from '../../../components/form/FormButton'
 import FormSelectInput from '../../../components/form/FormSelectInput'
@@ -16,16 +17,6 @@ const CreateExerciseForm = ({route, navigation}) => {
     const [goal_tempo, setGoalTempo] = useState('');
     const [tempo_progression, setTempoProgression] = useState('');
 
-    const getTempoProgressionOptions = () => {
-        /*
-        Return a list of Tempo Progression(s)
-        */
-        const options = [
-            {'key': 'linear','value': 'Linear'},
-        ];
-        return options;
-    }
-
     const onCreatePressed = async () => {
         /*
         Function that action(s) the CREATE functionality.
@@ -41,7 +32,7 @@ const CreateExerciseForm = ({route, navigation}) => {
         } else if (validationGoalTempoIsNumber() == false) {
             alert('Goal Tempo must be a number!');
         } else {
-            createExercise();
+            createOnDatabase();
             navigation.navigate('Exercises', {practice_plan});
         }
     }
@@ -77,7 +68,7 @@ const CreateExerciseForm = ({route, navigation}) => {
         return !isNaN(Number(goal_tempo.trim()));
     }
 
-    const createExercise = async () => {
+    const createOnDatabase = async () => {
         /*
         Calls a database function to create a new Exercise.
         */
@@ -94,8 +85,19 @@ const CreateExerciseForm = ({route, navigation}) => {
         await insertExerciseRow(db, exercise);
     }
 
+    const getTempoProgressionOptions = () => {
+        /*
+        Return a list of Tempo Progression(s)
+        */
+        const options = [
+            {'key': 'linear','value': 'Linear'},
+        ];
+        return options;
+    }
+
     return (
         <View style={styles.container}>
+            {/* Field(s) */}
             <FormTextInput 
             fieldName="Practice Plan Name"
             value={route.params.practice_plan.name} 
@@ -125,6 +127,7 @@ const CreateExerciseForm = ({route, navigation}) => {
             defaultOption={{'key': 'linear','value': 'Linear'}} 
             setValue={setTempoProgression}
             options={getTempoProgressionOptions()} />
+            {/* Action(s) */}
             <FormButton 
             text="Create"
             onPress={onCreatePressed} />

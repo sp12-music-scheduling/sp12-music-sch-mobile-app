@@ -2,18 +2,18 @@ import React, { useState, useCallback, useEffect } from 'react'
 import { StyleSheet,View,FlatList,Dimensions } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
-import Exercise from '../../../components/teacher/Exercise';
+import ExerciseRow from '../../../components/teacher/ExerciseRow';
 import FloatingPlusButton from '../../../components/teacher/FloatingPlusButton';
 import { getDBConnection, getExercisesByPracticePlan, getExerciseEnrollment } from "../../../services/database";
 
 
-const device_height = Dimensions.get('window').height
+const DEVICE_HEIGHT = Dimensions.get('window').height
 
-const ExercisesPage = ({route, navigation}) => {
+const ExerciseHomePage = ({route, navigation}) => {
 
   const practice_plan = route.params.practice_plan;
   const [exercises, setExercises] = useState([]);
-  const [exercises_entrollment, setExercisesEnrollment] = useState([]);
+  const [exercisesEntrollment, setExercisesEnrollment] = useState([]);
 
  
   useEffect(() => {
@@ -29,8 +29,7 @@ const ExercisesPage = ({route, navigation}) => {
 
   const loadDataCallback = useCallback(async () => {
     /*
-    This function is used to populate available Practice Plans
-    and Practice Plan Types.
+    Pulls data required to load this page.
     */
     const db = await getDBConnection();
     const exercises = await getExercisesByPracticePlan(db, practice_plan);
@@ -38,28 +37,8 @@ const ExercisesPage = ({route, navigation}) => {
     const ee = await getExerciseEnrollment(db);
     setExercisesEnrollment(ee);
   }, []);
-  
-  const getExerciseList = () => {
-    /*
-    Returns a list of available Exercises by Practife Plan
-    */   
-    return exercises;
-  }
 
-  const getExerciseEnrollmentCount = (item) => {
-    /*
-    Returns a list of available Exercises by Practife Plan
-    */   
-    var count = 0;
-    exercises_entrollment.forEach(ee => {
-      if (ee.exercise_id == item.id){
-        count++;
-      } 
-    })
-    return count;
-  }
-
-  const navigateToCreateExercise = () => {
+  const navigateToCreate = () => {
     /*
     Function to navigate to the CREATE form with
     required parameters.
@@ -69,7 +48,7 @@ const ExercisesPage = ({route, navigation}) => {
     });
   }
 
-  const navigateToUpdateOrDeleteExercise = (item) => {
+  const navigateToUpdateOrDelete = (item) => {
     /*
     Function to navigate to the UPDATE_OR_CREATE form with
     required parameters.
@@ -91,6 +70,26 @@ const ExercisesPage = ({route, navigation}) => {
     });
   }
 
+  const getExerciseList = () => {
+    /*
+    Returns a list of available Exercises by Practife Plan
+    */   
+    return exercises;
+  }
+
+  const getExerciseEnrollmentCount = (item) => {
+    /*
+    Returns a list of available Exercises by Practife Plan
+    */   
+    var count = 0;
+    exercisesEntrollment.forEach(ee => {
+      if (ee.exercise_id == item.id){
+        count++;
+      } 
+    })
+    return count;
+  }
+
   return (
       <View style={styles.container}>
         <View style={styles.sectionItems}>
@@ -98,9 +97,9 @@ const ExercisesPage = ({route, navigation}) => {
           data={getExerciseList()}
           renderItem={({item}) =>
               <TouchableOpacity 
-              onLongPress={navigateToUpdateOrDeleteExercise(item)}
+              onLongPress={navigateToUpdateOrDelete(item)}
               onPress={navigateToRowSelect(item)}  >
-                  <Exercise 
+                  <ExerciseRow 
                   name={item.name} 
                   user_count={getExerciseEnrollmentCount(item)}
                   />
@@ -113,20 +112,20 @@ const ExercisesPage = ({route, navigation}) => {
         </View>
         <View style={styles.fab}>
             <FloatingPlusButton 
-            onPress={navigateToCreateExercise()} />
+            onPress={navigateToCreate()} />
         </View>
       </View>
   )
 };
 
-export default ExercisesPage;
+export default ExerciseHomePage;
 
 const styles = StyleSheet.create({
   container: {
     backgroundColor: 'white',
     paddingTop: 80,
     paddingHorizontal: 20,
-    height: device_height - 210
+    height: DEVICE_HEIGHT - 210
   },
   fab: {
     flex: 1,

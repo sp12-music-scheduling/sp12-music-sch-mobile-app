@@ -1,7 +1,7 @@
 import React from 'react';
 import {StyleSheet, Text, View, Image} from 'react-native';
 
-const Exercise = ({name, user_count}) => {
+const ExerciseRow = ({name, user_count}) => {
     return (
         <View style={styles.item}>
             <View style={styles.itemleft}>
@@ -52,4 +52,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default Exercise;
+export default ExerciseRow;

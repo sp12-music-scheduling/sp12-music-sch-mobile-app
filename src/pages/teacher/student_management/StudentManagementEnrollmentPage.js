@@ -36,6 +36,7 @@ const StudentManagementEnrollmentPage = ({route, navigation}) => {
 
   const loadDataCallback = useCallback(async () => {
     /*
+    Pulls data required to load this page.
     */
     const db = await getDBConnection();
     const exercises = await getExercises(db);
@@ -50,6 +51,9 @@ const StudentManagementEnrollmentPage = ({route, navigation}) => {
   
   const getExerciseList = () => {
     /*
+    Returns a list of exercises, and injects the following:
+      - practice_plan_name
+      - practice_plan_type
     */
    const exercises = [];
     for (let index = 0; index < available_exercises.length; index++) {
@@ -63,9 +67,9 @@ const StudentManagementEnrollmentPage = ({route, navigation}) => {
     return exercises;
   }
 
-
   const getPracticePlanByExerciseId = (exercise) => {
     /*
+    Given an Exercise, returns the Practice Plan Object
     */
     var n = NaN;
     available_practice_plans.forEach(pp => {
@@ -76,8 +80,10 @@ const StudentManagementEnrollmentPage = ({route, navigation}) => {
     });
     return n;
   }
+
   const getPracticeTypeNameByPracticePlanId = (practice_plan) => {
     /*
+    Given a PracticePlan, returns the Practice Type Name
     */
     var n = '';
     available_practice_types.forEach(pt => {
@@ -91,6 +97,8 @@ const StudentManagementEnrollmentPage = ({route, navigation}) => {
 
   const isStudentEnrolledInExercise = (exercise) => {
     /*
+    Checks if the Student on this page is enrolled to the
+    exercise provided as a parameter.
     */
    var response = false;
     exercise_entrollment.forEach(ee => {

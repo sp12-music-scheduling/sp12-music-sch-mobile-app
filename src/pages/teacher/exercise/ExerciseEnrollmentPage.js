@@ -2,7 +2,7 @@ import React, { useState, useCallback, useEffect } from 'react'
 import { StyleSheet,View,FlatList,Dimensions } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
-import StudentRow from '../../../components/teacher/StudentRow';
+import ExerciseEntrollmentRow from '../../../components/teacher/ExerciseEntrollmentRow';
 import { 
   getDBConnection,
   getExerciseEnrollmentByExercise,
@@ -12,13 +12,13 @@ import {
  } from "../../../services/database";
 
 
-const device_height = Dimensions.get('window').height
+const DEVICE_HEIGHT = Dimensions.get('window').height
 
 const ExerciseEnrollmentPage = ({route, navigation}) => {
 
   const exercise = route.params.exercise;
-  const [exercise_enrollment, setExerciseEnrollment] = useState('');
-  const [available_students, setAvailableStudents] = useState('');
+  const [exerciseEnrollment, setExerciseEnrollment] = useState([]);
+  const [availableStudents, setAvailableStudents] = useState([]);
 
  
   useEffect(() => {
@@ -39,21 +39,39 @@ const ExerciseEnrollmentPage = ({route, navigation}) => {
     */
     const db = await getDBConnection();
     const ee = await getExerciseEnrollmentByExercise(db, exercise);
-    console.log(ee);
     setExerciseEnrollment(ee);
     const students = await getUsers(db);
     setAvailableStudents(students);
   }, []);
   
+  const navigateToRowSelect = async (item) => {
+    /*
+    Toggle Exercise Enrollment (Enroll/Unenroll)
+    */
+    const db = await getDBConnection();
+    if (item.is_enrolled == false){
+      const ee = {
+        'exercise_id': exercise.id,
+        'user_id': item.id,
+      }
+      await insertExerciseEnrollment(db, ee);
+    } else {
+      const ee = getExerciceEnrollment(item);
+      await deleteExerciseEnrollment(db, ee);
+    }
+    const ee = await getExerciseEnrollmentByExercise(db, exercise);
+    setExerciseEnrollment(ee);
+  }
+
   const getAvailableStudentList = () => {
     /*
     Returns a list of Students enrolled to an Exercise.
     */
-    for (let index = 0; index < available_students.length; index++) {
-      const is_enrolled = isStudentEnrolled(available_students[index]);
-      available_students[index].is_enrolled = is_enrolled;
+    for (let index = 0; index < availableStudents.length; index++) {
+      const is_enrolled = isStudentEnrolled(availableStudents[index]);
+      availableStudents[index].is_enrolled = is_enrolled;
     }
-    return available_students;
+    return availableStudents;
   }
 
   const isStudentEnrolled = (user) => {
@@ -61,7 +79,7 @@ const ExerciseEnrollmentPage = ({route, navigation}) => {
     Checks if a student is enrolled in the exercise.
     */
    var is_enrolled = false;
-    exercise_enrollment.forEach(ee => {
+   exerciseEnrollment.forEach(ee => {
       if (ee.user_id == user.id){
         is_enrolled = true;
       }
@@ -74,34 +92,12 @@ const ExerciseEnrollmentPage = ({route, navigation}) => {
     Checks if a student is enrolled in the exercise.
     */
    var response = NaN;
-    exercise_enrollment.forEach(ee => {
+   exerciseEnrollment.forEach(ee => {
       if (ee.user_id == user.id){
         response = ee;
       }
     });
     return response;
-  }
-
-  const navigateToRowSelect = async (item) => {
-    /*
-    Implement toggle
-    */
-    const db = await getDBConnection();
-    if (item.is_enrolled == false){
-      // console.log('ENROLL!');
-      const ee = {
-      'exercise_id': exercise.id,
-      'user_id': item.id,
-      }
-      await insertExerciseEnrollment(db, ee);
-    } else {
-      // console.log('UN-ENROLL!');
-      const ee = getExerciceEnrollment(item);
-      await deleteExerciseEnrollment(db, ee);
-    }
-    const ee = await getExerciseEnrollmentByExercise(db, exercise);
-    // console.log(ee);
-    setExerciseEnrollment(ee);
   }
 
   return (
@@ -112,7 +108,7 @@ const ExerciseEnrollmentPage = ({route, navigation}) => {
           renderItem={({item}) =>
               <TouchableOpacity 
               onPress={() => navigateToRowSelect(item)}  >
-                  <StudentRow 
+                  <ExerciseEntrollmentRow 
                   name={item.name} 
                   email={item.email}
                   is_selected={item.is_enrolled}
@@ -135,7 +131,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     paddingTop: 80,
     paddingHorizontal: 20,
-    height: device_height - 210
+    height: DEVICE_HEIGHT - 210
   },
   fab: {
     flex: 1,

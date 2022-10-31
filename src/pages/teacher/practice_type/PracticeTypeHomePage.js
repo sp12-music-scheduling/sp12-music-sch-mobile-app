@@ -11,7 +11,7 @@ const DEVICE_HEIGHT = Dimensions.get('window').height
 
 const PracticeTypeHomePage = ({navigation}) => {
 
-   const [practiceTypes, setPracticeTypes] = useState([]);
+  const [practiceTypes, setPracticeTypes] = useState([]);
  
   useEffect(() => {
     /*
@@ -26,6 +26,7 @@ const PracticeTypeHomePage = ({navigation}) => {
 
   const loadDataCallback = useCallback(async () => {
     /*
+    Pulls data required to load this page.
     */
     const db = await getDBConnection();
     const pt = await getPracticeTypes(db);
@@ -34,6 +35,7 @@ const PracticeTypeHomePage = ({navigation}) => {
   
   const getPracticeTypeList = () => {
     /*
+    Returns an array of practice type(s).
     */
     return practiceTypes;
   }

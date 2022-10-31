@@ -1,16 +1,16 @@
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 
-import VideosPage from '../../pages/teacher/video/VideosPage';
+import VideosHomePage from '../../pages/teacher/video/VideosHomePage';
 
-import StudentManagementPage from '../../pages/teacher/student_management/StudentManagementPage';
+import StudentManagementHomePage from '../../pages/teacher/student_management/StudentManagementHomePage';
 import StudentManagementEnrollmentPage from "../../pages/teacher/student_management/StudentManagementEnrollmentPage";
 
-import PracticePlanListPage from '../../pages/teacher/practice_plan/PracticePlanListPage';
+import PracticePlanHomePage from '../../pages/teacher/practice_plan/PracticePlanHomePage';
 import CreatePracticePlanForm from '../../pages/teacher/practice_plan/CreatePracticePlanForm';
 import UpdateOrDeletePracticePlanForm from "../../pages/teacher/practice_plan/UpdateOrDeletePracticePlanForm";
 
-import ExercisesPage from '../../pages/teacher/exercise/ExercisesPage';
+import ExerciseHomePage from '../../pages/teacher/exercise/ExerciseHomePage';
 import CreateExerciseForm from '../../pages/teacher/exercise/CreateExerciseForm';
 import UpdateOrDeleteExerciseForm from "../../pages/teacher/exercise/UpdateOrDeleteExerciseForm";
 import ExerciseEnrollmentPage from "../../pages/teacher/exercise/ExerciseEnrollmentPage";
@@ -32,10 +32,10 @@ const screenOptionStyle = {
 const MainStackNavigator = () => {
   return (
     <Stack.Navigator screenOptions={screenOptionStyle}>
-      <Stack.Screen name="Practice Plans" component={PracticePlanListPage} />
+      <Stack.Screen name="Practice Plans" component={PracticePlanHomePage} />
       <Stack.Screen name="Create Practice Plan" component={CreatePracticePlanForm} />
       <Stack.Screen name="Update or Delete Practice Plan" component={UpdateOrDeletePracticePlanForm} />
-      <Stack.Screen name="Exercises" component={ExercisesPage} />
+      <Stack.Screen name="Exercises" component={ExerciseHomePage} />
       <Stack.Screen name="Create Exercise" component={CreateExerciseForm} />
       <Stack.Screen name="Update or Delete Exercise" component={UpdateOrDeleteExerciseForm} />
       <Stack.Screen name="Exercise Entrollment" component={ExerciseEnrollmentPage} />
@@ -46,7 +46,7 @@ const MainStackNavigator = () => {
 const VideosStackNavigator = () => {
   return (
     <Stack.Navigator screenOptions={screenOptionStyle}>
-      <Stack.Screen name="Videos" component={VideosPage} />
+      <Stack.Screen name="Videos" component={VideosHomePage} />
     </Stack.Navigator>
   );
 }
@@ -54,7 +54,7 @@ const VideosStackNavigator = () => {
 const StudentManagementStackNavigator = () => {
   return (
     <Stack.Navigator screenOptions={screenOptionStyle}>
-      <Stack.Screen name="Student Management" component={StudentManagementPage} />
+      <Stack.Screen name="Student Management" component={StudentManagementHomePage} />
       <Stack.Screen name="Student Management Enrollment" component={StudentManagementEnrollmentPage} />
     </Stack.Navigator>
   );
@@ -70,4 +70,9 @@ const ManagePracticeTypeStackNavigator = () => {
   );
 }
 
-export { MainStackNavigator, VideosStackNavigator, StudentManagementStackNavigator, ManagePracticeTypeStackNavigator };
+export { 
+  MainStackNavigator, 
+  VideosStackNavigator, 
+  StudentManagementStackNavigator, 
+  ManagePracticeTypeStackNavigator,
+};
