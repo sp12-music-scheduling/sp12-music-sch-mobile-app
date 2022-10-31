@@ -2,7 +2,9 @@ import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 
 import VideosPage from '../../pages/teacher/video/VideosPage';
+
 import StudentManagementPage from '../../pages/teacher/student_management/StudentManagementPage';
+import StudentManagementEnrollmentPage from "../../pages/teacher/student_management/StudentManagementEnrollmentPage";
 
 import PracticePlanListPage from '../../pages/teacher/practice_plan/PracticePlanListPage';
 import CreatePracticePlanForm from '../../pages/teacher/practice_plan/CreatePracticePlanForm';
@@ -49,6 +51,7 @@ const StudentManagementStackNavigator = () => {
   return (
     <Stack.Navigator screenOptions={screenOptionStyle}>
       <Stack.Screen name="Student Management" component={StudentManagementPage} />
+      <Stack.Screen name="Student Management Enrollment" component={StudentManagementEnrollmentPage} />
     </Stack.Navigator>
   );
 }

@@ -4,7 +4,7 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 
 import Exercise from '../../../components/teacher/Exercise';
 import FloatingPlusButton from '../../../components/teacher/FloatingPlusButton';
-import { getDBConnection, getExercises, getExerciseEnrollment } from "../../../services/database";
+import { getDBConnection, getExercisesByPracticePlan, getExerciseEnrollment } from "../../../services/database";
 
 
 const device_height = Dimensions.get('window').height
@@ -33,7 +33,7 @@ const ExercisesPage = ({route, navigation}) => {
     and Practice Plan Types.
     */
     const db = await getDBConnection();
-    const exercises = await getExercises(db, practice_plan);
+    const exercises = await getExercisesByPracticePlan(db, practice_plan);
     setExercises(exercises);
     const ee = await getExerciseEnrollment(db);
     setExercisesEnrollment(ee);

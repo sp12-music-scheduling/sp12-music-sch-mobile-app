@@ -220,7 +220,18 @@ const createExerciseTable = async (db: SQLiteDatabase) => {
     await db.executeSql(table_sql);
 };
 
-export const getExercises = async (db: SQLiteDatabase, practice_plan: PracticePlan): Promise<Exercise[]> => {
+export const getExercises = async (db: SQLiteDatabase): Promise<Exercise[]> => {
+    const exercises: Exercise[] = [];
+    const results = await db.executeSql(`SELECT * FROM exercise;`);
+    results.forEach(result => {
+        for (let index = 0; index < result.rows.length; index++) {
+            exercises.push(result.rows.item(index))
+        }
+    });
+    return exercises;
+};
+
+export const getExercisesByPracticePlan = async (db: SQLiteDatabase, practice_plan: PracticePlan): Promise<Exercise[]> => {
     const exercises: Exercise[] = [];
     const results = await db.executeSql(`SELECT * FROM exercise WHERE practice_plan_id == ${practice_plan.id};`);
     results.forEach(result => {

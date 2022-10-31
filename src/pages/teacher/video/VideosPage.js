@@ -9,11 +9,8 @@ import {
 const VideosPage = ({navigation}) => {
   return (
       <View style={styles.container}>
-          <Text>Video Submission Screen PLACEHOLDER</Text>
-          <Button
-              title="Click Here"
-              onPress={() => alert('Button Clicked!')}
-          ></Button>
+          <Text>Coming Soon!</Text>
+
       </View>
   )
 };

@@ -41,7 +41,7 @@ const ExerciseEnrollmentPage = ({route, navigation}) => {
     const ee = await getExerciseEnrollmentByExercise(db, exercise);
     console.log(ee);
     setExerciseEnrollment(ee);
-    const students = await getUsers(db, exercise);
+    const students = await getUsers(db);
     setAvailableStudents(students);
   }, []);
   
