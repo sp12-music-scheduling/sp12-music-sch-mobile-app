@@ -7,7 +7,7 @@ const Tab = createBottomTabNavigator();
 const BottomTabNavigator = () => {
   return (
     <Tab.Navigator 
-      initialRouteName={"Home"}
+      initialRouteName={"PracticePlanHome"}
       screenOptions={{
         headerShown: false,
         tabBarShowLabel: false,
@@ -50,7 +50,7 @@ const BottomTabNavigator = () => {
         }}
       />
       <Tab.Screen 
-        name="Home" 
+        name="PracticePlanHome" 
         component={MainStackNavigator} 
         options={{
           tabBarIcon: ({focused}) => (

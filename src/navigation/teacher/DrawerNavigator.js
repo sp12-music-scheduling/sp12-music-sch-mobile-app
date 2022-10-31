@@ -20,7 +20,7 @@ const DrawerNavigator = () => {
       <Drawer.Screen 
       name="Home" 
       component={TabNavigator} 
-      initialParams={{screen:'Home'}} />
+      initialParams={{screen:'PracticePlanHome'}} />
       <Drawer.Screen 
       name="Videos" 
       component={TabNavigator} 
