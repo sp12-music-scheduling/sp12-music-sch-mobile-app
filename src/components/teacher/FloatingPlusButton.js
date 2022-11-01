@@ -1,5 +1,5 @@
-import { Pressable, StyleSheet, Text } from "react-native";
 import React from "react";
+import { Pressable, StyleSheet, Text } from "react-native";
   
 const FloatingPlusButton = (props) => {
     return (
@@ -18,7 +18,7 @@ const styles = StyleSheet.create({
         alignItems: "center",
         borderRadius: 10,
         position: "absolute",
-        bottom: 150,
+        bottom: 90,
         right: 0,
         backgroundColor: "#754747",
         paddingHorizontal: 20,

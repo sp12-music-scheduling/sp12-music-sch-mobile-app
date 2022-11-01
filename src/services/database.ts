@@ -1,26 +1,19 @@
-// TEMPORARY
-// USING AS REFERENCE TO LEARN
+/*
+ * 
+ * The prototype is being developed using SQLite. We
+ * will look to migrate to Firebase or comparable
+ * service for final deployment.
+ * 
+ */
 
 import { enablePromise, openDatabase, SQLiteDatabase } from 'react-native-sqlite-storage';
 
 enablePromise(true);
 
-//
-// MODELS
-//
-
-export type UserRole = {
-    id: number;
-    name: string;
-};
-
-export type User = {
-    id: number;
-    name: string;
-    email: string;
-    password: string;
-    user_role_id: number;
-};
+/*
+    Models       
+    ----------------------
+*/
 
 export type PracticeType = {
     id: number;
@@ -36,42 +29,139 @@ export type PracticePlan = {
     practice_type_id: number;
 };
 
-//
-// Functions
-//
+export type Exercise = {
+    id: number;
+    name: string;
+    descr: string;
+    video_link: string;
+    start_tempo: number;
+    goal_tempo: number;
+    tempo_progression: string;
+    practice_plan_id: number;
+};
+
+export type User = {
+    id: number;
+    name: string;
+    email: string;
+};
+
+export type ExerciseEnrollment = {
+    id: number;
+    exercise_id: number;
+    user_id: number;
+};
+
+/*
+    Main       
+    ----------------------
+    Global Database Function(s)
+*/
 
 export const getDBConnection = async () => {
     return openDatabase({ name: 'sp12-music-app.db', location: 'default' });
 };
 
 export const createTables = async (db: SQLiteDatabase) => {
-    const create_user_role = `
-        CREATE TABLE IF NOT EXISTS "user_role" (
-            "id"	INTEGER NOT NULL UNIQUE,
-            "name"	TEXT NOT NULL UNIQUE,
-            PRIMARY KEY("id" AUTOINCREMENT)
-        );`;
-    await db.executeSql(create_user_role);
-    const create_user = `
-        CREATE TABLE IF NOT EXISTS "user" (
-            "id"	INTEGER NOT NULL UNIQUE,
-            "name"	TEXT NOT NULL,
-            "email"	TEXT NOT NULL UNIQUE,
-            "password"	TEXT NOT NULL,
-            "user_role_id"	INTEGER NOT NULL,
-            PRIMARY KEY("id" AUTOINCREMENT),
-            FOREIGN KEY("user_role_id") REFERENCES "user_role"("id")
-        );`;
-    await db.executeSql(create_user);
-    const create_practice_type_table = `
+    await createPracticeTypeTable(db);
+    await createPracticePlanTable(db);
+    await createExerciseTable(db);
+    await createUserTable(db);
+    await createExerciseEnrollmentTable(db);
+};
+
+export const clearDatabase = async (db: SQLiteDatabase) => {
+    const tables = [
+        'exercise_enrollment',
+        'user',
+        'exercise',
+        'practice_plan', 
+        'practice_type',
+    ];
+    tables.forEach(table => 
+        deleteTable(db, table)
+    );
+};
+
+const deleteTable = async (db: SQLiteDatabase, tableName: string) => {
+    const query = `drop table ${tableName}`;
+    await db.executeSql(query);
+};
+
+
+/*
+    TABLE       
+    ----------------------
+    Practice Type
+*/
+
+const createPracticeTypeTable = async (db: SQLiteDatabase) => {
+    const table_sql = `
         CREATE TABLE IF NOT EXISTS "practice_type" (
             "id"	INTEGER NOT NULL UNIQUE,
             "name"	TEXT NOT NULL,
             "sub_type"	TEXT,
             PRIMARY KEY("id" AUTOINCREMENT)
         );`;
-    await db.executeSql(create_practice_type_table);
-    const create_practice_plan_table = `
+    await db.executeSql(table_sql);
+};
+
+export const insertPracticeTypeRow = async (db: SQLiteDatabase, practice_type: PracticeType) => {
+    const insertQuery = `
+        INSERT INTO "practice_type" ("name", "sub_type") 
+        VALUES ("${practice_type.name}", "${practice_type.sub_type}")
+    ;`;
+    return db.executeSql(insertQuery);
+};
+
+export const updatePracticeTypeRow = async (db: SQLiteDatabase, practice_type: PracticeType) => {
+    const replaceQuery = `
+        REPLACE INTO "practice_type" (id, "name", "sub_type") 
+        VALUES (${practice_type.id}, "${practice_type.name}", "${practice_type.sub_type}")
+    ;`;
+    return db.executeSql(replaceQuery);
+};
+
+export const deletePracticeTypeRow = async (db: SQLiteDatabase, practice_type: PracticeType) => {
+    const insertQuery = `DELETE FROM practice_type WHERE id == ${practice_type.id};`;
+    return db.executeSql(insertQuery);
+};
+
+export const insertDefaultPracticeTypes = async (db: SQLiteDatabase) => {
+    const insertQuery = `
+        INSERT INTO "practice_type" ("name", "sub_type") 
+        VALUES 
+            ('Fundamental', 'Flow'),
+            ('Fundamental', 'Fingers'),
+            ('Fundamental', 'Freedom'),
+            ('Fundamental', 'Fronts'),
+            ('Fundamental', 'Flex'),
+            ('Solo', ''),
+            ('Etude', '')
+    ;`;
+    return db.executeSql(insertQuery);
+};
+
+export const getPracticeTypes = async (db: SQLiteDatabase): Promise<PracticeType[]> => {
+    const practice_types: PracticeType[] = [];
+    const results = await db.executeSql(`SELECT * FROM practice_type;`);
+    results.forEach(result => {
+        for (let index = 0; index < result.rows.length; index++) {
+            practice_types.push(result.rows.item(index))
+        }
+    });
+    return practice_types;
+};
+
+
+/*
+    TABLE       
+    ----------------------
+    Practice Plan
+*/
+
+const createPracticePlanTable = async (db: SQLiteDatabase) => {
+    const table_sql = `
         CREATE TABLE IF NOT EXISTS "practice_plan" (
             "id"	INTEGER NOT NULL UNIQUE,
             "name"	TEXT NOT NULL,
@@ -81,24 +171,7 @@ export const createTables = async (db: SQLiteDatabase) => {
             FOREIGN KEY("practice_type_id") REFERENCES "practice_type"("id"),
             PRIMARY KEY("id")
         );`;
-    await db.executeSql(create_practice_plan_table);
-};
-
-const deleteTable = async (db: SQLiteDatabase, tableName: string) => {
-    const query = `drop table ${tableName}`;
-    await db.executeSql(query);
-};
-
-export const clearDatabase = async (db: SQLiteDatabase) => {
-    const tables = [
-        'practice_plan', 
-        'practice_type',
-        'user_role',
-        'user',
-    ];
-    tables.forEach(table => 
-        deleteTable(db, table)
-        );
+    await db.executeSql(table_sql);
 };
 
 export const insertPracticePlanRow = async (db: SQLiteDatabase, practice_plan: PracticePlan) => {
@@ -111,7 +184,7 @@ export const insertPracticePlanRow = async (db: SQLiteDatabase, practice_plan: P
 
 export const updatePracticePlanRow = async (db: SQLiteDatabase, practice_plan: PracticePlan) => {
     const replaceQuery = `
-    REPLACE INTO "practice_plan" (id, "name", "duration_days", "code", "practice_type_id") 
+        REPLACE INTO "practice_plan" (id, "name", "duration_days", "code", "practice_type_id") 
         VALUES (${practice_plan.id}, "${practice_plan.name}", ${practice_plan.duration_days}, "${practice_plan.code}", ${practice_plan.practice_type_id})
     ;`;
     return db.executeSql(replaceQuery);
@@ -144,91 +217,183 @@ export const isPracticePlanCodeAvailable = async (db: SQLiteDatabase, code: stri
     return practice_plans.length == 0;
 };
 
-export const insertDefaultPracticeTypes = async (db: SQLiteDatabase) => {
+
+/*
+    TABLE       
+    ----------------------
+    Exercise
+*/
+
+const createExerciseTable = async (db: SQLiteDatabase) => {
+    const table_sql = `
+    CREATE TABLE IF NOT EXISTS "exercise" (
+        "id"	INTEGER NOT NULL UNIQUE,
+        "name"	TEXT NOT NULL,
+        "descr"	TEXT,
+        "video_link"	TEXT,
+        "start_tempo"	INTEGER NOT NULL,
+        "goal_tempo"	INTEGER NOT NULL,
+        "tempo_progression"	TEXT,
+        "practice_plan_id"	INTEGER NOT NULL,
+        PRIMARY KEY("id" AUTOINCREMENT),
+        FOREIGN KEY("practice_plan_id") REFERENCES "practice_plan"("id")
+    );`;
+    await db.executeSql(table_sql);
+};
+
+export const getExercises = async (db: SQLiteDatabase): Promise<Exercise[]> => {
+    const exercises: Exercise[] = [];
+    const results = await db.executeSql(`SELECT * FROM exercise;`);
+    results.forEach(result => {
+        for (let index = 0; index < result.rows.length; index++) {
+            exercises.push(result.rows.item(index))
+        }
+    });
+    return exercises;
+};
+
+export const getExercisesByPracticePlan = async (db: SQLiteDatabase, practice_plan: PracticePlan): Promise<Exercise[]> => {
+    const exercises: Exercise[] = [];
+    const results = await db.executeSql(`SELECT * FROM exercise WHERE practice_plan_id == ${practice_plan.id};`);
+    results.forEach(result => {
+        for (let index = 0; index < result.rows.length; index++) {
+            exercises.push(result.rows.item(index))
+        }
+    });
+    return exercises;
+};
+
+export const insertExerciseRow = async (db: SQLiteDatabase, exercise: Exercise) => {
     const insertQuery = `
-        INSERT INTO "practice_type" ("name", "sub_type") 
-        VALUES 
-            ('Fundamental', 'Flow'),
-            ('Fundamental', 'Fingers'),
-            ('Fundamental', 'Freedom'),
-            ('Fundamental', 'Fronts'),
-            ('Fundamental', 'Flex'),
-            ('Solo', ''),
-            ('Etude', '')
+        INSERT INTO "exercise" ("name", "descr", "video_link", "start_tempo", "goal_tempo", "tempo_progression", "practice_plan_id") 
+        VALUES ("${exercise.name}", "${exercise.descr}", "${exercise.video_link}", ${exercise.start_tempo}, ${exercise.goal_tempo}, "${exercise.tempo_progression}", ${exercise.practice_plan_id})
     ;`;
     return db.executeSql(insertQuery);
 };
 
-export const insertDefaultUserRoles = async (db: SQLiteDatabase) => {
-    const insertQuery = `
-        INSERT INTO "user_role" ("name") 
-        VALUES 
-            ('Teacher'),
-            ('Student')
+export const updateExerciseRow = async (db: SQLiteDatabase, exercise: Exercise) => {
+    const replaceQuery = `
+        REPLACE INTO "exercise" (id, "name", "descr", "video_link", "start_tempo", "goal_tempo", "tempo_progression", "practice_plan_id") 
+        VALUES (${exercise.id},"${exercise.name}", "${exercise.descr}", "${exercise.video_link}", ${exercise.start_tempo}, ${exercise.goal_tempo}, "${exercise.tempo_progression}", ${exercise.practice_plan_id})
     ;`;
+    return db.executeSql(replaceQuery);
+};
+
+export const deleteExerciseRow = async (db: SQLiteDatabase, exercise: Exercise) => {
+    const insertQuery = `DELETE FROM exercise WHERE id == ${exercise.id};`;
     return db.executeSql(insertQuery);
 };
 
+/*
+    TABLE       
+    ----------------------
+    User
+*/
 
-export const getPracticeTypes = async (db: SQLiteDatabase): Promise<PracticeType[]> => {
-    const practice_types: PracticeType[] = [];
-    const results = await db.executeSql(`SELECT * FROM practice_type;`);
-    results.forEach(result => {
-        for (let index = 0; index < result.rows.length; index++) {
-            practice_types.push(result.rows.item(index))
-        }
-    });
-    return practice_types;
-};
-
-export const getUserRoles = async (db: SQLiteDatabase): Promise<UserRole[]> => {
-    const user_roles: UserRole[] = [];
-    const results = await db.executeSql(`SELECT * FROM user_role;`);
-    results.forEach(result => {
-        for (let index = 0; index < result.rows.length; index++) {
-            user_roles.push(result.rows.item(index))
-        }
-    });
-    return user_roles;
+const createUserTable = async (db: SQLiteDatabase) => {
+    const table_sql = `
+    CREATE TABLE IF NOT EXISTS "user" (
+        "id"	INTEGER NOT NULL UNIQUE,
+        "name"	TEXT NOT NULL,
+        "email"	TEXT NOT NULL UNIQUE,
+        PRIMARY KEY("id" AUTOINCREMENT)
+    );`;
+    await db.executeSql(table_sql);
 };
 
 export const insertUser = async (db: SQLiteDatabase, user: User) => {
     const insertQuery = `
-        INSERT INTO "user" ("name", "email", "password", "user_role_id") 
-        VALUES ("${user.name}", "${user.email}", "${user.password}", ${user.user_role_id})
+        INSERT INTO "user" ("name", "email") 
+        VALUES ("${user.name}", "${user.email}")
     ;`;
     return db.executeSql(insertQuery);
 };
 
-
-export const createDemoTeacherUser = async (db: SQLiteDatabase) => {
-    const user: User = {
-        id: NaN, // Defined at creation
-        name: 'Demo Usr',
-        email: 'demo.usr@kennesaw.edu',
-        password: 'pwd',
-        user_role_id: 1
-    };
-    return insertUser(db, user);
+export const insertDemoStudentUsers = async (db: SQLiteDatabase) => {
+    /* DEMO FICTICIOUS USERS */
+    const users: User[] = [
+        {id: NaN, name: "John Doe", email: "jdoe0@students.kennesaw.edu"},
+        {id: NaN,name: "Alejandro Zicavo", email: "azicavo0@students.kennesaw.edu"},
+        {id: NaN,name: "Elmiche Kinmakon", email: "ekinmako0@students.kennesaw.edu"},
+        {id: NaN,name: "Batsi M", email: "tmoloi0@students.kennesaw.edu"},
+        {id: NaN,name: "Mary Jane", email: "mjane0@students.kennesaw.edu"},
+    ];
+    users.forEach(user => {
+        insertUser(db, user);
+    });
 };
 
-export const getDemoTeacherUser = async (db: SQLiteDatabase): Promise<User> => {
-    const demo_usr: User[] = [];
-    const results = await db.executeSql(`
-        SELECT * FROM user
-        WHERE email == "demo.usr@kennesaw.edu" 
-    ;`);
+export const getUsers = async (db: SQLiteDatabase): Promise<User[]> => {
+    const users: User[] = [];
+    const results = await db.executeSql(`SELECT * FROM user;`);
     results.forEach(result => {
         for (let index = 0; index < result.rows.length; index++) {
-            demo_usr.push(result.rows.item(index))
+            users.push(result.rows.item(index))
         }
     });
-    if (demo_usr.length == 0){
-        await createDemoTeacherUser(db);
-        return getDemoTeacherUser(db); // Recursive
-    }
-    else{
-        return demo_usr[0];
+    return users;
+};
 
-    }
+/*
+    TABLE       
+    ----------------------
+    Exercise Enrollment
+*/
+
+const createExerciseEnrollmentTable = async (db: SQLiteDatabase) => {
+    const table_sql = `
+    CREATE TABLE IF NOT EXISTS "exercise_enrollment" (
+        "id"	INTEGER NOT NULL UNIQUE,
+        "exercise_id"	INTEGER NOT NULL,
+        "user_id"	INTEGER NOT NULL,
+        PRIMARY KEY("id" AUTOINCREMENT),
+        FOREIGN KEY("exercise_id") REFERENCES "exercise"("id"),
+        FOREIGN KEY("user_id") REFERENCES "user"("id")
+    );`;
+    await db.executeSql(table_sql);
+};
+
+export const insertExerciseEnrollment = async (db: SQLiteDatabase, exercise_enrollment: ExerciseEnrollment) => {
+    const insertQuery = `
+        INSERT INTO "exercise_enrollment" ("exercise_id", "user_id") 
+        VALUES ("${exercise_enrollment.exercise_id}", "${exercise_enrollment.user_id}");`;
+    return db.executeSql(insertQuery);
+};
+
+export const deleteExerciseEnrollment = async (db: SQLiteDatabase, exercise_enrollment: ExerciseEnrollment) => {
+    const deleteQuery = `DELETE FROM exercise_enrollment WHERE id == ${exercise_enrollment.id};`;
+    return db.executeSql(deleteQuery);
+};
+
+export const getExerciseEnrollment = async (db: SQLiteDatabase): Promise<ExerciseEnrollment[]> => {
+    const ee: ExerciseEnrollment[] = [];
+    const results = await db.executeSql(`SELECT * FROM exercise_enrollment;`);
+    results.forEach(result => {
+        for (let index = 0; index < result.rows.length; index++) {
+            ee.push(result.rows.item(index))
+        }
+    });
+    return ee;
+};
+
+export const getExerciseEnrollmentByExercise = async (db: SQLiteDatabase, exercise: Exercise): Promise<ExerciseEnrollment[]> => {
+    const ee: ExerciseEnrollment[] = [];
+    const results = await db.executeSql(`SELECT * FROM exercise_enrollment WHERE exercise_id == ${exercise.id};`);
+    results.forEach(result => {
+        for (let index = 0; index < result.rows.length; index++) {
+            ee.push(result.rows.item(index))
+        }
+    });
+    return ee;
+};
+
+export const getExerciseEnrollmentByUser = async (db: SQLiteDatabase, user: User): Promise<ExerciseEnrollment[]> => {
+    const ee: ExerciseEnrollment[] = [];
+    const results = await db.executeSql(`SELECT * FROM exercise_enrollment WHERE user_id == ${user.id};`);
+    results.forEach(result => {
+        for (let index = 0; index < result.rows.length; index++) {
+            ee.push(result.rows.item(index))
+        }
+    });
+    return ee;
 };

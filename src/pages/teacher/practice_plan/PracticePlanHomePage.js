@@ -2,14 +2,14 @@ import React, { useState, useCallback, useEffect } from 'react'
 import { StyleSheet,View,FlatList,Dimensions } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
-import PracticePlan from '../../../components/PracticePlan';
-import FloatingPlusButton from '../../../components/FloatingPlusButton';
+import PracticePlanRow from '../../../components/teacher/PracticePlanRow';
+import FloatingPlusButton from '../../../components/teacher/FloatingPlusButton';
 import { getDBConnection, getPracticePlans, getPracticeTypes } from "../../../services/database";
 
 
 const device_height = Dimensions.get('window').height
 
-const PracticePlanListPage = ({navigation}) => {
+const PracticePlanHomePage = ({navigation}) => {
 
   const [practicePlanTypeLookup, setPracticePlanTypeLookup] = useState({});
   const [practicePlanTypeOptions, setPracticePlanTypeOptions] = useState([]);
@@ -69,6 +69,16 @@ const PracticePlanListPage = ({navigation}) => {
     });
   }
 
+  const navigateToExercises = (item) => {
+    /*
+    Function to navigate to the CREATE form with
+    required parameters.
+    */
+    return () =>  navigation.push('Exercises', {
+      'practice_plan': item,
+    });
+  }
+
   const searchPracticePlanTypes = (id) => {
     /*
     Function that returns a dict whose key mathces
@@ -117,8 +127,8 @@ const PracticePlanListPage = ({navigation}) => {
           renderItem={({item}) =>
               <TouchableOpacity 
               onLongPress={navigateToUpdateOrDeletePracticePlan(item)}
-              onPress={()=>navigation.navigate('Exercises')}  >
-                  <PracticePlan 
+              onPress={navigateToExercises(item)}  >
+                  <PracticePlanRow 
                   name={item.name} 
                   type={item.type} 
                   duration_days={item.duration_days} />
@@ -137,7 +147,7 @@ const PracticePlanListPage = ({navigation}) => {
   )
 };
 
-export default PracticePlanListPage;
+export default PracticePlanHomePage;
 
 const styles = StyleSheet.create({
   container: {

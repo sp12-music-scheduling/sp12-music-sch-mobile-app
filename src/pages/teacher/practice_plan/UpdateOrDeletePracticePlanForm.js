@@ -43,7 +43,7 @@ const UpdateOrDeletePracticePlanForm = ({route, navigation}) => {
 
     const onUpdatePressed = async () => {
         /*
-        Function that action(s) the CREATE functionality.
+        Function that action(s) the UPDATE functionality.
             1. Performs validations
             2. Makes DB call to update the Practice Plan
             3. Redirects back to Parent page
@@ -53,7 +53,7 @@ const UpdateOrDeletePracticePlanForm = ({route, navigation}) => {
         } else if (validationDurationIsNumber() == false) {
             alert('Durations (days) must be a number!');
         } else {
-            updatePracticePlan();
+            await updatePracticePlan();
             navigation.navigate('Practice Plans');
         }
     }
