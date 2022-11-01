@@ -1,42 +1,82 @@
 import * as React from "react";
-import {StyleSheet, Text, View, Image, TouchableOpacity, SafeAreaView, Button} from "react-native";
+import {StyleSheet, Text, View, Image, TouchableOpacity, SafeAreaView, Button, FlatList} from "react-native";
 import {NavigatorContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import Roundbutton from '././components/button-round'
-import BottomTabNavigator from '././navigation/teacher/TabNavigator'
-export default function App({navigation}) {
+
+ const ExsDATA =[
+      {
+      id: 'Ex1',
+      title: 'Exercise-1'
+      },
+      {
+       id: 'Ex2',
+       title: 'Exercise-2'
+      },
+      {
+       id: 'Ex3',
+       title: 'Exercise-3'
+      },
+      {
+        id: 'Ex4',
+        title: 'Exercise-4'
+      },
+      {
+        id: 'Ex5',
+        title: 'Exercise-5'
+      },
+      {
+        id: 'Ex6',
+        title: 'Exercise-6'
+      },
+      {
+        id: 'Ex7',
+        title: 'Exercise-7'
+      },
+      {
+        id: 'Ex8',
+        title: 'Exercise-8'
+      },
+      {
+        id: 'Ex9',
+        title: 'Exercise-9'
+      },
+      {
+        id: 'Ex10',
+        title: 'Exercise-10'
+      },
+      ]
+      const ExsItem = ({title}) => (
+        <View style ={styles.content}>
+          <Text style = {styles.ExItem}> {title}</Text>
+        </View>
+        );
+
+const App = ({navigation}) => {
+const renderItem = ({item}) => (
+<ExsItem title = {item.title} />
+ );
+
   return (
     <SafeAreaView style={styles.container}>
       <View>
-<<<<<<< HEAD
       <View style = {styles.topSection}>
       <TouchableOpacity onPress ={() => navigation.goBack()}>
-        <Image style= {styles.backArrow} source= {require('././assets/icons/backArrow.png')} />
+        <Image style= {styles.backArrow} source= {require('./assets/icons/backArrow.png')} />
         </TouchableOpacity>
         <Text style={styles.ExerciseTitle}>
-=======
-        <Text
-          style={{
-            color: "#754747",
-            textAlign: "center",
-            fontSize: 32,
-            padding: 20
-          }}
-        >
->>>>>>> 532bf95f5602b9603d5ca6f818a064577e04492f
           Exercises
         </Text>
-        </View>
-        <View style= {styles.buttonViewStyle}>
-        <Roundbutton title ='Exercise-1' />
-        <Roundbutton title ='Exercise-2'/>
-        <Roundbutton title ='Exercise-3' />
-        </View>
-        <BottomTabNavigator />
       </View>
+      </View>
+      <FlatList
+      data= {ExsDATA}
+      renderItem = {renderItem}
+      keyExtractor = {item => item.id}
+      />
     </SafeAreaView>
   );
 }
+export default App;
 
 const styles = StyleSheet.create({
   container: {
@@ -44,26 +84,24 @@ const styles = StyleSheet.create({
     backgroundColor: "#F5F5F5",
     fontFamily: 'Inter',
   },
-//  topSection: {
-//  flexDirection: "column",
-//   justifyContent: "space-between",
-//  },
-backArrow:{
-margin: 20,
+  backArrow:{
+    margin: 20,
 },
-  StudentViewMenu: {
-    flexDirection: "row",
-    justifyContent: "space-around",
-    alignItems: "center",
-    paddingTop: 20,
-  },
-  fontColor: {
-  color: "#754747",
-  fontSize: 21,
-  },
-  buttonViewStyle: {
-  flexDirection:'column',
-  justifyContent: 'center',
-  alignItems: 'center',
-  }
+  ExerciseTitle:{
+    color: "#754747",
+    textAlign: "center",
+    fontSize: 36,
+    padding: 20,
+    },
+    content:{
+     backgroundColor: "#C3AAAA",
+     padding:20,
+     marginVertical: 8,
+     marginHorizontal: 16
+    },
+    ExItem:{
+    fontSize: 25,
+    color: "white"
+
+    }
 });

@@ -4,7 +4,7 @@ import DrawerNavigator from "./src/navigation/teacher/DrawerNavigator";
 import { getDBConnection, createTables, clearDatabase, getPracticeTypes, insertDefaultPracticeTypes, insertDefaultUserRoles, getUserRoles, getDemoTeacherUser } from "./src/services/database";
 
  const App = () => {
-  
+
   const [user, setUser] = useState('');
 
   const loadDataCallback = useCallback(async () => {
@@ -26,7 +26,7 @@ import { getDBConnection, createTables, clearDatabase, getPracticeTypes, insertD
       console.error(error);
     }
   }, []);
-  
+
   useEffect(() => {
     loadDataCallback();
   }, [loadDataCallback]);
@@ -70,4 +70,7 @@ export default App;
 //  });
  
 //  export default App;
- 
+
+/*Student Navigation*/
+//import AppStart from './src/navigation/student/App'
+//<AppStart/>
