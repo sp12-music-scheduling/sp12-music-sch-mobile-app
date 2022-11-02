@@ -12,7 +12,7 @@ import {
  } from "./src/services/database";
 
  const App = () => {
-
+  
   const [user, setUser] = useState('');
 
   const loadDataCallback = useCallback(async () => {
@@ -39,7 +39,7 @@ import {
       console.error(error);
     }
   }, []);
-
+  
   useEffect(() => {
     loadDataCallback();
   }, [loadDataCallback]);
@@ -82,7 +82,4 @@ export default App;
 //  });
  
 //  export default App;
-
-/*Student Navigation*/
-//import AppStart from './src/navigation/student/App'
-//<AppStart/>
+ 

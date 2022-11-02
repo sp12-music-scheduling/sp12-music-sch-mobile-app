@@ -2,8 +2,10 @@ import * as React from "react";
 import {StyleSheet,Text, View, Image, TouchableOpacity, SafeAreaView, Button, Alert} from "react-native";
 import {NavigatorContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import Roundbutton from '../../components/button-round'
-import AddButton from '../../components/button-add'
+import Roundbutton from '././components/button-round'
+import AddButton from '././components/button-add'
+import BottomTabNavigator from '././navigation/teacher/TabNavigator'
+
 export default function App({navigation}) {
   return (
     <SafeAreaView style={styles.container}>
@@ -14,17 +16,24 @@ export default function App({navigation}) {
         <Text style={styles.fontColor}>Fundamentals</Text>
       </View>
       <View style={styles.PracticePlanTitle}>
-        <Text>Practice Plan</Text>
+        <Text
+          style={{
+            color: "#754747",
+            textAlign: "center",
+            fontSize: 38,
+            padding: 20
+          }}
+        >
+          Practice Plan
+        </Text>
         <View style= {styles.buttonViewStyle}>
         <Roundbutton title ='Plan A' onPress = {() => navigation.navigate('Exercises')}/>
-        <Roundbutton title ='Plan B' onPress = {onPress = {() => navigation.navigate('Weekly Practice List')}/>
-        <Roundbutton title ='Test' onPress = {() => navigation.navigate('Daily Practice')}/>
+        <Roundbutton title ='Plan B' onPress = {() => navigation.navigate('Exercises')}/>
         </View>
         <View>
-        <AddButton onPress = {() => navigation.navigate('Join Plan')}/>
+        <AddButton onPress = {() => Alert.alert('Button pressed')}/>
         </View>
-      </View>
-      <View>
+        <BottomTabNavigator />
       </View>
     </SafeAreaView>
   );
@@ -35,12 +44,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#F5F5F5",
     fontFamily: 'Inter',
-  },
-  PracticePlanTitle:{
-  color: "#754747",
-  textAlign: "center",
-  fontSize: 38,
-  padding: 20
   },
   StudentViewMenu: {
     flexDirection: "row",
