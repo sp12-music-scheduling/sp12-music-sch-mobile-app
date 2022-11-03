@@ -1,26 +1,43 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { View, Text, Image, StyleSheet, useWindowDimensions } from 'react-native'
-import Logo from '../../../assets/icons/Logo.png' // import logo
-import CustomInput from '../../../components/login/CustomInput';
-import CustomButton from '../../../components/login/CustomButton/CustomButton';
+import Logo from '../../../assets/images/Logo.png' // import logo
+import CustomInput from '../../components/CustomInput'
+import CustomButton from '../../components/CustomButton/CustomButton';
 import { useNavigation } from '@react-navigation/native';
+import { auth } from '../../../firebase';
 
 const SignInScreen = () => {
-    const [username, setUsername] = useState('');
+    const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
     const {height} = useWindowDimensions();
     const navigation = useNavigation();
 
+    // event handler; if there's a user, then navigate to homescreen
+    // "unsubscribe" = when login screen is left, the listener will stop being unneecessarily pinged
+    useEffect(() => {
+        const unsubscribe = auth.onAuthStateChanged(user => {
+            if(user) {
+                navigation.navigate("HomePage");
+            }
+        })
+        return unsubscribe;
+    }, [])
+
     const onSignInPressed = () => {
-        navigation.navigate('HomePage');
+        auth.signInWithEmailAndPassword(email, password)
+        .then(userCredentials => {
+            const user = userCredentials.user;
+            console.log(user.email, ' Logged in');
+        })
+        .catch(error => alert(error.message))
     }
 
-    const onSignUpPressed = () => {
+    const onGoToSignUpScreenPressed = () => {
         navigation.navigate('Sign Up Screen')
     }
 
-    const onForgotPasswordPressed = () => {
+    const onGoToForgotPasswordScreenPressed = () => {
         navigation.navigate('Forgot Password Screen');
     }
 
@@ -31,9 +48,10 @@ const SignInScreen = () => {
              resizeMode="contain"/>
 
              <CustomInput 
-             placeholder="Username" 
-             value={username} 
-             setValue={setUsername} />
+             placeholder="Email" 
+             value={email} 
+             setValue={setEmail} />
+
              <CustomInput 
              placeholder="Password" 
              value={password} 
@@ -42,10 +60,10 @@ const SignInScreen = () => {
 
              <CustomButton text="Sign In" onPress={onSignInPressed} />
              <CustomButton text="Not Registered? Sign Up"
-              onPress={onSignUpPressed} />
+              onPress={onGoToSignUpScreenPressed} />
              <CustomButton 
              text="Forgot Password?" 
-             onPress={onForgotPasswordPressed}
+             onPress={onGoToForgotPasswordScreenPressed}
              type="TERTIARY" />
 
         </View>
