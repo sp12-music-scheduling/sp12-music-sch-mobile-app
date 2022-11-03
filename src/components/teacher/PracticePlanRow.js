@@ -1,7 +1,7 @@
 import React from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 
-const PracticePlan = ({name, type, duration_days}) => {
+const PracticePlanRow = ({name, type, duration_days}) => {
     return (
         <View style={styles.item}>
             <View style={styles.itemleft}>
@@ -43,4 +43,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default PracticePlan;
+export default PracticePlanRow;

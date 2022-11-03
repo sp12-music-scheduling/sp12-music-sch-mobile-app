@@ -1,13 +1,18 @@
 import React from "react";
-import {StyleSheet, Text, View, Image, TouchableOpacity} from 'react-native';
+import { StyleSheet, View, Image } from 'react-native';
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { MainStackNavigator, VideosStackNavigator, StudentManagementStackNavigator } from "./StackNavigator";
+import { 
+  MainStackNavigator, 
+  VideosStackNavigator, 
+  StudentManagementStackNavigator 
+} from "./StackNavigator";
+
 const Tab = createBottomTabNavigator();
 
 const BottomTabNavigator = () => {
   return (
     <Tab.Navigator 
-      initialRouteName={"Home"}
+      initialRouteName={"PracticePlanHome"}
       screenOptions={{
         headerShown: false,
         tabBarShowLabel: false,
@@ -50,7 +55,7 @@ const BottomTabNavigator = () => {
         }}
       />
       <Tab.Screen 
-        name="Home" 
+        name="PracticePlanHome" 
         component={MainStackNavigator} 
         options={{
           tabBarIcon: ({focused}) => (
@@ -99,6 +104,8 @@ const BottomTabNavigator = () => {
   );
 };
 
+export default BottomTabNavigator;
+
 const styles = StyleSheet.create({
   shadow: {
       shadowOffset: {
@@ -110,6 +117,3 @@ const styles = StyleSheet.create({
       elevation: 5,
   }
 })
-
-
-export default BottomTabNavigator;
