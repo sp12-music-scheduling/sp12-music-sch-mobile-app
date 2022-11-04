@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
 import { View, Text, StyleSheet, useWindowDimensions } from 'react-native'
-import CustomInput from '../../components/CustomInput'
-import CustomButton from '../../components/CustomButton/CustomButton';
+import CustomButton from '../../../components/login/CustomButton';
+import CustomInput from '../../../components/login/CustomInput';
 import { useNavigation } from '@react-navigation/native';
-import Navigation from '../../navigation';
-import { auth } from '../../../firebase';
+import Navigation from '../../../navigation/login';
+import { auth } from '../../../../firebase';
 
 const SignUpScreen = () => {
     const studentEmail = "@students.kennesaw.edu"
