@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
 import { View, Text, StyleSheet, useWindowDimensions } from 'react-native'
-import CustomInput from '../../components/CustomInput'
-import CustomButton from '../../components/CustomButton/CustomButton';
+import CustomButton from '../../../components/login/CustomButton';
+import CustomInput from '../../../components/login/CustomInput';
 import { useNavigation } from '@react-navigation/native';
-import { auth } from '../../../firebase';
+import { auth } from '../../../../firebase';
 
 const ForgotPasswordScreen = () => {
     const [email, setEmail] = useState('');

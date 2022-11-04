@@ -1,9 +1,9 @@
 //import liraries
 import React, { Component } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { auth } from '../../../firebase';
-import CustomButton from '../../components/CustomButton/CustomButton';
-import CustomInput from '../../components/CustomInput';
+import { auth } from '../../../../firebase';
+import CustomButton from '../../../components/login/CustomButton';
+import CustomInput from '../../../components/login/CustomInput';
 import { useNavigation } from '@react-navigation/native';
 
 
