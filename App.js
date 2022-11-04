@@ -11,47 +11,63 @@ import {
   getUsers,
  } from "./src/services/database";
 
+
  const App = () => {
 
   const [user, setUser] = useState('');
 
+//  const App = () => {
+  
+//   const [user, setUser] = useState('');
+
+
   const loadDataCallback = useCallback(async () => {
     try {
       const db = await getDBConnection();
-      // await clearDatabase(db); // Useed to manually clear table
+      // await clearDatabase(db);
       await createTables(db);
+
       /**
        * Default Pratice Types
        * Inject the default practice types of empty.
       */
+
+      const user_roles = await getUserRoles(db);
+      if (user_roles.length == 0) {
+        await insertDefaultUserRoles(db);
+      }
+
       const practice_types = await getPracticeTypes(db);
       if (practice_types.length == 0) {
         await insertDefaultPracticeTypes(db);
       }
-      /**
-       * Demo Users creasted to allow for testing.
-       */
-      const demo_users = await getUsers(db);
-      if (demo_users.length == 0) {
-        await insertDemoStudentUsers(db);
-      }
+      // TMP CREATING USER
+      setUser(await getDemoTeacherUser(db));
     } catch (error) {
       console.error(error);
     }
   }, []);
 
+
   useEffect(() => {
     loadDataCallback();
   }, [loadDataCallback]);
 
+  
+//   useEffect(() => {
+//     loadDataCallback();
+//   }, [loadDataCallback]);
+
+
+  console.log('APP <user>',user);
   return (
     <NavigationContainer>
-      <DrawerNavigator />
+      <DrawerNavigator user={user} />
     </NavigationContainer>
   );
 }
 
-export default App;
+// export default App;
 
 /**
  * 
@@ -61,26 +77,27 @@ export default App;
  */
 
 //  import React from 'react';
-//  import {SafeAreaView, StyleSheet, Text} from 'react-native';
-//  import Navigation from './src/navigation/login';
+ import {SafeAreaView, StyleSheet, Text} from 'react-native';
+ import Navigation from './src/navigation/login';
  
  
  
-//  const App = () => {
-//    return (
-//      <SafeAreaView style={styles.root}>
-//        <Navigation />
-//      </SafeAreaView>
-//    );
-//  };
+ const App = () => {
+   return (
+     <SafeAreaView style={styles.root}>
+       <Navigation />
+     </SafeAreaView>
+   );
+ };
  
-//  const styles = StyleSheet.create({
-//    root: {
-//      flex: 1,
-//      backgroundColor: '#F9FBFC'
-//    },
-//  });
+ const styles = StyleSheet.create({
+   root: {
+     flex: 1,
+     backgroundColor: '#F9FBFC'
+   },
+ });
  
+
 //  export default App;
 
 /* Student View */

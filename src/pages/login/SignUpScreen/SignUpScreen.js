@@ -1,12 +1,14 @@
 import React, { useState } from 'react'
 import { View, Text, StyleSheet, useWindowDimensions } from 'react-native'
-import CustomInput from '../../../components/login/CustomInput/CustomInput';
-import CustomButton from '../../../components/login/CustomButton/CustomButton';
+import CustomInput from '../../components/CustomInput'
+import CustomButton from '../../components/CustomButton/CustomButton';
 import { useNavigation } from '@react-navigation/native';
-import Navigation from '../../../navigation/login';
+import Navigation from '../../navigation';
+import { auth } from '../../../firebase';
 
 const SignUpScreen = () => {
-    const [username, setUsername] = useState('');
+    const studentEmail = "@students.kennesaw.edu"
+    const facultyEmail = "@kennesaw.edu"
     const [email, setEmail] = useState('');
 
     const [password, setPassword] = useState('');
@@ -16,13 +18,21 @@ const SignUpScreen = () => {
 
 
     const onRegisterPressed = () => {
-        // register logic will be added later
-        console.warn("Register");
-        // navigation.navigate('');
+       // creates user with email and password
+       if(email.includes(studentEmail) || email.includes(facultyEmail)) {
+        auth.createUserWithEmailAndPassword(email, password)
+        .then(userCredentials => {
+            const user = userCredentials.user;
+            console.log(user.email);
+        })
+        .catch(error => alert(error.message))
+       } else {
+        console.warn("Only Kennesaw State students and faculty can use this application.")
+       }
+       
     }
 
     const onSignInPressed = () => {
-        // console.warn("Sign Up");
         navigation.navigate('Sign In Screen');
     }
 
@@ -40,10 +50,10 @@ const SignUpScreen = () => {
         <View style={styles.root}>
             <Text styles={styles.title}>Create an Account</Text>
 
-            <CustomInput 
+            {/* <CustomInput 
              placeholder="Username" 
              value={username} 
-             setValue={setUsername} />
+             setValue={setUsername} /> */}
 
             <CustomInput 
              placeholder="Email" 
@@ -59,11 +69,12 @@ const SignUpScreen = () => {
             <CustomInput 
              placeholder="Repeat Password" 
              value={passwordRepeat} 
-             setValue={setPasswordRepeat} />
+             setValue={setPasswordRepeat}
+             secureTextEntry={true} />
 
              <CustomButton text="Register" onPress={onRegisterPressed} />
 
-             <Text style={styles.text}>By regiestering, you confirm that you
+             <Text style={styles.text}>By registering, you confirm that you
               accept our 
               <Text style={styles.link} onPress={onTermsOfUsePressed}> Terms of Use </Text>and 
               <Text style={styles.link} onPress={onPolicyPressed}> Privacy Policy </Text></Text>

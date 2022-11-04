@@ -1,30 +1,30 @@
 import React, { useState } from 'react'
 import { View, Text, StyleSheet, useWindowDimensions } from 'react-native'
-import CustomInput from '../../../components/login/CustomInput';
-import CustomButton from '../../../components/login/CustomButton/CustomButton';
+import CustomInput from '../../components/CustomInput'
+import CustomButton from '../../components/CustomButton/CustomButton';
 import { useNavigation } from '@react-navigation/native';
+import { auth } from '../../../firebase';
 
 const ForgotPasswordScreen = () => {
-    const [username, setUsername] = useState('');
+    const [email, setEmail] = useState('');
     const navigation = useNavigation();
 
     const onSendPressed = () => {
-        console.warn("Sent code");
-        // will send code to email attached to username component input
-        // logic will be handled later
+        // will send code to email entered (if there's an account attached)
+        auth.sendPasswordResetEmail(email)
+        .then(() => {
+            console.log("Reset email sent to", email)
+        })
+        .catch(error => {
+            console.log(error)
+            console.warn("This email is not associated with an existing account")
+        })
     }
 
-    const onSignInPressed = () => {
+    const onGoToSignInScreenPressed = () => {
         //Back to sign in
         navigation.navigate('Sign In Screen');
 
-        // console.warn("Sign In");
-    }
-
-    const onResendPressed = () => {
-        console.warn("Resend code");
-         // will resend code to email attached to username component input
-        // logic will be handled later
     }
 
     return (
@@ -32,20 +32,20 @@ const ForgotPasswordScreen = () => {
             <Text styles={styles.title}>Enter username here to receive email with a password reset code</Text>
 
             <CustomInput 
-             placeholder="Username" 
-             value={username} 
-             setValue={setUsername} />
+             placeholder="Email" 
+             value={email} 
+             setValue={setEmail} />
 
              <CustomButton text="Send" onPress={onSendPressed} />
 
              <CustomButton 
              text="Resend code" 
-             onPress={onResendPressed}
+             onPress={onSendPressed}
              type="SECONDARY" />
 
              <CustomButton 
              text=" Back to Sign In" 
-             onPress={onSignInPressed}
+             onPress={onGoToSignInScreenPressed}
              type="TERTIARY" />
 
         </View>
