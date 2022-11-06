@@ -5,6 +5,7 @@ import CustomInput from '../../../components/login/CustomInput';
 import { useNavigation } from '@react-navigation/native';
 import Navigation from '../../../navigation/login';
 import { auth } from '../../../../firebase';
+import { Alert } from 'react-native';
 
 const SignUpScreen = () => {
     const studentEmail = "@students.kennesaw.edu"
@@ -27,7 +28,7 @@ const SignUpScreen = () => {
         })
         .catch(error => alert(error.message))
        } else {
-        console.warn("Only Kennesaw State students and faculty can use this application.")
+        Alert.alert("Only Kennesaw State students and faculty can use this application.")
        }
        
     }
