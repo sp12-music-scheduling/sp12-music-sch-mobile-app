@@ -1,11 +1,10 @@
 import React, { useState } from 'react'
-import { View, Text, StyleSheet } from 'react-native'
+import { View, Text, StyleSheet, useWindowDimensions } from 'react-native'
 import CustomButton from '../../../components/login/CustomButton';
-import FormTextInput from '../../../components/form/FormTextInput';
+import CustomInput from '../../../components/login/CustomInput';
 import { useNavigation } from '@react-navigation/native';
 import { auth } from '../../../../firebase';
 import { Alert } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 
 const SignUpScreen = () => {
     const studentEmail = "@students.kennesaw.edu"
@@ -17,9 +16,16 @@ const SignUpScreen = () => {
 
     const navigation = useNavigation();
 
+
+    // creates user with email and password
     const onRegisterPressed = () => {
-       // creates user with email and password
-       if(email.includes(studentEmail) || email.includes(facultyEmail)) {
+        if(email.length == 0) {
+            Alert.alert("Please enter an email address.")
+        } else if(password.length == 0) {
+            Alert.alert("Please enter a password")
+        } else if(passwordRepeat != password) {
+            Alert.alert("Passwords are not matching. Please ensure the passwords match.")
+        } else if(email.includes(studentEmail) || email.includes(facultyEmail)) {
         auth.createUserWithEmailAndPassword(email, password)
         .then(userCredentials => {
             const user = userCredentials.user;
@@ -37,48 +43,52 @@ const SignUpScreen = () => {
     }
 
     const onTermsOfUsePressed = () => {
-        // Terms of Use page can be added later
-        console.warn("Terms of Use");
+        Alert.alert("This application is for the use of Kennesaw State University Students and faculty. Accounts should only be used by their creator.");
     }
 
     const onPolicyPressed = () => {
-        // Privacy Policy page can be added later
-        console.warn("Privacy Policy");
+        Alert.alert("Information collected will be (1) The user's email address.");
     }
 
     return (
-        <SafeAreaView style={styles.root}>
+        <View style={styles.root}>
             <Text styles={styles.title}>Create an Account</Text>
-            <FormTextInput 
-            fieldName="Email"
-            value={email} 
-            setValue={setEmail} />
 
-            <FormTextInput 
-            fieldName="Password"
-            value={password} 
-            setValue={setPassword}
-            secureTextEntry={true} />
+            {/* <CustomInput 
+             placeholder="Username" 
+             value={username} 
+             setValue={setUsername} /> */}
 
-            <FormTextInput 
-            fieldName="Repeat Password"
-            value={passwordRepeat} 
-            setValue={setPasswordRepeat}
-            secureTextEntry={true} />
+            <CustomInput 
+             placeholder="Email" 
+             value={email} 
+             setValue={setEmail} />
 
-            <CustomButton text="Register" onPress={onRegisterPressed} />
+             <CustomInput 
+             placeholder="Password" 
+             value={password} 
+             setValue={setPassword}
+             secureTextEntry={true} />
 
-            <Text style={styles.text}>By registering, you confirm that you
-            accept our 
-            <Text style={styles.link} onPress={onTermsOfUsePressed}> Terms of Use </Text>and 
-            <Text style={styles.link} onPress={onPolicyPressed}> Privacy Policy </Text></Text>
+            <CustomInput 
+             placeholder="Repeat Password" 
+             value={passwordRepeat} 
+             setValue={setPasswordRepeat}
+             secureTextEntry={true} />
 
-            <CustomButton 
-            text="Have an account? Sign In" 
-            onPress={onSignInPressed}
-            type="TERTIARY" />
+             <CustomButton text="Register" onPress={onRegisterPressed} />
 
-        </SafeAreaView>
+             <Text style={styles.text}>By registering, you confirm that you
+              accept our 
+              <Text style={styles.link} onPress={onTermsOfUsePressed}> Terms of Use </Text>and 
+              <Text style={styles.link} onPress={onPolicyPressed}> Privacy Policy </Text></Text>
+
+             <CustomButton 
+             text="Have an account? Sign In" 
+             onPress={onSignInPressed}
+             type="TERTIARY" />
+
+        </View>
     )
 }
 
