@@ -3,7 +3,7 @@ import { View, StyleSheet } from 'react-native'
 import FormTextInput from '../../../components/form/FormTextInput'
 import FormButton from '../../../components/form/FormButton'
 import FormSelectInput from '../../../components/form/FormSelectInput'
-import { getDBConnection, isPracticePlanCodeAvailable, deletePracticePlanRow, updatePracticePlanRow } from "../../../services/database";
+import { getDBConnection, deletePracticePlanRow, updatePracticePlanRow } from "../../../services/database";
 
 
 const UpdateOrDeletePracticePlanForm = ({route, navigation}) => {
@@ -34,7 +34,8 @@ const UpdateOrDeletePracticePlanForm = ({route, navigation}) => {
             'name': practicePlanName,
             'duration_days': Number(practicePlanDurationDays.trim()),
             'code': route.params.code,
-            'practice_type_id': practicePlanType
+            'practice_type_id': practicePlanType,
+            'user_uid': route.params.user_uid,
         };
         const db = await getDBConnection();
         await deletePracticePlanRow(db, practice_plan);
@@ -89,7 +90,8 @@ const UpdateOrDeletePracticePlanForm = ({route, navigation}) => {
             'name': practicePlanName,
             'duration_days': Number(practicePlanDurationDays.trim()),
             'code': route.params.code,
-            'practice_type_id': practicePlanType
+            'practice_type_id': practicePlanType,
+            'user_uid': route.params.user_uid,
        };
        const db = await getDBConnection();
        await updatePracticePlanRow(db, practice_plan);
