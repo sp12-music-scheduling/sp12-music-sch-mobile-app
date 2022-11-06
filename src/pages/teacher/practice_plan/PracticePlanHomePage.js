@@ -4,12 +4,14 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 
 import PracticePlanRow from '../../../components/teacher/PracticePlanRow';
 import FloatingPlusButton from '../../../components/teacher/FloatingPlusButton';
-import { getDBConnection, getPracticePlans, getPracticeTypes } from "../../../services/database";
-
+import { getDBConnection, getPracticePlansByUser, getPracticeTypesByUser } from "../../../services/database";
+import { auth } from '../../../../firebase';
 
 const device_height = Dimensions.get('window').height
 
 const PracticePlanHomePage = ({navigation}) => {
+
+  const user = auth.currentUser;
 
   const [practicePlanTypeLookup, setPracticePlanTypeLookup] = useState({});
   const [practicePlanTypeOptions, setPracticePlanTypeOptions] = useState([]);
@@ -32,9 +34,9 @@ const PracticePlanHomePage = ({navigation}) => {
     and Practice Plan Types.
     */
     const db = await getDBConnection();
-    const practice_plans = await getPracticePlans(db);
+    const practice_plans = await getPracticePlansByUser(db, user.uid);
     setPracticePlanPlans(practice_plans);
-    const practice_types = await getPracticeTypes(db);
+    const practice_types = await getPracticeTypesByUser(db, user.uid);
     setPracticePlanTypeOptions(practice_types);
     const practice_type_lookup = {};
     practice_types.forEach(dict => {
@@ -54,7 +56,8 @@ const PracticePlanHomePage = ({navigation}) => {
       'duration_days': dict.duration_days,
       'code': dict.code,
       'practice_type_id': dict.practice_type_id,
-      'type': practicePlanTypeLookup[dict.practice_type_id]
+      'type': practicePlanTypeLookup[dict.practice_type_id],
+      'user_uid': user.uid
     }));
     return data;
   }
@@ -107,8 +110,6 @@ const PracticePlanHomePage = ({navigation}) => {
     Function to navigate to the UPDATE_OR_CREATE form with
     required parameters.
     */
-
-    //TODO: Strange vehavior when the practice plan names are the same!!! DANGER
     return () =>  navigation.push('Update or Delete Practice Plan', {
       "id": item.id,
       "name": item.name,
@@ -116,6 +117,7 @@ const PracticePlanHomePage = ({navigation}) => {
       "duration_days": item.duration_days,
       "practice_type": generatePracticePlanTypeDict(item),
       'availablePracticePlanTypes': practicePlanTypeOptions,
+      "user_uid": item.user_uid
     });
   }
 

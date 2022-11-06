@@ -25,6 +25,9 @@ import ConfirmEmailScreen from '../../pages/login/ConfirmEmailScreen';
 import ForgotPasswordScreen from '../../pages/login/ForgotPasswordScreen';
 import ResetPasswordScreen from '../../pages/login/ResetPasswordScreen';
 
+import StudentPracticePlanHomePage from "../../pages/student-v2/practice_plan/StudentPracticePlanHomePage";
+import NewEnrollForm from "../../pages/student-v2/practice_plan/NewEnrollForm";
+
 const Stack = createStackNavigator();
 
 const screenOptionStyle = {
@@ -88,10 +91,20 @@ const ProfessorManagePracticeTypeStackNavigator = () => {
   );
 }
 
+const StudentMainStackNavigator = () => {
+  return (
+    <Stack.Navigator screenOptions={screenOptionStyle}>
+      <Stack.Screen name="Practice Plans" component={StudentPracticePlanHomePage} />
+      <Stack.Screen name="Enroll" component={NewEnrollForm} />
+    </Stack.Navigator>
+  );
+}
+
 export { 
   LoginStackNavigator,
   ProfessorMainStackNavigator, 
   ProfessorVideosStackNavigator, 
   ProfessortManageStudentStackNavigator, 
   ProfessorManagePracticeTypeStackNavigator,
+  StudentMainStackNavigator,
 };

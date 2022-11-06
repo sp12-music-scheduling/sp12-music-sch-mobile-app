@@ -2,7 +2,7 @@ import React from "react";
 import { StyleSheet, View, Image } from 'react-native';
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { 
-  ProfessorMainStackNavigator, 
+  StudentMainStackNavigator, 
   ProfessorVideosStackNavigator, 
   ProfessortManageStudentStackNavigator 
 } from "./StackNavigator";
@@ -56,7 +56,7 @@ const BottomTabNavigator = () => {
       />
       <Tab.Screen 
         name="PracticePlanHome" 
-        component={ProfessorMainStackNavigator} 
+        component={StudentMainStackNavigator} 
         options={{
           tabBarIcon: ({focused}) => (
               <View

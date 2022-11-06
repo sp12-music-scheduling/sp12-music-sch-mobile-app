@@ -4,9 +4,12 @@ import FormTextInput from '../../../components/form/FormTextInput'
 import FormButton from '../../../components/form/FormButton'
 import FormSelectInput from '../../../components/form/FormSelectInput'
 import { getDBConnection, isPracticePlanCodeAvailable, insertPracticePlanRow} from "../../../services/database";
+import { auth } from '../../../../firebase';
 
 
 const CreatePracticePlanForm = ({route, navigation}) => {
+
+    const user = auth.currentUser;
 
     const [practicePlanName, setPracticePlanName] = useState('');
     const [practicePlanDurationDays, setPracticePlanDurationDays] = useState('');
@@ -85,7 +88,8 @@ const CreatePracticePlanForm = ({route, navigation}) => {
             'name': practicePlanName,
             'duration_days': Number(practicePlanDurationDays.trim()),
             'code': practicePlanCode,
-            'practice_type_id': practicePlanType
+            'practice_type_id': practicePlanType,
+            'user_uid': user.uid
         };
         const db = await getDBConnection();
         await insertPracticePlanRow(db, practice_plan);

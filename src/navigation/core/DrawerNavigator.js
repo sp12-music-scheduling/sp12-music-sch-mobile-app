@@ -10,7 +10,7 @@ import {
   getDBConnection,
   createTables,
   clearDatabase,
-  getPracticeTypes,
+  getPracticeTypesByUser,
   insertDefaultPracticeTypes,
  } from "../../services/database";
 
@@ -43,9 +43,9 @@ const DrawerNavigator = () => {
     const db = await getDBConnection();
     // await clearDatabase(db);
     await createTables(db);
-    const practice_types = await getPracticeTypes(db);
+    const practice_types = await getPracticeTypesByUser(db, user.uid);
     if (practice_types.length == 0) {
-      await insertDefaultPracticeTypes(db);
+      await insertDefaultPracticeTypes(db, user.uid);
     }
   }
 
@@ -113,10 +113,10 @@ const DrawerNavigator = () => {
         name="Home" 
         component={StudentTabNavigator} 
         initialParams={{screen:'PracticePlanHome'}} />
-        <Drawer.Screen 
+        {/* <Drawer.Screen 
         name="Videos" 
         component={StudentTabNavigator} 
-        initialParams={{screen:'Video'}}/>
+        initialParams={{screen:'Video'}}/> */}
       </Drawer.Navigator>
     );
   }
