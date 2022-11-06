@@ -1,10 +1,11 @@
 import React, { useState } from 'react'
-import { View, Text, StyleSheet, useWindowDimensions } from 'react-native'
+import { View, Text, StyleSheet } from 'react-native'
 import CustomButton from '../../../components/login/CustomButton';
-import CustomInput from '../../../components/login/CustomInput';
+import FormTextInput from '../../../components/form/FormTextInput';
 import { useNavigation } from '@react-navigation/native';
 import { auth } from '../../../../firebase';
 import { Alert } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const SignUpScreen = () => {
     const studentEmail = "@students.kennesaw.edu"
@@ -15,7 +16,6 @@ const SignUpScreen = () => {
     const [passwordRepeat, setPasswordRepeat] = useState('');
 
     const navigation = useNavigation();
-
 
     const onRegisterPressed = () => {
        // creates user with email and password
@@ -47,44 +47,38 @@ const SignUpScreen = () => {
     }
 
     return (
-        <View style={styles.root}>
+        <SafeAreaView style={styles.root}>
             <Text styles={styles.title}>Create an Account</Text>
+            <FormTextInput 
+            fieldName="Email"
+            value={email} 
+            setValue={setEmail} />
 
-            {/* <CustomInput 
-             placeholder="Username" 
-             value={username} 
-             setValue={setUsername} /> */}
+            <FormTextInput 
+            fieldName="Password"
+            value={password} 
+            setValue={setPassword}
+            secureTextEntry={true} />
 
-            <CustomInput 
-             placeholder="Email" 
-             value={email} 
-             setValue={setEmail} />
+            <FormTextInput 
+            fieldName="Repeat Password"
+            value={passwordRepeat} 
+            setValue={setPasswordRepeat}
+            secureTextEntry={true} />
 
-             <CustomInput 
-             placeholder="Password" 
-             value={password} 
-             setValue={setPassword}
-             secureTextEntry={true} />
+            <CustomButton text="Register" onPress={onRegisterPressed} />
 
-            <CustomInput 
-             placeholder="Repeat Password" 
-             value={passwordRepeat} 
-             setValue={setPasswordRepeat}
-             secureTextEntry={true} />
+            <Text style={styles.text}>By registering, you confirm that you
+            accept our 
+            <Text style={styles.link} onPress={onTermsOfUsePressed}> Terms of Use </Text>and 
+            <Text style={styles.link} onPress={onPolicyPressed}> Privacy Policy </Text></Text>
 
-             <CustomButton text="Register" onPress={onRegisterPressed} />
+            <CustomButton 
+            text="Have an account? Sign In" 
+            onPress={onSignInPressed}
+            type="TERTIARY" />
 
-             <Text style={styles.text}>By registering, you confirm that you
-              accept our 
-              <Text style={styles.link} onPress={onTermsOfUsePressed}> Terms of Use </Text>and 
-              <Text style={styles.link} onPress={onPolicyPressed}> Privacy Policy </Text></Text>
-
-             <CustomButton 
-             text="Have an account? Sign In" 
-             onPress={onSignInPressed}
-             type="TERTIARY" />
-
-        </View>
+        </SafeAreaView>
     )
 }
 
