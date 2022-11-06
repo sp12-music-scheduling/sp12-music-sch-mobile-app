@@ -113,10 +113,10 @@ const DrawerNavigator = () => {
         name="Home" 
         component={StudentTabNavigator} 
         initialParams={{screen:'PracticePlanHome'}} />
-        <Drawer.Screen 
+        {/* <Drawer.Screen 
         name="Videos" 
         component={StudentTabNavigator} 
-        initialParams={{screen:'Video'}}/>
+        initialParams={{screen:'Video'}}/> */}
       </Drawer.Navigator>
     );
   }
