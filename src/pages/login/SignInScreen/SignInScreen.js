@@ -3,6 +3,7 @@ import { View, Text, Image, StyleSheet, useWindowDimensions } from 'react-native
 import Logo from '../../../assets/icons/Logo.png' // import logo
 import CustomButton from '../../../components/login/CustomButton';
 import CustomInput from '../../../components/login/CustomInput';
+import FormTextInput from '../../../components/form/FormTextInput';
 import { useNavigation } from '@react-navigation/native';
 import { auth } from '../../../../firebase';
 
@@ -12,17 +13,6 @@ const SignInScreen = () => {
 
     const {height} = useWindowDimensions();
     const navigation = useNavigation();
-
-    // event handler; if there's a user, then navigate to homescreen
-    // "unsubscribe" = when login screen is left, the listener will stop being unneecessarily pinged
-    useEffect(() => {
-        const unsubscribe = auth.onAuthStateChanged(user => {
-            if(user) {
-                navigation.navigate("HomePage");
-            }
-        })
-        return unsubscribe;
-    }, [])
 
     const onSignInPressed = () => {
         auth.signInWithEmailAndPassword(email, password)
@@ -46,17 +36,15 @@ const SignInScreen = () => {
             <Image source={Logo}
              style={[styles.logo, {height: height * 0.3}]} 
              resizeMode="contain"/>
-
-             <CustomInput 
-             placeholder="Email" 
-             value={email} 
-             setValue={setEmail} />
-
-             <CustomInput 
-             placeholder="Password" 
-             value={password} 
-             setValue={setPassword}
-             secureTextEntry={true} />
+            <FormTextInput 
+            fieldName="Email"
+            value={email} 
+            setValue={setEmail} />
+             <FormTextInput 
+            fieldName="Password"
+            value={password} 
+            setValue={setPassword}
+            secureTextEntry={true} />
 
              <CustomButton text="Sign In" onPress={onSignInPressed} />
              <CustomButton text="Not Registered? Sign Up"

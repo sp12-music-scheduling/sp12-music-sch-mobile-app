@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, TextInput, StyleSheet } from 'react-native';
 
-const FormTextInput = ({fieldName, value, setValue, editable = true}) => {
+const FormTextInput = ({fieldName, value, setValue, editable = true, secureTextEntry = false}) => {
     return (
         <View style={styles.container}>
           <Text>{fieldName}</Text>
@@ -10,6 +10,7 @@ const FormTextInput = ({fieldName, value, setValue, editable = true}) => {
             value={value}
             style={editable == true ? styles.input_box : [styles.input_box, styles.editable_false] }
             editable={editable}
+            secureTextEntry={secureTextEntry}
           />
         </View>
     );
