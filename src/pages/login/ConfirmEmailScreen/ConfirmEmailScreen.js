@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { View, Text, StyleSheet, useWindowDimensions } from 'react-native'
-import CustomInput from '../../../components/login/CustomInput/CustomInput';
-import CustomButton from '../../../components/login/CustomButton/CustomButton';
+import CustomButton from '../../../components/login/CustomButton';
+import CustomInput from '../../../components/login/CustomInput';
 import { useNavigation } from '@react-navigation/native';
 
 const ConfirmEmailScreen = () => {

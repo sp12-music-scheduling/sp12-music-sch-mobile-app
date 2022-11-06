@@ -19,6 +19,15 @@ import PracticeTypeHomePage from "../../pages/teacher/practice_type/PracticeType
 import CreatePracticeTypeForm from "../../pages/teacher/practice_type/CreatePracticeTypeForm";
 import UpdateOrDeletePracticeTypeForm from "../../pages/teacher/practice_type/UpdateOrDeletePracticeTypeForm";
 
+import SignInScreen from '../../pages/login/SignInScreen';
+import SignUpScreen from '../../pages/login/SignUpScreen';
+import ConfirmEmailScreen from '../../pages/login/ConfirmEmailScreen';
+import ForgotPasswordScreen from '../../pages/login/ForgotPasswordScreen';
+import ResetPasswordScreen from '../../pages/login/ResetPasswordScreen';
+
+import StudentPracticePlanHomePage from "../../pages/student-v2/practice_plan/StudentPracticePlanHomePage";
+import NewEnrollForm from "../../pages/student-v2/practice_plan/NewEnrollForm";
+
 const Stack = createStackNavigator();
 
 const screenOptionStyle = {
@@ -29,7 +38,19 @@ const screenOptionStyle = {
   headerBackTitle: "Back",
 };
 
-const MainStackNavigator = () => {
+const LoginStackNavigator = () => {
+  return (
+    <Stack.Navigator screenOptions={{headerShown: false}}>
+      <Stack.Screen name = "Sign In Screen" component={SignInScreen} />
+      <Stack.Screen name = "Sign Up Screen" component={SignUpScreen} />
+      <Stack.Screen name = "Confirm Email Screen" component={ConfirmEmailScreen} />
+      <Stack.Screen name = "Forgot Password Screen" component={ForgotPasswordScreen} />
+      <Stack.Screen name = "Reset Password Screen" component={ResetPasswordScreen} />
+    </Stack.Navigator>      
+  );
+};
+
+const ProfessorMainStackNavigator = () => {
   return (
     <Stack.Navigator screenOptions={screenOptionStyle}>
       <Stack.Screen name="Practice Plans" component={PracticePlanHomePage} />
@@ -43,7 +64,7 @@ const MainStackNavigator = () => {
   );
 }
 
-const VideosStackNavigator = () => {
+const ProfessorVideosStackNavigator = () => {
   return (
     <Stack.Navigator screenOptions={screenOptionStyle}>
       <Stack.Screen name="Videos" component={VideosHomePage} />
@@ -51,7 +72,7 @@ const VideosStackNavigator = () => {
   );
 }
 
-const StudentManagementStackNavigator = () => {
+const ProfessortManageStudentStackNavigator = () => {
   return (
     <Stack.Navigator screenOptions={screenOptionStyle}>
       <Stack.Screen name="Student Management" component={StudentManagementHomePage} />
@@ -60,7 +81,7 @@ const StudentManagementStackNavigator = () => {
   );
 }
 
-const ManagePracticeTypeStackNavigator = () => {
+const ProfessorManagePracticeTypeStackNavigator = () => {
   return (
     <Stack.Navigator screenOptions={screenOptionStyle}>
       <Stack.Screen name="Manage Practice Types" component={PracticeTypeHomePage} />
@@ -70,9 +91,20 @@ const ManagePracticeTypeStackNavigator = () => {
   );
 }
 
+const StudentMainStackNavigator = () => {
+  return (
+    <Stack.Navigator screenOptions={screenOptionStyle}>
+      <Stack.Screen name="Practice Plans" component={StudentPracticePlanHomePage} />
+      <Stack.Screen name="Enroll" component={NewEnrollForm} />
+    </Stack.Navigator>
+  );
+}
+
 export { 
-  MainStackNavigator, 
-  VideosStackNavigator, 
-  StudentManagementStackNavigator, 
-  ManagePracticeTypeStackNavigator,
+  LoginStackNavigator,
+  ProfessorMainStackNavigator, 
+  ProfessorVideosStackNavigator, 
+  ProfessortManageStudentStackNavigator, 
+  ProfessorManagePracticeTypeStackNavigator,
+  StudentMainStackNavigator,
 };

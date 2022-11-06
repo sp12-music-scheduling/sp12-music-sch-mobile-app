@@ -1,10 +1,12 @@
 import React, { useState } from 'react'
-import { View, StyleSheet } from 'react-native'
+import { View, StyleSheet, Dimensions } from 'react-native'
 
 import FormTextInput from '../../../components/form/FormTextInput'
 import FormButton from '../../../components/form/FormButton'
 import FormSelectInput from '../../../components/form/FormSelectInput'
 import { getDBConnection, insertExerciseRow } from "../../../services/database";
+
+const DEVICE_HEIGHT = Dimensions.get('window').height
 
 
 const CreateExerciseForm = ({route, navigation}) => {
@@ -141,5 +143,6 @@ const styles = StyleSheet.create({
     container: {
         alignItems: 'center',
         padding: 20,
+        height: DEVICE_HEIGHT - 210
     },
 });

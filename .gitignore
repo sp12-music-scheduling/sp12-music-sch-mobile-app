@@ -68,3 +68,6 @@ package-lock.json
 # Podfile
 /ios/Podfile
 /ios/Podfile.lock
+
+# Firebase IDs
+firebase.js

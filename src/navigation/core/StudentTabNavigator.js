@@ -2,9 +2,9 @@ import React from "react";
 import { StyleSheet, View, Image } from 'react-native';
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { 
-  MainStackNavigator, 
-  VideosStackNavigator, 
-  StudentManagementStackNavigator 
+  StudentMainStackNavigator, 
+  ProfessorVideosStackNavigator, 
+  ProfessortManageStudentStackNavigator 
 } from "./StackNavigator";
 
 const Tab = createBottomTabNavigator();
@@ -31,7 +31,7 @@ const BottomTabNavigator = () => {
     >
       <Tab.Screen 
         name="StudentManagement" 
-        component={StudentManagementStackNavigator} 
+        component={ProfessortManageStudentStackNavigator} 
         options={{
           tabBarIcon: ({focused}) => (
               <View
@@ -56,7 +56,7 @@ const BottomTabNavigator = () => {
       />
       <Tab.Screen 
         name="PracticePlanHome" 
-        component={MainStackNavigator} 
+        component={StudentMainStackNavigator} 
         options={{
           tabBarIcon: ({focused}) => (
               <View
@@ -77,7 +77,7 @@ const BottomTabNavigator = () => {
       />
       <Tab.Screen 
         name="Video" 
-        component={VideosStackNavigator} 
+        component={ProfessorVideosStackNavigator} 
         options={{
           tabBarIcon: ({focused}) => (
               <View
