@@ -1,7 +1,8 @@
 import React, { useEffect, useState }  from "react";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import { DrawerContentScrollView, DrawerItemList, DrawerItem } from "@react-navigation/drawer";
-import TabNavigator from './TabNavigator';
+import ProfessorTabNavigator from './ProfessorTabNavigator';
+import StudentTabNavigator from './StudentTabNavigator';
 import { ProfessorManagePracticeTypeStackNavigator, LoginStackNavigator } from "./StackNavigator";
 import { auth } from '../../../firebase';
 
@@ -33,7 +34,7 @@ const DrawerNavigator = () => {
     if (user.email.endsWith('@kennesaw.edu')){
           return professorViews();
     } else{
-      // TODO: Add student views function
+      return studentViews();
     }
   }
 
@@ -55,20 +56,48 @@ const DrawerNavigator = () => {
         }}>
         <Drawer.Screen 
         name="Home" 
-        component={TabNavigator} 
+        component={ProfessorTabNavigator} 
         initialParams={{screen:'PracticePlanHome'}} />
         <Drawer.Screen 
         name="Videos" 
-        component={TabNavigator} 
+        component={ProfessorTabNavigator} 
         initialParams={{screen:'Video'}}/>
         <Drawer.Screen 
         name="Student Management" 
-        component={TabNavigator} 
+        component={ProfessorTabNavigator} 
         initialParams={{screen:'StudentManagement'}}/>
         <Drawer.Screen 
         name="Manage Practice Types" 
         component={ProfessorManagePracticeTypeStackNavigator} 
         />
+      </Drawer.Navigator>
+    );
+  }
+
+  const studentViews = () => {
+    /*
+
+    */
+    return (
+      <Drawer.Navigator 
+        drawerContent={props => <SignOutDrawerContent {...props} />}
+        screenOptions={{
+          headerShown: false,
+          drawerStyle: {
+            backgroundColor: "white",
+            width: "60%",
+          },
+          drawerActiveBackgroundColor: '#754747',
+          drawerActiveTintColor: 'white',
+        }}>
+        <Drawer.Screen 
+        name="Home" 
+        component={StudentTabNavigator} 
+        initialParams={{screen:'PracticePlanHome'}} />
+        <Drawer.Screen 
+        name="Videos" 
+        component={StudentTabNavigator} 
+        initialParams={{screen:'Video'}}/>
       </Drawer.Navigator>
     );
   }
