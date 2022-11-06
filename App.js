@@ -1,57 +1,57 @@
-import React, {useState, useCallback, useEffect } from "react";
-import { NavigationContainer } from "@react-navigation/native";
-import DrawerNavigator from "./src/navigation/teacher/DrawerNavigator";
-import {
-  getDBConnection,
-  createTables,
-  clearDatabase,
-  getPracticeTypes,
-  insertDefaultPracticeTypes,
-  insertDemoStudentUsers,
-  getUsers,
- } from "./src/services/database";
-
-
- const App = () => {
-
-  const [user, setUser] = useState('');
-
-//  const App = () => {
-  
-//   const [user, setUser] = useState('');
-
-
-  const loadDataCallback = useCallback(async () => {
-    try {
-      const db = await getDBConnection();
-      // await clearDatabase(db);
-      await createTables(db);
-
-      /**
-       * Default Pratice Types
-       * Inject the default practice types of empty.
-      */
-
-      const user_roles = await getUserRoles(db);
-      if (user_roles.length == 0) {
-        await insertDefaultUserRoles(db);
-      }
-
-      const practice_types = await getPracticeTypes(db);
-      if (practice_types.length == 0) {
-        await insertDefaultPracticeTypes(db);
-      }
-      // TMP CREATING USER
-      setUser(await getDemoTeacherUser(db));
-    } catch (error) {
-      console.error(error);
-    }
-  }, []);
-
-
-  useEffect(() => {
-    loadDataCallback();
-  }, [loadDataCallback]);
+//import React, {useState, useCallback, useEffect } from "react";
+//import { NavigationContainer } from "@react-navigation/native";
+//import DrawerNavigator from "./src/navigation/teacher/DrawerNavigator";
+//import {
+//  getDBConnection,
+//  createTables,
+//  clearDatabase,
+//  getPracticeTypes,
+//  insertDefaultPracticeTypes,
+//  insertDemoStudentUsers,
+//  getUsers,
+// } from "./src/services/database";
+//
+//
+// const App = () => {
+//
+//  const [user, setUser] = useState('');
+//
+////  const App = () => {
+//
+////   const [user, setUser] = useState('');
+//
+//
+//  const loadDataCallback = useCallback(async () => {
+//    try {
+//      const db = await getDBConnection();
+//      // await clearDatabase(db);
+//      await createTables(db);
+//
+//      /**
+//       * Default Pratice Types
+//       * Inject the default practice types of empty.
+//      */
+//
+//      const user_roles = await getUserRoles(db);
+//      if (user_roles.length == 0) {
+//        await insertDefaultUserRoles(db);
+//      }
+//
+//      const practice_types = await getPracticeTypes(db);
+//      if (practice_types.length == 0) {
+//        await insertDefaultPracticeTypes(db);
+//      }
+//      // TMP CREATING USER
+//      setUser(await getDemoTeacherUser(db));
+//    } catch (error) {
+//      console.error(error);
+//    }
+//  }, []);
+//
+//
+//  useEffect(() => {
+//    loadDataCallback();
+//  }, [loadDataCallback]);
 
   
 //   useEffect(() => {
