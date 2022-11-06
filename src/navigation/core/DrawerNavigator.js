@@ -6,6 +6,14 @@ import StudentTabNavigator from './StudentTabNavigator';
 import { ProfessorManagePracticeTypeStackNavigator, LoginStackNavigator } from "./StackNavigator";
 import { auth } from '../../../firebase';
 
+import {
+  getDBConnection,
+  createTables,
+  clearDatabase,
+  getPracticeTypes,
+  insertDefaultPracticeTypes,
+ } from "../../services/database";
+
 function SignOutDrawerContent(props) {
   return (
     <DrawerContentScrollView {...props}>
@@ -27,8 +35,19 @@ const DrawerNavigator = () => {
 
   useEffect(() => {
     const subscriber = auth.onAuthStateChanged(onAuthStateChanged);
+    createDatabaseDefaults();
     return subscriber; // unsubscribe on unmount
   }, []);
+
+  const createDatabaseDefaults = async () => {
+    const db = await getDBConnection();
+    // await clearDatabase(db);
+    await createTables(db);
+    const practice_types = await getPracticeTypes(db);
+    if (practice_types.length == 0) {
+      await insertDefaultPracticeTypes(db);
+    }
+  }
 
   const getUserViews = () => {
     if (user.email.endsWith('@kennesaw.edu')){
