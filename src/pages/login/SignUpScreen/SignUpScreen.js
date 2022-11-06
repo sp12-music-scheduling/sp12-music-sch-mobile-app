@@ -3,7 +3,6 @@ import { View, Text, StyleSheet, useWindowDimensions } from 'react-native'
 import CustomButton from '../../../components/login/CustomButton';
 import CustomInput from '../../../components/login/CustomInput';
 import { useNavigation } from '@react-navigation/native';
-import Navigation from '../../../navigation/login';
 import { auth } from '../../../../firebase';
 import { Alert } from 'react-native';
 
