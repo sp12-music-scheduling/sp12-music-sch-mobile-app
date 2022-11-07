@@ -6,7 +6,7 @@ import { getDBConnection, getPracticePlanByCode, insertPracticePlanEnrollment} f
 import { auth } from '../../../../firebase';
 
 
-const NewEnrollForm = ({route, navigation}) => {
+const NewEnrollForm = ({navigation}) => {
 
     const user = auth.currentUser;
 
@@ -33,7 +33,6 @@ const NewEnrollForm = ({route, navigation}) => {
         */
         const db = await getDBConnection();
         const pp = await getPracticePlanByCode(db, code.trim());
-        console.log('validationPPCodeExists >> pp', pp)
         if (pp.length == 0){
             return false;
         } else {

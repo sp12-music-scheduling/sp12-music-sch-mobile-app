@@ -27,6 +27,7 @@ import ResetPasswordScreen from '../../pages/login/ResetPasswordScreen';
 
 import StudentPracticePlanHomePage from "../../pages/student-v2/practice_plan/StudentPracticePlanHomePage";
 import NewEnrollForm from "../../pages/student-v2/practice_plan/NewEnrollForm";
+import UpdateEnrollmentForm from "../../pages/student-v2/practice_plan/UpdateEnrollmentForm";
 
 const Stack = createStackNavigator();
 
@@ -96,6 +97,7 @@ const StudentMainStackNavigator = () => {
     <Stack.Navigator screenOptions={screenOptionStyle}>
       <Stack.Screen name="Practice Plans" component={StudentPracticePlanHomePage} />
       <Stack.Screen name="Enroll" component={NewEnrollForm} />
+      <Stack.Screen name="Update Enrollment" component={UpdateEnrollmentForm} />
     </Stack.Navigator>
   );
 }
