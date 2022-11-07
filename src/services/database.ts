@@ -54,6 +54,12 @@ export type PracticePlanEnrollment = {
     user_uid: string;
 };
 
+export type UserAttributes = {
+    id: number;
+    display_name: string,
+    user_uid: string;
+    email: string;
+};
 
 /*
     Main       
@@ -71,6 +77,7 @@ export const createTables = async (db: SQLiteDatabase) => {
     await createExerciseTable(db);
     await createPracticePlanEnrollmentTable(db);
     await createExerciseEnrollmentTable(db);
+    await createUserAttributesTable(db);
 };
 
 export const clearDatabase = async (db: SQLiteDatabase) => {
@@ -423,4 +430,47 @@ export const getPracticePlanEnrollmentByUser = async (db: SQLiteDatabase, user_u
         }
     });
     return ee;
+};
+
+/*
+    TABLE       
+    ----------------------
+    User Attributes
+*/
+
+const createUserAttributesTable = async (db: SQLiteDatabase) => {
+    const table_sql = `
+    CREATE TABLE IF NOT EXISTS "user_attribute" (
+        "id"	INTEGER NOT NULL UNIQUE,
+        "display_name"	TEXT NOT NULL,
+        "user_uid"	TEXT NOT NULL,
+        "email"	TEXT NOT NULL,
+        PRIMARY KEY("id" AUTOINCREMENT)
+    );`;
+    await db.executeSql(table_sql);
+};
+
+export const insertUserAttributes = async (db: SQLiteDatabase, user_attribute: UserAttributes) => {
+    const insertQuery = `
+        INSERT INTO "user_attribute" ("display_name", "user_uid", "email") 
+        VALUES ("${user_attribute.display_name}", "${user_attribute.user_uid}", "${user_attribute.email}");`;
+    return db.executeSql(insertQuery);
+};
+
+export const updateUserAttributes = async (db: SQLiteDatabase, user_attribute: UserAttributes) => {
+    const replaceQuery = `
+        REPLACE INTO "user_attribute" ("display_name", "user_uid", "email") 
+        VALUES ("${user_attribute.display_name}", "${user_attribute.user_uid}", "${user_attribute.email}");`;
+    return db.executeSql(replaceQuery);
+};
+
+export const getUserAttributesByUID = async (db: SQLiteDatabase, user_uid: string): Promise<UserAttributes> => {
+    const ee: UserAttributes[] = [];
+    const results = await db.executeSql(`SELECT * FROM user_attribute WHERE user_uid == "${user_uid}" LIMIT 1;`);
+    results.forEach(result => {
+        for (let index = 0; index < result.rows.length; index++) {
+            ee.push(result.rows.item(index))
+        }
+    });
+    return ee[0];
 };

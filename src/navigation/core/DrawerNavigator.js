@@ -10,8 +10,6 @@ import {
   getDBConnection,
   createTables,
   clearDatabase,
-  getPracticeTypesByUser,
-  insertDefaultPracticeTypes,
  } from "../../services/database";
 
 function SignOutDrawerContent(props) {
@@ -36,6 +34,7 @@ const DrawerNavigator = () => {
   useEffect(() => {
     const subscriber = auth.onAuthStateChanged(onAuthStateChanged);
     createDatabaseDefaults();
+
     return subscriber; // unsubscribe on unmount
   }, []);
 
@@ -43,10 +42,6 @@ const DrawerNavigator = () => {
     const db = await getDBConnection();
     // await clearDatabase(db);
     await createTables(db);
-    const practice_types = await getPracticeTypesByUser(db, user.uid);
-    if (practice_types.length == 0) {
-      await insertDefaultPracticeTypes(db, user.uid);
-    }
   }
 
   const getUserViews = () => {

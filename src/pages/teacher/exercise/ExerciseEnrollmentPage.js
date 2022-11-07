@@ -6,7 +6,6 @@ import ExerciseEntrollmentRow from '../../../components/teacher/ExerciseEntrollm
 import { 
   getDBConnection,
   getExerciseEnrollmentByExercise,
-  getUsers,
   insertExerciseEnrollment,
   deleteExerciseEnrollment,
  } from "../../../services/database";
@@ -16,6 +15,7 @@ const DEVICE_HEIGHT = Dimensions.get('window').height
 
 const ExerciseEnrollmentPage = ({route, navigation}) => {
 
+  const practice_plan = route.params.practice_plan;
   const exercise = route.params.exercise;
   const [exerciseEnrollment, setExerciseEnrollment] = useState([]);
   const [availableStudents, setAvailableStudents] = useState([]);

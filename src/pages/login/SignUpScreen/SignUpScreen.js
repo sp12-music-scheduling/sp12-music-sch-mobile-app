@@ -1,16 +1,19 @@
 import React, { useState } from 'react'
-import { View, Text, StyleSheet, useWindowDimensions } from 'react-native'
+import { View, Text, StyleSheet, useWindowDimensions, SafeAreaView } from 'react-native'
 import CustomButton from '../../../components/login/CustomButton';
 import CustomInput from '../../../components/login/CustomInput';
+import FormTextInput from '../../../components/form/FormTextInput';
 import { useNavigation } from '@react-navigation/native';
 import { auth } from '../../../../firebase';
 import { Alert } from 'react-native';
+import { getDBConnection, insertUserAttributes, insertDefaultPracticeTypes } from '../../../services/database';
 
 const SignUpScreen = () => {
     const studentEmail = "@students.kennesaw.edu"
     const facultyEmail = "@kennesaw.edu"
-    const [email, setEmail] = useState('');
 
+    const [displayName, setDisplayName] = useState('');
+    const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [passwordRepeat, setPasswordRepeat] = useState('');
 
@@ -30,12 +33,31 @@ const SignUpScreen = () => {
         .then(userCredentials => {
             const user = userCredentials.user;
             console.log(user.email);
+            // Create DB User Attribute that references email and additional
+            // attribute "Display Name"
+            createUserArributeOnDB(user);
         })
         .catch(error => alert(error.message))
        } else {
         Alert.alert("Only Kennesaw State students and faculty can use this application.")
        }
        
+    }
+
+    const createUserArributeOnDB = async (user) => {
+        /**
+         * Table ties the ser UID to an email and a display name.
+         */
+        const db = await getDBConnection();
+        const ua = {
+            'display_name': displayName,
+            'user_uid': user.uid,
+            'email': email,
+        };
+        await insertUserAttributes(db, ua);
+        if (user.email.includes(facultyEmail) ){
+            await insertDefaultPracticeTypes(db, user.uid);
+        }
     }
 
     const onSignInPressed = () => {
@@ -51,30 +73,31 @@ const SignUpScreen = () => {
     }
 
     return (
+        <SafeAreaView>
         <View style={styles.root}>
             <Text styles={styles.title}>Create an Account</Text>
 
-            {/* <CustomInput 
-             placeholder="Username" 
-             value={username} 
-             setValue={setUsername} /> */}
+            <FormTextInput 
+            fieldName="Display Name"
+            value={displayName} 
+            setValue={setDisplayName} />
+            
+            <FormTextInput 
+            fieldName="Email"
+            value={email} 
+            setValue={setEmail} />
+            
+            <FormTextInput 
+            fieldName="Password"
+            value={password} 
+            setValue={setPassword}
+            secureTextEntry={true} />
 
-            <CustomInput 
-             placeholder="Email" 
-             value={email} 
-             setValue={setEmail} />
-
-             <CustomInput 
-             placeholder="Password" 
-             value={password} 
-             setValue={setPassword}
-             secureTextEntry={true} />
-
-            <CustomInput 
-             placeholder="Repeat Password" 
-             value={passwordRepeat} 
-             setValue={setPasswordRepeat}
-             secureTextEntry={true} />
+            <FormTextInput 
+            fieldName="Repeat Password"
+            value={passwordRepeat} 
+            setValue={setPasswordRepeat}
+            secureTextEntry={true} />
 
              <CustomButton text="Register" onPress={onRegisterPressed} />
 
@@ -89,6 +112,7 @@ const SignUpScreen = () => {
              type="TERTIARY" />
 
         </View>
+        </SafeAreaView>
     )
 }
 
