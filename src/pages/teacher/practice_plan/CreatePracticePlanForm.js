@@ -13,7 +13,7 @@ const CreatePracticePlanForm = ({route, navigation}) => {
     const [name, setName] = useState('');
     const [durationDays, setDurationDays] = useState('');
     const [code, setCode] = useState('');
-    const [practicePlanTypeDocID, setPracticePlanTypeDocID] = useState(''); // This will be the Numerical ID as a String
+    const [practicePlanTypeDocID, setPracticePlanTypeDocID] = useState('');
 
     const getSelectOptions = () => {
         /*
@@ -35,19 +35,19 @@ const CreatePracticePlanForm = ({route, navigation}) => {
             2. Makes DB call to create the Practice Plan
             3. Redirects back to Parent page
         */
-        if (validationEmptyValues() == false) {
+        if (validateEmptyValues() == false) {
             alert('Please fill all fields!');
-        } else if (validationDurationIsNumber() == false) {
+        } else if (validateDurationIsNumber() == false) {
             alert('Durations (days) must be a number!');
-        } else if (await validationPPCode() == false) {
+        } else if (await validateCodeIsUnique() == false) {
             alert('Practice Plan Code already in use! Try another one.');
         } else {
-            createPracticePlan();
+            firestoreCreate();
             navigation.navigate('Practice Plans');
         }
     }
 
-    const validationEmptyValues= () => {
+    const validateEmptyValues= () => {
         /*
         Checks if any of the inputs are empty (ie = '').
         */
@@ -64,14 +64,14 @@ const CreatePracticePlanForm = ({route, navigation}) => {
         }
     }
 
-    const validationDurationIsNumber = () => {
+    const validateDurationIsNumber = () => {
         /*
         Checks that Durations (days) is numeric.
         */
         return !isNaN(Number(durationDays.trim()));
     }
 
-    const validationPPCode = async () => {
+    const validateCodeIsUnique = async () => {
         /*
         Checks that the Practice Plan Code is unique.
         */
@@ -80,7 +80,7 @@ const CreatePracticePlanForm = ({route, navigation}) => {
         return ptStore.docs.length == 0;
     }
 
-    const createPracticePlan = async () => {
+    const firestoreCreate = async () => {
         /*
         Calls a database function to create a new Practice Plan.
         */

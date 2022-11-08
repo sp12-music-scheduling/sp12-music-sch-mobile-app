@@ -4,7 +4,6 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 
 import PracticePlanRow from '../../../components/teacher/PracticePlanRow';
 import FloatingPlusButton from '../../../components/teacher/FloatingPlusButton';
-// import { getDBConnection, getPracticePlansByUser, getPracticeTypesByUser, insertDefaultPracticeTypes } from "../../../services/database";
 import { auth, firestore } from '../../../../firebase';
 
 const device_height = Dimensions.get('window').height
@@ -33,26 +32,28 @@ const PracticePlanHomePage = ({navigation}) => {
     This function is used to populate available Practice Plans
     and Practice Plan Types.
     */
-    // const db = await getDBConnection();
-    // const practice_plans = await getPracticePlansByUser(db, user.uid);
-    // setPracticePlanPlans(practice_plans);
     firestoreGetPracticePlans();
     firestoreGetPracticeTypes();
   }, []);
 
   const firestoreGetPracticeTypes = async () => {
-    /*
-    */
-    let ptRef = firestore.collection('practice_types');
-    let ptStore = await ptRef.orderBy('name', 'asc').get();
-    const ptLocal = [];
-    for(const doc of ptStore.docs){
-      ptLocal.push({
-        ...doc.data(),
-        key: doc.id,
-      });
-    }
-    setPracticePlanTypeOptions(ptLocal);
+    // #1 PULL DATA
+    firestore.collection('practice_types')
+    .where('user_uid', '==', user.uid)
+    .onSnapshot(
+      querySnapshot => {
+          const data = [];
+          querySnapshot.forEach( documentSnapshot =>{
+            data.push({
+                  ...documentSnapshot.data(),
+                  key: documentSnapshot.id,
+              });
+          });
+          sortArrayOfDictByName(data);
+          setPracticePlanTypeOptions(data)
+      }
+    );
+    // #2 CREATE LOOKUP
     const practice_type_lookup = {};
     practicePlanTypeOptions.forEach(dict => {
       practice_type_lookup[dict.key] = dict.name;
@@ -60,19 +61,34 @@ const PracticePlanHomePage = ({navigation}) => {
     setPracticePlanTypeLookup(practice_type_lookup);
   }
 
+  const sortArrayOfDictByName = (data) => {
+    /* Auxillary Function to Sort a List of Dict */
+    data.sort(function(a,b){
+      var nameA=a.name.toLowerCase(), nameB=b.name.toLowerCase()
+      if (nameA < nameB) //sort string ascending
+          return -1 
+      if (nameA > nameB)
+          return 1
+      return 0
+    }); 
+  }
+
   const firestoreGetPracticePlans = async () => {
-    /*
-    */
-    let ppRef = firestore.collection('practice_plans');
-    let ppStore = await ppRef.orderBy('name', 'asc').get();
-    const ppLocal = [];
-    for(const doc of ppStore.docs){
-      ppLocal.push({
-        ...doc.data(),
-        key: doc.id,
-      });
-    }
-    setPracticePlanPlans(ppLocal);
+    firestore.collection('practice_plans')
+    .where('user_uid', '==', user.uid)
+    .onSnapshot(
+      querySnapshot => {
+          const data = [];
+          querySnapshot.forEach( documentSnapshot =>{
+            data.push({
+                  ...documentSnapshot.data(),
+                  key: documentSnapshot.id,
+              });
+          });
+          sortArrayOfDictByName(data);
+          setPracticePlanPlans(data)
+      }
+    );
   }
   
   const getPracticePlanList = () => {
@@ -81,12 +97,12 @@ const PracticePlanHomePage = ({navigation}) => {
     */
     const data = [];
     practicePlanPlans.forEach(dict => data.push({
-      'id': dict.id,
+      'key': dict.key,
       'name': dict.name,
       'duration_days': dict.duration_days,
       'code': dict.code,
-      'practice_type_id': dict.practice_type_id,
-      'type': practicePlanTypeLookup[dict.practice_type_id],
+      'practice_type_doc': dict.practice_type_doc,
+      'type': practicePlanTypeLookup[dict.practice_type_doc],
       'user_uid': user.uid
     }));
     return data;
@@ -112,13 +128,13 @@ const PracticePlanHomePage = ({navigation}) => {
     });
   }
 
-  const searchPracticePlanTypes = (id) => {
+  const searchPracticePlanTypes = (key) => {
     /*
     Function that returns a dict whose key mathces
     an entry on practicePlanTypeOptions.
     */
     const type = practicePlanTypeOptions.find((element, index) => {
-       return element.id === id;
+       return element.key === key;
     });
     return type;
   }
@@ -128,9 +144,9 @@ const PracticePlanHomePage = ({navigation}) => {
     Function that returns a Practice Plan Type formatted
     to be used an the parameter 'defaultOption' by a SelectList.
     */
-    const type = searchPracticePlanTypes(item.practice_type_id);
+    const type = searchPracticePlanTypes(item.practice_type_doc);
     return {
-      "key": item.practice_type_id.toString(),
+      "key": type.key,
       "value": type.sub_type == "" ? type.name : type.name + ": " + type.sub_type
     }
   }
@@ -141,13 +157,15 @@ const PracticePlanHomePage = ({navigation}) => {
     required parameters.
     */
     return () =>  navigation.push('Update or Delete Practice Plan', {
-      "id": item.id,
-      "name": item.name,
-      "code": item.code,
-      "duration_days": item.duration_days,
+      "practice_plan": {
+        "key": item.key,
+        "name": item.name,
+        "code": item.code,
+        "duration_days": item.duration_days,
+        "user_uid": item.user_uid
+      },
       "practice_type": generatePracticePlanTypeDict(item),
       'availablePracticePlanTypes': practicePlanTypeOptions,
-      "user_uid": item.user_uid
     });
   }
 

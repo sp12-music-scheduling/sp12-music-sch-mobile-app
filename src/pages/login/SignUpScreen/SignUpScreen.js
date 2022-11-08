@@ -6,7 +6,7 @@ import FormTextInput from '../../../components/form/FormTextInput';
 import { useNavigation } from '@react-navigation/native';
 import { auth, firebase } from '../../../../firebase';
 import { Alert } from 'react-native';
-import { getDBConnection, insertDefaultPracticeTypes } from '../../../services/database';
+// import { getDBConnection, insertDefaultPracticeTypes } from '../../../services/database';
 
 const SignUpScreen = () => {
     const studentEmail = "@students.kennesaw.edu"
