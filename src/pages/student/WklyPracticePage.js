@@ -39,9 +39,9 @@ data: ["Day 1", "Day 2", "Day 3", "Day 4", "Day 5", "Day 6", "Day 7"]
 }
 ];
 
-const WeekItem = ({title}) => (
+const WeekItem = ({title, navigation, onPress}) => (
 <View style = {styles.content}>
-<TouchableOpacity style = {styles.DaySection}>
+<TouchableOpacity style = {styles.DaySection} onPress = {onPress}>
 <Text style ={styles.listItems}>{title}</Text>
 <Image source = {require('../../assets/icons/chevron.png')}/>
 </TouchableOpacity>
@@ -53,7 +53,7 @@ const App = ({navigation}) => (
 <SectionList
 sections = {WEEK_DATA}
 keyExtractor = {(item, index) => item + index}
-renderItem = {({item}) => <WeekItem title = {item} />}
+renderItem = {({item}) => <WeekItem title = {item}  onPress = {() => navigation.navigate('Daily Practice')} />}
 renderSectionHeader = {({section: {title}}) => (
 <Text style = {styles.header}> {title} </Text>
 )}
