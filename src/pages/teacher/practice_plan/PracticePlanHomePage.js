@@ -4,8 +4,8 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 
 import PracticePlanRow from '../../../components/teacher/PracticePlanRow';
 import FloatingPlusButton from '../../../components/teacher/FloatingPlusButton';
-import { getDBConnection, getPracticePlansByUser, getPracticeTypesByUser } from "../../../services/database";
-import { auth } from '../../../../firebase';
+// import { getDBConnection, getPracticePlansByUser, getPracticeTypesByUser, insertDefaultPracticeTypes } from "../../../services/database";
+import { auth, firestore } from '../../../../firebase';
 
 const device_height = Dimensions.get('window').height
 
@@ -33,17 +33,47 @@ const PracticePlanHomePage = ({navigation}) => {
     This function is used to populate available Practice Plans
     and Practice Plan Types.
     */
-    const db = await getDBConnection();
-    const practice_plans = await getPracticePlansByUser(db, user.uid);
-    setPracticePlanPlans(practice_plans);
-    const practice_types = await getPracticeTypesByUser(db, user.uid);
-    setPracticePlanTypeOptions(practice_types);
+    // const db = await getDBConnection();
+    // const practice_plans = await getPracticePlansByUser(db, user.uid);
+    // setPracticePlanPlans(practice_plans);
+    firestoreGetPracticePlans();
+    firestoreGetPracticeTypes();
+  }, []);
+
+  const firestoreGetPracticeTypes = async () => {
+    /*
+    */
+    let ptRef = firestore.collection('practice_types');
+    let ptStore = await ptRef.orderBy('name', 'asc').get();
+    const ptLocal = [];
+    for(const doc of ptStore.docs){
+      ptLocal.push({
+        ...doc.data(),
+        key: doc.id,
+      });
+    }
+    setPracticePlanTypeOptions(ptLocal);
     const practice_type_lookup = {};
-    practice_types.forEach(dict => {
-      practice_type_lookup[dict.id] = dict.name;
+    practicePlanTypeOptions.forEach(dict => {
+      practice_type_lookup[dict.key] = dict.name;
     });
     setPracticePlanTypeLookup(practice_type_lookup);
-  }, []);
+  }
+
+  const firestoreGetPracticePlans = async () => {
+    /*
+    */
+    let ppRef = firestore.collection('practice_plans');
+    let ppStore = await ppRef.orderBy('name', 'asc').get();
+    const ppLocal = [];
+    for(const doc of ppStore.docs){
+      ppLocal.push({
+        ...doc.data(),
+        key: doc.id,
+      });
+    }
+    setPracticePlanPlans(ppLocal);
+  }
   
   const getPracticePlanList = () => {
     /*

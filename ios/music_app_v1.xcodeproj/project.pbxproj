@@ -8,16 +8,16 @@
 
 /* Begin PBXBuildFile section */
 		00E356F31AD99517003FC87E /* music_app_v1Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* music_app_v1Tests.m */; };
-		0C80B921A6F3F58F76C31292 /* libPods-music_app_v1.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5DCACB8F33CDC322A6C60F78 /* libPods-music_app_v1.a */; };
 		13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.mm */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
-		7699B88040F8A987B510C191 /* libPods-music_app_v1-music_app_v1Tests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 19F6CBCC0A4E27FBF8BF4A61 /* libPods-music_app_v1-music_app_v1Tests.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
+		9875CFF5A4AD4D0420ECAE12 /* libPods-music_app_v1-music_app_v1Tests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EF288371B56ED51F3FAB4EBF /* libPods-music_app_v1-music_app_v1Tests.a */; };
 		A95B078B2915F1A200AF02F4 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = A95B078A2915F1A200AF02F4 /* GoogleService-Info.plist */; };
 		A95B078E2915F26000AF02F4 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = A95B078D2915F26000AF02F4 /* FirebaseAnalytics */; };
 		A95B07902915F26000AF02F4 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = A95B078F2915F26000AF02F4 /* FirebaseAuth */; };
 		A95B07922915F26000AF02F4 /* FirebaseAuthCombine-Community in Frameworks */ = {isa = PBXBuildFile; productRef = A95B07912915F26000AF02F4 /* FirebaseAuthCombine-Community */; };
+		F31EC3538D42ACA415AA2F27 /* libPods-music_app_v1.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0C1F3567ECB6AE6754D9E0DF /* libPods-music_app_v1.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -34,21 +34,23 @@
 		00E356EE1AD99517003FC87E /* music_app_v1Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = music_app_v1Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00E356F21AD99517003FC87E /* music_app_v1Tests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = music_app_v1Tests.m; sourceTree = "<group>"; };
+		0C1F3567ECB6AE6754D9E0DF /* libPods-music_app_v1.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-music_app_v1.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07F961A680F5B00A75B9A /* music_app_v1.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = music_app_v1.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = music_app_v1/AppDelegate.h; sourceTree = "<group>"; };
 		13B07FB01A68108700A75B9A /* AppDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = AppDelegate.mm; path = music_app_v1/AppDelegate.mm; sourceTree = "<group>"; };
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = music_app_v1/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = music_app_v1/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = music_app_v1/main.m; sourceTree = "<group>"; };
-		19F6CBCC0A4E27FBF8BF4A61 /* libPods-music_app_v1-music_app_v1Tests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-music_app_v1-music_app_v1Tests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		1897E0716DFF7B2598F4A281 /* Pods-music_app_v1Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-music_app_v1Tests.release.xcconfig"; path = "Target Support Files/Pods-music_app_v1Tests/Pods-music_app_v1Tests.release.xcconfig"; sourceTree = "<group>"; };
 		3B4392A12AC88292D35C810B /* Pods-music_app_v1.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-music_app_v1.debug.xcconfig"; path = "Target Support Files/Pods-music_app_v1/Pods-music_app_v1.debug.xcconfig"; sourceTree = "<group>"; };
 		5709B34CF0A7D63546082F79 /* Pods-music_app_v1.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-music_app_v1.release.xcconfig"; path = "Target Support Files/Pods-music_app_v1/Pods-music_app_v1.release.xcconfig"; sourceTree = "<group>"; };
 		5B7EB9410499542E8C5724F5 /* Pods-music_app_v1-music_app_v1Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-music_app_v1-music_app_v1Tests.debug.xcconfig"; path = "Target Support Files/Pods-music_app_v1-music_app_v1Tests/Pods-music_app_v1-music_app_v1Tests.debug.xcconfig"; sourceTree = "<group>"; };
-		5DCACB8F33CDC322A6C60F78 /* libPods-music_app_v1.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-music_app_v1.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = music_app_v1/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		89C6BE57DB24E9ADA2F236DE /* Pods-music_app_v1-music_app_v1Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-music_app_v1-music_app_v1Tests.release.xcconfig"; path = "Target Support Files/Pods-music_app_v1-music_app_v1Tests/Pods-music_app_v1-music_app_v1Tests.release.xcconfig"; sourceTree = "<group>"; };
+		9907594DB82FBCA9B6A6D46A /* Pods-music_app_v1Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-music_app_v1Tests.debug.xcconfig"; path = "Target Support Files/Pods-music_app_v1Tests/Pods-music_app_v1Tests.debug.xcconfig"; sourceTree = "<group>"; };
 		A95B078A2915F1A200AF02F4 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; name = "GoogleService-Info.plist"; path = "../../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
+		EF288371B56ED51F3FAB4EBF /* libPods-music_app_v1-music_app_v1Tests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-music_app_v1-music_app_v1Tests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,7 +58,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7699B88040F8A987B510C191 /* libPods-music_app_v1-music_app_v1Tests.a in Frameworks */,
+				9875CFF5A4AD4D0420ECAE12 /* libPods-music_app_v1-music_app_v1Tests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -66,8 +68,8 @@
 			files = (
 				A95B078E2915F26000AF02F4 /* FirebaseAnalytics in Frameworks */,
 				A95B07902915F26000AF02F4 /* FirebaseAuth in Frameworks */,
-				0C80B921A6F3F58F76C31292 /* libPods-music_app_v1.a in Frameworks */,
 				A95B07922915F26000AF02F4 /* FirebaseAuthCombine-Community in Frameworks */,
+				F31EC3538D42ACA415AA2F27 /* libPods-music_app_v1.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -109,8 +111,8 @@
 			isa = PBXGroup;
 			children = (
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
-				5DCACB8F33CDC322A6C60F78 /* libPods-music_app_v1.a */,
-				19F6CBCC0A4E27FBF8BF4A61 /* libPods-music_app_v1-music_app_v1Tests.a */,
+				0C1F3567ECB6AE6754D9E0DF /* libPods-music_app_v1.a */,
+				EF288371B56ED51F3FAB4EBF /* libPods-music_app_v1-music_app_v1Tests.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -153,6 +155,8 @@
 				5709B34CF0A7D63546082F79 /* Pods-music_app_v1.release.xcconfig */,
 				5B7EB9410499542E8C5724F5 /* Pods-music_app_v1-music_app_v1Tests.debug.xcconfig */,
 				89C6BE57DB24E9ADA2F236DE /* Pods-music_app_v1-music_app_v1Tests.release.xcconfig */,
+				9907594DB82FBCA9B6A6D46A /* Pods-music_app_v1Tests.debug.xcconfig */,
+				1897E0716DFF7B2598F4A281 /* Pods-music_app_v1Tests.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -168,8 +172,8 @@
 				00E356EA1AD99517003FC87E /* Sources */,
 				00E356EB1AD99517003FC87E /* Frameworks */,
 				00E356EC1AD99517003FC87E /* Resources */,
-				C59DA0FBD6956966B86A3779 /* [CP] Embed Pods Frameworks */,
-				F6A41C54EA430FDDC6A6ED99 /* [CP] Copy Pods Resources */,
+				B420BFA4377610A6083B16F3 /* [CP] Embed Pods Frameworks */,
+				426ACD95261CD1F9B9B3D34A /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -191,8 +195,8 @@
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
-				00EEFC60759A1932668264C0 /* [CP] Embed Pods Frameworks */,
-				E235C05ADACE081382539298 /* [CP] Copy Pods Resources */,
+				94F0F710F9133631DD6B42ED /* [CP] Embed Pods Frameworks */,
+				18461314C8047898666847A8 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -284,7 +288,41 @@
 			shellPath = /bin/sh;
 			shellScript = "set -e\n\nWITH_ENVIRONMENT=\"../node_modules/react-native/scripts/xcode/with-environment.sh\"\nREACT_NATIVE_XCODE=\"../node_modules/react-native/scripts/react-native-xcode.sh\"\n\n/bin/sh -c \"$WITH_ENVIRONMENT $REACT_NATIVE_XCODE\"\n";
 		};
-		00EEFC60759A1932668264C0 /* [CP] Embed Pods Frameworks */ = {
+		18461314C8047898666847A8 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-music_app_v1/Pods-music_app_v1-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-music_app_v1/Pods-music_app_v1-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-music_app_v1/Pods-music_app_v1-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		426ACD95261CD1F9B9B3D34A /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-music_app_v1-music_app_v1Tests/Pods-music_app_v1-music_app_v1Tests-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-music_app_v1-music_app_v1Tests/Pods-music_app_v1-music_app_v1Tests-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-music_app_v1-music_app_v1Tests/Pods-music_app_v1-music_app_v1Tests-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		94F0F710F9133631DD6B42ED /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -323,6 +361,23 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
+		B420BFA4377610A6083B16F3 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-music_app_v1-music_app_v1Tests/Pods-music_app_v1-music_app_v1Tests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-music_app_v1-music_app_v1Tests/Pods-music_app_v1-music_app_v1Tests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-music_app_v1-music_app_v1Tests/Pods-music_app_v1-music_app_v1Tests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		C38B50BA6285516D6DCD4F65 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -343,57 +398,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		C59DA0FBD6956966B86A3779 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-music_app_v1-music_app_v1Tests/Pods-music_app_v1-music_app_v1Tests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-music_app_v1-music_app_v1Tests/Pods-music_app_v1-music_app_v1Tests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-music_app_v1-music_app_v1Tests/Pods-music_app_v1-music_app_v1Tests-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		E235C05ADACE081382539298 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-music_app_v1/Pods-music_app_v1-resources-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Copy Pods Resources";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-music_app_v1/Pods-music_app_v1-resources-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-music_app_v1/Pods-music_app_v1-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		F6A41C54EA430FDDC6A6ED99 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-music_app_v1-music_app_v1Tests/Pods-music_app_v1-music_app_v1Tests-resources-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Copy Pods Resources";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-music_app_v1-music_app_v1Tests/Pods-music_app_v1-music_app_v1Tests-resources-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-music_app_v1-music_app_v1Tests/Pods-music_app_v1-music_app_v1Tests-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		FD10A7F022414F080027D42C /* Start Packager */ = {
