@@ -4,9 +4,9 @@ import CustomButton from '../../../components/login/CustomButton';
 import CustomInput from '../../../components/login/CustomInput';
 import FormTextInput from '../../../components/form/FormTextInput';
 import { useNavigation } from '@react-navigation/native';
-import { auth } from '../../../../firebase';
+import { auth, firebase } from '../../../../firebase';
 import { Alert } from 'react-native';
-import { getDBConnection, insertUserAttributes, insertDefaultPracticeTypes } from '../../../services/database';
+import { getDBConnection, insertDefaultPracticeTypes } from '../../../services/database';
 
 const SignUpScreen = () => {
     const studentEmail = "@students.kennesaw.edu"
@@ -48,15 +48,25 @@ const SignUpScreen = () => {
         /**
          * Table ties the ser UID to an email and a display name.
          */
-        const db = await getDBConnection();
-        const ua = {
-            'display_name': displayName,
-            'user_uid': user.uid,
-            'email': email,
-        };
-        await insertUserAttributes(db, ua);
+        firebase.firestore()
+        .collection('user_settings')
+        .add({
+            display_name: displayName,
+            uid: user.uid,
+            email: email,
+        })
+        .then(() => {
+            console.log('User added!');
+        });
+
         if (user.email.includes(facultyEmail) ){
-            await insertDefaultPracticeTypes(db, user.uid);
+            await firebase.firestore().collection('practice_types').add({user_uid: user.uid, name: 'Fundamental', sub_type: 'Flow'});
+            await firebase.firestore().collection('practice_types').add({user_uid: user.uid, name: 'Fundamental', sub_type: 'Fingers'});
+            await firebase.firestore().collection('practice_types').add({user_uid: user.uid, name: 'Fundamental', sub_type: 'Freedom'});
+            await firebase.firestore().collection('practice_types').add({user_uid: user.uid, name: 'Fundamental', sub_type: 'Fronts'});
+            await firebase.firestore().collection('practice_types').add({user_uid: user.uid, name: 'Fundamental', sub_type: 'Flex'});
+            await firebase.firestore().collection('practice_types').add({user_uid: user.uid, name: 'Solo', sub_type: ''});
+            await firebase.firestore().collection('practice_types').add({user_uid: user.uid, name: 'Etude', sub_type: ''});
         }
     }
 

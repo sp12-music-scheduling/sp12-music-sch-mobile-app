@@ -3,18 +3,17 @@ import { View, StyleSheet } from 'react-native'
 import FormTextInput from '../../../components/form/FormTextInput'
 import FormButton from '../../../components/form/FormButton'
 import FormSelectInput from '../../../components/form/FormSelectInput'
-import { getDBConnection, isPracticePlanCodeAvailable, insertPracticePlanRow} from "../../../services/database";
-import { auth } from '../../../../firebase';
+import { auth, firestore } from '../../../../firebase';
 
 
 const CreatePracticePlanForm = ({route, navigation}) => {
 
     const user = auth.currentUser;
 
-    const [practicePlanName, setPracticePlanName] = useState('');
-    const [practicePlanDurationDays, setPracticePlanDurationDays] = useState('');
-    const [practicePlanCode, setPracticePlanCode] = useState('');
-    const [practicePlanType, setPracticePlanType] = useState(''); // This will be the Numerical ID as a String
+    const [name, setName] = useState('');
+    const [durationDays, setDurationDays] = useState('');
+    const [code, setCode] = useState('');
+    const [practicePlanTypeDocID, setPracticePlanTypeDocID] = useState(''); // This will be the Numerical ID as a String
 
     const getSelectOptions = () => {
         /*
@@ -23,7 +22,7 @@ const CreatePracticePlanForm = ({route, navigation}) => {
         */
         const types = [];
         route.params.availablePracticePlanTypes.forEach(dict => types.push({
-            'key': dict.id,
+            'key': dict.key,
             'value': dict.sub_type == "" ? dict.name : dict.name + ": " + dict.sub_type
         }));
         return types;
@@ -52,13 +51,13 @@ const CreatePracticePlanForm = ({route, navigation}) => {
         /*
         Checks if any of the inputs are empty (ie = '').
         */
-        if (practicePlanName.trim() == "") {
+        if (name.trim() == "") {
             return false;
-        } else if (practicePlanDurationDays.trim() == "") {
+        } else if (durationDays.trim() == "") {
             return false;
-        } else if (practicePlanCode.trim() == "") {
+        } else if (code.trim() == "") {
             return false;
-        }else if (practicePlanType.toString().trim() == "") {
+        }else if (practicePlanTypeDocID.toString().trim() == "") {
             return false;
         } else {
             return true;
@@ -69,50 +68,49 @@ const CreatePracticePlanForm = ({route, navigation}) => {
         /*
         Checks that Durations (days) is numeric.
         */
-        return !isNaN(Number(practicePlanDurationDays.trim()));
+        return !isNaN(Number(durationDays.trim()));
     }
 
     const validationPPCode = async () => {
         /*
         Checks that the Practice Plan Code is unique.
         */
-        const db = await getDBConnection();
-        return await isPracticePlanCodeAvailable(db, practicePlanCode.trim());
+        let ppRef = firestore.collection('practice_plans');
+        let ptStore = await ppRef.where('code', '==', code).get();
+        return ptStore.docs.length == 0;
     }
 
     const createPracticePlan = async () => {
         /*
         Calls a database function to create a new Practice Plan.
         */
-        const practice_plan = {
-            'name': practicePlanName,
-            'duration_days': Number(practicePlanDurationDays.trim()),
-            'code': practicePlanCode,
-            'practice_type_id': practicePlanType,
-            'user_uid': user.uid
-        };
-        const db = await getDBConnection();
-        await insertPracticePlanRow(db, practice_plan);
+        await firestore.collection('practice_plans').add({
+            user_uid: user.uid,
+            name: name,
+            duration_days: Number(durationDays.trim()),
+            code: code,
+            practice_type_doc: practicePlanTypeDocID,
+        });
     }
 
     return (
         <View style={styles.container}>
             <FormTextInput 
             fieldName="Name"
-            value={practicePlanName} 
-            setValue={setPracticePlanName} />
+            value={name} 
+            setValue={setName} />
             <FormTextInput 
             fieldName="Duration (days)"
-            value={practicePlanDurationDays} 
-            setValue={setPracticePlanDurationDays} />
+            value={durationDays} 
+            setValue={setDurationDays} />
             <FormTextInput 
             fieldName="Code (used by student to register)"
-            value={practicePlanCode} 
-            setValue={setPracticePlanCode} />
+            value={code} 
+            setValue={setCode} />
             <FormSelectInput 
             fieldName="Type"
-            defaultOption={practicePlanType} 
-            setValue={setPracticePlanType}
+            defaultOption={practicePlanTypeDocID} 
+            setValue={setPracticePlanTypeDocID}
             options={getSelectOptions()} />
             <FormButton 
             text="Create"
