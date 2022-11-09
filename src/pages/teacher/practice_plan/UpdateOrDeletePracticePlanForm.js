@@ -27,23 +27,24 @@ const UpdateOrDeletePracticePlanForm = ({route, navigation}) => {
         return types;
     }
 
-    const onDeletePressed = async () => {
+    const onDeletePressed = () => {
         /*
         Function that implements the DELETE functionality.
         */
-        firestoreDelete();
-        navigation.navigate('Practice Plans');
+        firestoreDelete();  
     }
 
-    const firestoreDelete = async () => {
+    const firestoreDelete = () => {
         /*
         Function that implements the DELETE functionality.
         */
-        await firestore.collection('practice_plans')
+        firestore.collection('practice_plans')
         .doc(route.params.practice_plan.key)
-        .delete();
+        .delete()
+        .then(() => {
+            navigation.navigate('Practice Plans');
+        });
     }
-
 
     const onUpdatePressed = async () => {
         /*
@@ -58,7 +59,6 @@ const UpdateOrDeletePracticePlanForm = ({route, navigation}) => {
             alert('Durations (days) must be a number!');
         } else {
             firestoreUpdate();
-            navigation.navigate('Practice Plans');
         }
     }
 
@@ -84,11 +84,11 @@ const UpdateOrDeletePracticePlanForm = ({route, navigation}) => {
         return !isNaN(Number(durationDays.trim()));
     }
 
-    const firestoreUpdate = async () => {
+    const firestoreUpdate = () => {
         /*
         Calls a database function to UPDATE a Practice Plan.
         */
-        await firestore.collection('practice_plans')
+        firestore.collection('practice_plans')
         .doc(route.params.practice_plan.key)
         .update({
             user_uid: user.uid,
@@ -96,6 +96,8 @@ const UpdateOrDeletePracticePlanForm = ({route, navigation}) => {
             duration_days: Number(durationDays.trim()),
             code: route.params.practice_plan.code,
             practice_type_doc: practicePlanTypeDocID,
+        }).then(()=>{
+            navigation.navigate('Practice Plans');
         });
     }
 

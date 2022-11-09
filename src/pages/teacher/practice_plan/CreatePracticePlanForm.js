@@ -39,12 +39,8 @@ const CreatePracticePlanForm = ({route, navigation}) => {
             alert('Please fill all fields!');
         } else if (validateDurationIsNumber() == false) {
             alert('Durations (days) must be a number!');
-        } else if (await validateCodeIsUnique() == false) {
-            alert('Practice Plan Code already in use! Try another one.');
-        } else {
-            firestoreCreate();
-            navigation.navigate('Practice Plans');
-        }
+        } 
+        firestoreValidateCodeIsUnique();
     }
 
     const validateEmptyValues= () => {
@@ -71,25 +67,40 @@ const CreatePracticePlanForm = ({route, navigation}) => {
         return !isNaN(Number(durationDays.trim()));
     }
 
-    const validateCodeIsUnique = async () => {
-        /*
-        Checks that the Practice Plan Code is unique.
-        */
-        let ppRef = firestore.collection('practice_plans');
-        let ptStore = await ppRef.where('code', '==', code).get();
-        return ptStore.docs.length == 0;
+    const firestoreValidateCodeIsUnique = () => {
+        firestore.collection('practice_plans')
+        .where('code', '==', code.trim())
+        .limit(1)
+        .get()
+        .then( querySnapshot => {
+            const data = [];
+            querySnapshot.forEach(documentSnapshot => {
+                data.push({
+                    ...documentSnapshot.data(),
+                    key: documentSnapshot.id,
+                });
+            });
+            if (data.length > 0) {
+                alert('Practice Plan Code already in use! Try another one.');
+            } else {
+                firestoreCreate();
+            }
+        });
     }
 
-    const firestoreCreate = async () => {
+    const firestoreCreate = () => {
         /*
         Calls a database function to create a new Practice Plan.
         */
-        await firestore.collection('practice_plans').add({
+        firestore.collection('practice_plans')
+        .add({
             user_uid: user.uid,
             name: name,
             duration_days: Number(durationDays.trim()),
             code: code,
             practice_type_doc: practicePlanTypeDocID,
+        }).then(()=>{
+            navigation.navigate('Practice Plans');
         });
     }
 

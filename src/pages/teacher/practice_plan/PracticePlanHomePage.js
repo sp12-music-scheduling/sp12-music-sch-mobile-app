@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect } from 'react'
-import { StyleSheet,View,FlatList,Dimensions } from 'react-native';
+import { StyleSheet,View,FlatList,Dimensions, ActivityIndicator } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
 import PracticePlanRow from '../../../components/teacher/PracticePlanRow';
@@ -15,6 +15,9 @@ const PracticePlanHomePage = ({navigation}) => {
   const [practicePlanTypeLookup, setPracticePlanTypeLookup] = useState({});
   const [practicePlanTypeOptions, setPracticePlanTypeOptions] = useState([]);
   const [practicePlanPlans, setPracticePlanPlans] = useState([]);
+
+  const [isLoadingPart1, setIsLoadingPart1] = useState(true);
+  const [isLoadingPart2, setIsLoadingPart2] = useState(true);
  
   useEffect(() => {
     /*
@@ -27,7 +30,7 @@ const PracticePlanHomePage = ({navigation}) => {
     return unsubscribe;
   }, []);
 
-  const loadDataCallback = useCallback(async () => {
+  const loadDataCallback = useCallback( () => {
     /*
     This function is used to populate available Practice Plans
     and Practice Plan Types.
@@ -36,29 +39,27 @@ const PracticePlanHomePage = ({navigation}) => {
     firestoreGetPracticeTypes();
   }, []);
 
-  const firestoreGetPracticeTypes = async () => {
-    // #1 PULL DATA
+  const firestoreGetPracticeTypes = () => {
     firestore.collection('practice_types')
     .where('user_uid', '==', user.uid)
-    .onSnapshot(
-      querySnapshot => {
-          const data = [];
-          querySnapshot.forEach( documentSnapshot =>{
+    .get()
+    .then( querySnapshot => {
+        const data = [];
+        querySnapshot.forEach(documentSnapshot => {
             data.push({
-                  ...documentSnapshot.data(),
-                  key: documentSnapshot.id,
-              });
-          });
-          sortArrayOfDictByName(data);
-          setPracticePlanTypeOptions(data)
-      }
-    );
-    // #2 CREATE LOOKUP
-    const practice_type_lookup = {};
-    practicePlanTypeOptions.forEach(dict => {
-      practice_type_lookup[dict.key] = dict.name;
+                ...documentSnapshot.data(),
+                key: documentSnapshot.id,
+            });
+        });
+        sortArrayOfDictByName(data);
+        setPracticePlanTypeOptions(data)
+        const lookup = {};
+        data.forEach(dict => {
+          lookup[dict.key] = dict.name;
+        });
+        setPracticePlanTypeLookup(lookup);
+        setIsLoadingPart2(false);
     });
-    setPracticePlanTypeLookup(practice_type_lookup);
   }
 
   const sortArrayOfDictByName = (data) => {
@@ -73,22 +74,22 @@ const PracticePlanHomePage = ({navigation}) => {
     }); 
   }
 
-  const firestoreGetPracticePlans = async () => {
+  const firestoreGetPracticePlans =  () => {
     firestore.collection('practice_plans')
     .where('user_uid', '==', user.uid)
-    .onSnapshot(
-      querySnapshot => {
-          const data = [];
-          querySnapshot.forEach( documentSnapshot =>{
+    .get()
+    .then( querySnapshot => {
+        const data = [];
+        querySnapshot.forEach(documentSnapshot => {
             data.push({
-                  ...documentSnapshot.data(),
-                  key: documentSnapshot.id,
-              });
-          });
-          sortArrayOfDictByName(data);
-          setPracticePlanPlans(data)
-      }
-    );
+                ...documentSnapshot.data(),
+                key: documentSnapshot.id,
+            });
+        });
+        sortArrayOfDictByName(data);
+        setPracticePlanPlans(data);
+        setIsLoadingPart1(false);
+    });
   }
   
   const getPracticePlanList = () => {
@@ -169,34 +170,41 @@ const PracticePlanHomePage = ({navigation}) => {
     });
   }
 
-  return (
-      <View style={styles.container}>
-        <View style={styles.sectionItems}>
-          <FlatList
-          data={getPracticePlanList()}
-          renderItem={({item}) =>
-              <TouchableOpacity 
-              onLongPress={navigateToUpdateOrDeletePracticePlan(item)}
-              onPress={navigateToExercises(item)}  >
-                  <PracticePlanRow 
-                  name={item.name} 
-                  type={item.type} 
-                  duration_days={item.duration_days} />
-              </TouchableOpacity> 
-            }
-            maintainVisibleContentPosition={{
-              minIndexForVisible: 0,
-            }}
-          />
+  if (isLoadingPart1 || isLoadingPart2){
+    return (
+    <View style={styles.container}>
+        <ActivityIndicator></ActivityIndicator>
+    </View>
+    );
+  } else {
+    return (
+        <View style={styles.container}>
+          <View style={styles.sectionItems}>
+            <FlatList
+            data={getPracticePlanList()}
+            renderItem={({item}) =>
+                <TouchableOpacity 
+                onLongPress={navigateToUpdateOrDeletePracticePlan(item)}
+                onPress={navigateToExercises(item)}  >
+                    <PracticePlanRow 
+                    name={item.name} 
+                    type={item.type} 
+                    duration_days={item.duration_days} />
+                </TouchableOpacity> 
+              }
+              maintainVisibleContentPosition={{
+                minIndexForVisible: 0,
+              }}
+            />
+          </View>
+          <View style={styles.fab}>
+              <FloatingPlusButton 
+              onPress={navigateToCreatePracticePlan()} />
+          </View>
         </View>
-        <View style={styles.fab}>
-            <FloatingPlusButton 
-            onPress={navigateToCreatePracticePlan()} />
-        </View>
-      </View>
-  )
+    )
+  }
 };
-
 export default PracticePlanHomePage;
 
 const styles = StyleSheet.create({
