@@ -3,7 +3,7 @@ import { View, StyleSheet } from 'react-native'
 
 import FormTextInput from '../../../components/form/FormTextInput'
 import FormButton from '../../../components/form/FormButton'
-import { getDBConnection, updatePracticeTypeRow, deletePracticeTypeRow } from "../../../services/database";
+import { firestore } from '../../../../firebase';
 
 
 const UpdateOrDeletePracticeTypeForm = ({route, navigation}) => {
@@ -11,28 +11,35 @@ const UpdateOrDeletePracticeTypeForm = ({route, navigation}) => {
     const [name, setName] = useState(route.params.practice_type.name);
     const [subType, setSubType] = useState(route.params.practice_type.sub_type);
 
-    const onDeletePressed = async () => {
-        /*
-        Function that implements the DELETE functionality.
-        */
-        const db = await getDBConnection();
-        await deletePracticeTypeRow(db, route.params.practice_type);
-        navigation.navigate('Manage Practice Types');
+    const onDeletePressed = () => {
+        firestore.collection('practice_types')
+        .doc(route.params.practice_type.key)
+        .delete()
+        .then(() => {
+            navigation.navigate('Manage Practice Types');
+        });
     }
 
-    const onUpdatePressed = async () => {
-        /*
-        Function that action(s) the UPDATE functionality.
-            1. Performs validations
-            2. Makes DB call to update the Practice Type
-            3. Redirects back to Parent page
-        */
+    const onUpdatePressed = () => {
         if (validationEmptyValues() == false) {
             alert('Please fill all fields!');
         } else {
-            await updateOnDatabase();
-            navigation.navigate('Manage Practice Types');
+            firestoreUpdate();
         }
+    }
+
+    const firestoreUpdate = () => {
+        /*
+        */
+        firestore.collection('practice_types')
+        .doc(route.params.practice_type.key)
+        .update({
+            user_uid: route.params.practice_type.user_uid,
+            name: name,
+            sub_type: subType,
+        }).then(()=>{
+            navigation.navigate('Manage Practice Types');
+        });
     }
 
     const validationEmptyValues= () => {
@@ -44,19 +51,6 @@ const UpdateOrDeletePracticeTypeForm = ({route, navigation}) => {
         } else {
             return true;
         }
-    }
-
-    const updateOnDatabase = async () => {
-        /*
-        Calls a database function to update a Practice Type.
-        */
-        const pt = {
-            "id":	route.params.practice_type.id,
-            "name":	name,
-            "sub_type": subType,
-        };
-        const db = await getDBConnection();
-        await updatePracticeTypeRow(db, pt);
     }
 
     return (

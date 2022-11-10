@@ -10,7 +10,7 @@ const UpdateEnrollmentForm = ({route, navigation}) => {
     const [code, setCode] = useState(route.params.practice_plan_enrollment.practice_plan.code);
     const [practicePlanName, setPracticePlanName] = useState(route.params.practice_plan_enrollment.practice_plan.name);
     
-    const onLeavePlanPressed = async () => {
+    const onLeavePlanPressed = () => {
         /*
         */
         firestore.collection('practice_plan_enrollments')

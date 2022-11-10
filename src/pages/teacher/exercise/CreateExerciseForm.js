@@ -4,7 +4,7 @@ import { View, StyleSheet, Dimensions } from 'react-native'
 import FormTextInput from '../../../components/form/FormTextInput'
 import FormButton from '../../../components/form/FormButton'
 import FormSelectInput from '../../../components/form/FormSelectInput'
-import { getDBConnection, insertExerciseRow } from "../../../services/database";
+import { firestore } from '../../../../firebase';
 
 const DEVICE_HEIGHT = Dimensions.get('window').height
 
@@ -19,7 +19,7 @@ const CreateExerciseForm = ({route, navigation}) => {
     const [goal_tempo, setGoalTempo] = useState('');
     const [tempo_progression, setTempoProgression] = useState('');
 
-    const onCreatePressed = async () => {
+    const onCreatePressed = () => {
         /*
         Function that action(s) the CREATE functionality.
             1. Performs validations
@@ -34,9 +34,24 @@ const CreateExerciseForm = ({route, navigation}) => {
         } else if (validationGoalTempoIsNumber() == false) {
             alert('Goal Tempo must be a number!');
         } else {
-            createOnDatabase();
+            firestoreCreate();
             navigation.navigate('Exercises', {practice_plan});
         }
+    }
+    
+    const firestoreCreate = () => {
+        firestore.collection('exercises')
+        .add({
+            practice_plan_doc: practice_plan.key,
+            name: name,
+            descr: descr,
+            video_link: video_link,
+            start_tempo: Number(start_tempo.trim()),
+            goal_tempo: Number(goal_tempo.trim()),
+            tempo_progression: tempo_progression,
+        }).then( () => {
+            navigation.navigate('Exercises', {practice_plan});
+        });
     }
 
     const validationEmptyValues= () => {
@@ -68,23 +83,6 @@ const CreateExerciseForm = ({route, navigation}) => {
         Checks that Goal Tempo is numeric.
         */
         return !isNaN(Number(goal_tempo.trim()));
-    }
-
-    const createOnDatabase = async () => {
-        /*
-        Calls a database function to create a new Exercise.
-        */
-        const exercise = {
-            "name":	name,
-            "descr": descr,
-            "video_link": video_link,
-            "start_tempo": start_tempo,
-            "goal_tempo": goal_tempo,
-            "tempo_progression": tempo_progression,
-            "practice_plan_id":	practice_plan.id,
-        };
-        const db = await getDBConnection();
-        await insertExerciseRow(db, exercise);
     }
 
     const getTempoProgressionOptions = () => {

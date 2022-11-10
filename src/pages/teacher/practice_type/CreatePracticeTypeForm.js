@@ -3,15 +3,18 @@ import { View, StyleSheet } from 'react-native'
 
 import FormTextInput from '../../../components/form/FormTextInput'
 import FormButton from '../../../components/form/FormButton'
-import { getDBConnection, insertPracticeTypeRow} from "../../../services/database";
+import { auth, firestore } from '../../../../firebase';
+
 
 
 const CreatePracticeTypeForm = ({navigation}) => {
 
+    const user = auth.currentUser;
+
     const [name, setName] = useState('');
     const [subType, setSubType] = useState('');
 
-    const onCreatePressed = async () => {
+    const onCreatePressed = () => {
         /*
         Function that action(s) the CREATE functionality.
             1. Performs validations
@@ -22,9 +25,21 @@ const CreatePracticeTypeForm = ({navigation}) => {
             alert('Please fill all fields!');
         }
         else {
-            createOnDatabase();
-            navigation.navigate('Manage Practice Types');
+            firestoreCreate();
         }
+    }
+
+    const firestoreCreate = () => {
+        /*
+        */
+        firestore.collection('practice_types')
+        .add({
+            user_uid: user.uid,
+            name: name,
+            sub_type: subType,
+        }).then( () => {
+            navigation.navigate('Manage Practice Types');
+        });
     }
 
     const validationEmptyValues= () => {
@@ -36,18 +51,6 @@ const CreatePracticeTypeForm = ({navigation}) => {
         } else {
             return true;
         }
-    }
-
-    const createOnDatabase = async () => {
-        /*
-        Calls a database function to create a new Practice Type.
-        */
-        const practice_type = {
-            'name': name.trim(),
-            'sub_type': subType.trim(),
-        };
-        const db = await getDBConnection();
-        await insertPracticeTypeRow(db, practice_type);
     }
 
     return (

@@ -1,10 +1,10 @@
 import React, { useState, useCallback, useEffect } from 'react'
-import { StyleSheet,View,FlatList,Dimensions } from 'react-native';
+import { StyleSheet, View, FlatList, Dimensions, ActivityIndicator } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
 import ExerciseRow from '../../../components/teacher/ExerciseRow';
 import FloatingPlusButton from '../../../components/teacher/FloatingPlusButton';
-import { getDBConnection, getExercisesByPracticePlan, getExerciseEnrollment } from "../../../services/database";
+import { auth, firestore } from '../../../../firebase';
 
 
 const DEVICE_HEIGHT = Dimensions.get('window').height
@@ -15,6 +15,8 @@ const ExerciseHomePage = ({route, navigation}) => {
   const [exercises, setExercises] = useState([]);
   const [exercisesEntrollment, setExercisesEnrollment] = useState([]);
 
+  const [isLoadingPart1, setIsLoadingPart1] = useState(true);
+  const [isLoadingPart2, setIsLoadingPart2] = useState(true);
  
   useEffect(() => {
     /*
@@ -31,12 +33,58 @@ const ExerciseHomePage = ({route, navigation}) => {
     /*
     Pulls data required to load this page.
     */
-    const db = await getDBConnection();
-    const exercises = await getExercisesByPracticePlan(db, practice_plan);
-    setExercises(exercises);
-    const ee = await getExerciseEnrollment(db);
-    setExercisesEnrollment(ee);
+    firestoreGetExercises();
+    firestoreGetExerciseEnrollment();
   }, []);
+
+  const firestoreGetExercises = () => {
+    firestore.collection('exercises')
+    .where('practice_plan_doc', '==', practice_plan.key)
+    .get()
+    .then( querySnapshot => {
+        const data = [];
+        querySnapshot.forEach(documentSnapshot => {
+            data.push({
+                ...documentSnapshot.data(),
+                key: documentSnapshot.id,
+            });
+        });
+        sortArrayOfDictByName(data);
+        setExercises(data);
+        setIsLoadingPart1(false);
+    });
+  }
+
+  const sortArrayOfDictByName = (data) => {
+    /* Auxillary Function to Sort a List of Dict */
+    data.sort(function(a,b){
+      var nameA=a.name.toLowerCase(), nameB=b.name.toLowerCase()
+      if (nameA < nameB) //sort string ascending
+          return -1 
+      if (nameA > nameB)
+          return 1
+      return 0
+    }); 
+  }
+
+  const firestoreGetExerciseEnrollment = () => {
+    setExercisesEnrollment([]);
+    setIsLoadingPart2(false);
+    // firestore.collection('exercise_enrollment')
+    // .where('practice_plan_doc', '==', practice_plan.key)
+    // .get()
+    // .then( querySnapshot => {
+    //     const data = [];
+    //     querySnapshot.forEach(documentSnapshot => {
+    //         data.push({
+    //             ...documentSnapshot.data(),
+    //             key: documentSnapshot.id,
+    //         });
+    //     });
+    //     setExercisesEnrollment(data);
+    //     setIsLoadingPart2(false);
+    // });
+  }
 
   const navigateToCreate = () => {
     /*
@@ -83,39 +131,47 @@ const ExerciseHomePage = ({route, navigation}) => {
     */   
     var count = 0;
     exercisesEntrollment.forEach(ee => {
-      if (ee.exercise_id == item.id){
+      if (ee.exercise_doc == item.key){
         count++;
       } 
     })
     return count;
   }
 
-  return (
-      <View style={styles.container}>
-        <View style={styles.sectionItems}>
-          <FlatList
-          data={getExerciseList()}
-          renderItem={({item}) =>
-              <TouchableOpacity 
-              onLongPress={navigateToUpdateOrDelete(item)}
-              onPress={navigateToRowSelect(item)}  >
-                  <ExerciseRow 
-                  name={item.name} 
-                  user_count={getExerciseEnrollmentCount(item)}
-                  />
-              </TouchableOpacity> 
-            }
-            maintainVisibleContentPosition={{
-              minIndexForVisible: 0,
-            }}
-          />
+  if (isLoadingPart1 || isLoadingPart2){
+    return (
+    <View style={styles.container}>
+        <ActivityIndicator></ActivityIndicator>
+    </View>
+    );
+  } else {
+    return (
+        <View style={styles.container}>
+          <View style={styles.sectionItems}>
+            <FlatList
+            data={getExerciseList()}
+            renderItem={({item}) =>
+                <TouchableOpacity 
+                onLongPress={navigateToUpdateOrDelete(item)}
+                onPress={navigateToRowSelect(item)}  >
+                    <ExerciseRow 
+                    name={item.name} 
+                    user_count={getExerciseEnrollmentCount(item)}
+                    />
+                </TouchableOpacity> 
+              }
+              maintainVisibleContentPosition={{
+                minIndexForVisible: 0,
+              }}
+            />
+          </View>
+          <View style={styles.fab}>
+              <FloatingPlusButton 
+              onPress={navigateToCreate()} />
+          </View>
         </View>
-        <View style={styles.fab}>
-            <FloatingPlusButton 
-            onPress={navigateToCreate()} />
-        </View>
-      </View>
-  )
+    )
+  }
 };
 
 export default ExerciseHomePage;

@@ -4,7 +4,7 @@ import { View, StyleSheet } from 'react-native'
 import FormTextInput from '../../../components/form/FormTextInput'
 import FormButton from '../../../components/form/FormButton'
 import FormSelectInput from '../../../components/form/FormSelectInput'
-import { getDBConnection, updateExerciseRow, deleteExerciseRow } from "../../../services/database";
+import { firestore } from '../../../../firebase';
 
 
 const UpdateOrDeleteExerciseForm = ({route, navigation}) => {
@@ -17,16 +17,18 @@ const UpdateOrDeleteExerciseForm = ({route, navigation}) => {
     const [goal_tempo, setGoalTempo] = useState(route.params.exercise.goal_tempo.toString());
     const [tempo_progression, setTempoProgression] = useState(route.params.exercise.tempo_progression);
 
-    const onDeletePressed = async () => {
+    const onDeletePressed =  () => {
         /*
         Function that implements the DELETE functionality.
         */
-        const db = await getDBConnection();
-        await deleteExerciseRow(db, route.params.exercise);
-        navigation.navigate('Exercises', {practice_plan});
+        firestore.collection('exercises')
+        .doc(route.params.exercise.key)
+        .delete().then( ()=>{
+            navigation.navigate('Exercises', {practice_plan});
+        });
     }
-
-    const onUpdatePressed = async () => {
+    
+    const onUpdatePressed =  () => {
         /*
         Function that action(s) the UPDATE functionality.
             1. Performs validations
@@ -40,9 +42,26 @@ const UpdateOrDeleteExerciseForm = ({route, navigation}) => {
         } else if (validationGoalTempoIsNumber() == false) {
             alert('Goal Tempo must be a number!');
         } else {
-            await updateOnDatabase();
-            navigation.navigate('Exercises', {practice_plan});
+            firestoreUpdate();
         }
+    }
+
+    const firestoreUpdate = () => {
+        /*
+        */
+        firestore.collection('exercises')
+        .doc(route.params.exercise.key)
+        .update({
+            practice_plan_doc: practice_plan.key,
+            name: name,
+            descr: descr,
+            video_link: video_link,
+            start_tempo: Number(start_tempo.trim()),
+            goal_tempo: Number(goal_tempo.trim()),
+            tempo_progression: tempo_progression,
+        }).then(()=>{
+            navigation.navigate('Exercises', {practice_plan});
+        });
     }
 
     const validationEmptyValues= () => {
@@ -74,24 +93,6 @@ const UpdateOrDeleteExerciseForm = ({route, navigation}) => {
         Checks that Goal Tempo is numeric.
         */
         return !isNaN(Number(goal_tempo.trim()));
-    }
-
-    const updateOnDatabase = async () => {
-        /*
-        Calls a database function to update an Exercise.
-        */
-        const exercise = {
-            "id":	route.params.exercise.id,
-            "name":	name,
-            "descr": descr,
-            "video_link": video_link,
-            "start_tempo": Number(start_tempo),
-            "goal_tempo": Number(goal_tempo),
-            "tempo_progression": tempo_progression,
-            "practice_plan_id":	practice_plan.id,
-        };
-        const db = await getDBConnection();
-        await updateExerciseRow(db, exercise);
     }
 
     const getTempoProgressionOptions = () => {
