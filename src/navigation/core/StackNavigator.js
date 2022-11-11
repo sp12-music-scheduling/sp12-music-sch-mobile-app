@@ -33,6 +33,10 @@ import StudentExerciseHomePage from "../../pages/student-v2/exercise/StudentExer
 
 import UserSettingsPage from "../../pages/shared/UserSettingsPage";
 
+import StudentVideosHomePage from "../../pages/student-v2/video/StudentVideosHomePage";
+
+import StudentProgressHomePage from "../../pages/student-v2/progress/StudentProgressHomePage";
+
 const Stack = createStackNavigator();
 
 const screenOptionStyle = {
@@ -107,6 +111,22 @@ const StudentMainStackNavigator = () => {
   );
 }
 
+const StudentVideosStackNavigator = () => {
+  return (
+    <Stack.Navigator screenOptions={screenOptionStyle}>
+      <Stack.Screen name="Videos" component={StudentVideosHomePage} />
+    </Stack.Navigator>
+  );
+}
+
+const StudentProgressStackNavigator = () => {
+  return (
+    <Stack.Navigator screenOptions={screenOptionStyle}>
+      <Stack.Screen name="Progress" component={StudentProgressHomePage} />
+    </Stack.Navigator>
+  );
+}
+
 const UserSettingsStackNavigator = () => {
   return (
     <Stack.Navigator screenOptions={screenOptionStyle}>
@@ -122,5 +142,7 @@ export {
   ProfessortManageStudentStackNavigator, 
   ProfessorManagePracticeTypeStackNavigator,
   StudentMainStackNavigator,
+  StudentVideosStackNavigator,
+  StudentProgressStackNavigator,
   UserSettingsStackNavigator,
 };
