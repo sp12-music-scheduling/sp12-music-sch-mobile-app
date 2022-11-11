@@ -30,7 +30,7 @@ const BottomTabNavigator = () => {
       }}
     >
       <Tab.Screen 
-        name="Progress" 
+        name="StudentProgress" 
         component={StudentProgressStackNavigator} 
         options={{
           tabBarIcon: ({focused}) => (
