@@ -119,7 +119,9 @@ const StudentPracticePlanHomePage = ({navigation}) => {
   }
 
   const navigateToExercises = (item) => {
-
+    return () =>  navigation.push('Exercises', {
+      'practice_plan': item,
+    });
   }
 
   const navigateToUpdatePracticePlanEnrollment = (item) => {

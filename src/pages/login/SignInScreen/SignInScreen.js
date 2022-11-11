@@ -18,22 +18,6 @@ const SignInScreen = () => {
         .then(userCredentials => {
             const user = userCredentials.user;
             console.log(user.email, ' Logged in');
-            // Example CONFIG FOR FIRESTORE
-            
-            // firebase.firestore()
-            //     .collection('user_settings')
-            //     .onSnapshot(
-            //         querySnapshot => {
-            //             const userSettings = [];
-            //             querySnapshot.forEach( documentSnapshot =>{
-            //                 userSettings.push({
-            //                     ...documentSnapshot.data(),
-            //                     key: documentSnapshot.id,
-            //                 });
-            //             });
-            //             console.log('userSettings', userSettings);
-            //         }
-            //     );
         })
         .catch(error => alert(error.message))
     }

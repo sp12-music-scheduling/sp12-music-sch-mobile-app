@@ -29,6 +29,8 @@ import StudentPracticePlanHomePage from "../../pages/student-v2/practice_plan/St
 import NewEnrollForm from "../../pages/student-v2/practice_plan/NewEnrollForm";
 import UpdateEnrollmentForm from "../../pages/student-v2/practice_plan/UpdateEnrollmentForm";
 
+import StudentExerciseHomePage from "../../pages/student-v2/exercise/StudentExerciseHomePage";
+
 const Stack = createStackNavigator();
 
 const screenOptionStyle = {
@@ -98,6 +100,7 @@ const StudentMainStackNavigator = () => {
       <Stack.Screen name="Practice Plans" component={StudentPracticePlanHomePage} />
       <Stack.Screen name="Enroll" component={NewEnrollForm} />
       <Stack.Screen name="Update Enrollment" component={UpdateEnrollmentForm} />
+      <Stack.Screen name="Exercises" component={StudentExerciseHomePage} />
     </Stack.Navigator>
   );
 }

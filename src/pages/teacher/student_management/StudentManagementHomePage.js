@@ -1,13 +1,11 @@
 import React, {useState, useCallback, useEffect } from 'react';
-import { StyleSheet, Text, View, Dimensions, FlatList } from 'react-native';
+import { StyleSheet, Text, View, Dimensions, FlatList, ActivityIndicator } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import SwitchSelector from 'react-native-switch-selector';
 
 import StudentRow from '../../../components/teacher/ExerciseEntrollmentRow';
-import { 
-  getDBConnection,
-  getUsers,
- } from "../../../services/database";
+import { auth, firestore } from '../../../../firebase';
+
 
 const VIEWS = [
   { label: 'Student Progress', value: 0 },
@@ -18,8 +16,20 @@ const DEVICE_HEIGHT = Dimensions.get('window').height
 
 const StudentManagementHomePage = ({navigation}) => {
 
+  const user = auth.currentUser;
+
+
   const [currentSwitchSelection, setCurrentSwitchSelection] = useState(1);
-  const [availableStudents, setAvailableStudents] = useState([]);
+
+  const [userSettingLookup, setUserSettingLookup] = useState({});
+  const [practicePlans, setPracticePlans] = useState({});
+  const [practicePlanEnrollment, setPracticeEnrollmentPlan] = useState([]);
+
+
+  const [isLoadingPart1, setIsLoadingPart1] = useState(true);
+  const [isLoadingPart2, setIsLoadingPart2] = useState(true);
+  const [isLoadingPart3, setIsLoadingPart3] = useState(true);
+
 
   useEffect(() => {
     /*
@@ -36,10 +46,67 @@ const StudentManagementHomePage = ({navigation}) => {
     /*
     Pulls data required to load this page.
     */
-    const db = await getDBConnection();
-    const students = await getUsers(db);
-    setAvailableStudents(students);
+    firestoreGetPracticePlans();
+    firestoreGetPracticePlanEnrollments();
+    firestoreUserSettings();
   }, []);
+
+  const firestoreGetPracticePlans = () => {
+    firestore.collection('practice_plans')
+    .where('user_uid', '==', user.uid)
+    .get()
+    .then( querySnapshot => {
+        const data = [];
+        querySnapshot.forEach(documentSnapshot => {
+            data.push({
+                ...documentSnapshot.data(),
+                key: documentSnapshot.id,
+            });
+        });
+        setPracticePlans(data)
+        setIsLoadingPart1(false);
+    });
+  }
+
+  const firestoreGetPracticePlanEnrollments = () => {
+    firestore.collection('practice_plan_enrollments')
+    .get()
+    .then( querySnapshot => {
+        const data = [];
+        querySnapshot.forEach(documentSnapshot => {
+            data.push({
+                ...documentSnapshot.data(),
+                key: documentSnapshot.id,
+            });
+        });
+        // const lookup = {};
+        // data.forEach(dict => {
+        //   lookup[dict.practice_plan_doc] = dict;
+        // });
+        setPracticeEnrollmentPlan(data)
+        setIsLoadingPart2(false);
+    });
+  }
+
+  const firestoreUserSettings =  () => {
+    firestore.collection('user_settings')
+    .get()
+    .then( querySnapshot => {
+        const data = [];
+        querySnapshot.forEach(documentSnapshot => {
+            data.push({
+                ...documentSnapshot.data(),
+                key: documentSnapshot.id,
+            });
+        });
+        const lookup = {};
+        data.forEach(dict => {
+          lookup[dict.uid] = dict;
+        });
+        setUserSettingLookup(lookup);
+        setIsLoadingPart3(false);
+    });
+  }
 
   const onSwitchChange = (value) => {
     /*
@@ -49,6 +116,20 @@ const StudentManagementHomePage = ({navigation}) => {
    setCurrentSwitchSelection(value);
   }
 
+  const getStudentList = () => {
+    const data = [];
+    practicePlans.forEach(pp => {
+      practicePlanEnrollment.forEach(ppe => {
+        if (pp.key == ppe.practice_plan_doc){
+          const user = userSettingLookup[ppe.user_uid];
+          data.push(user);
+        }
+      });
+    });
+  
+    return data;
+  }
+
   const getEnrollmentViews = () => {
     /*
     VIEW when the Student Enrollment Toggle is Selected.
@@ -56,12 +137,12 @@ const StudentManagementHomePage = ({navigation}) => {
    return <View style={styles.enrollment_container}>
             <View style={styles.enrollment_section_items}>
               <FlatList
-              data={availableStudents}
+              data={getStudentList()}
               renderItem={({item}) =>
                   <TouchableOpacity 
                   onPress={navigateToEnrollmentRowSelect(item)}  >
                       <StudentRow 
-                      name={item.name} 
+                      name={item.display_name} 
                       email={item.email}
                       />
                   </TouchableOpacity> 
@@ -79,7 +160,7 @@ const StudentManagementHomePage = ({navigation}) => {
     Navigates to the Enrollement exercises by the selected Student User.
     */
     return () =>  navigation.push('Student Management Enrollment', {
-      'user': item,
+      'student': item,
     });
   }
 
@@ -93,21 +174,29 @@ const StudentManagementHomePage = ({navigation}) => {
     </View>
   }
 
-  return (
-      <View style={styles.container}>
-        {/* Switch */}
-          <SwitchSelector 
-          options={VIEWS} 
-          initial={currentSwitchSelection} 
-          selectedColor={'white'}
-          buttonColor={'#C3AAAA'}
-          backgroundColor={'white'}
-          textColor={'#2C0B0B'}
-          onPress={value => onSwitchChange(value)} />
-          {/* Switch Content Here */}
-          {currentSwitchSelection == 0 ? getStudentProgresstViews(): getEnrollmentViews()}
-      </View>
-  )
+  if (isLoadingPart1 || isLoadingPart2 || isLoadingPart3){
+    return (
+    <View style={styles.container}>
+        <ActivityIndicator></ActivityIndicator>
+    </View>
+    );
+  } else {
+    return (
+        <View style={styles.container}>
+          {/* Switch */}
+            <SwitchSelector 
+            options={VIEWS} 
+            initial={currentSwitchSelection} 
+            selectedColor={'white'}
+            buttonColor={'#C3AAAA'}
+            backgroundColor={'white'}
+            textColor={'#2C0B0B'}
+            onPress={value => onSwitchChange(value)} />
+            {/* Switch Content Here */}
+            {currentSwitchSelection == 0 ? getStudentProgresstViews(): getEnrollmentViews()}
+        </View>
+    )
+  }
 };
 
 export default StudentManagementHomePage;
