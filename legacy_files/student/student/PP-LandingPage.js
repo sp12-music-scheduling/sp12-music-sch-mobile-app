@@ -2,8 +2,8 @@ import * as React from "react";
 import {StyleSheet,Text, View, Image, TouchableOpacity, SafeAreaView, Button, Alert} from "react-native";
 import {NavigatorContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import Roundbutton from '../../components/button-round';
-import AddButton from '../../components/button-add';
+import Roundbutton from '../../../src/components/button-round';
+import AddButton from '../../button-add';
 
 export default function App({navigation}) {
   return (
