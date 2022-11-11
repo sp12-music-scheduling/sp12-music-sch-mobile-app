@@ -1,14 +1,9 @@
 import React, { useState, useCallback, useEffect } from 'react'
-import { StyleSheet,View,FlatList,Dimensions } from 'react-native';
+import { StyleSheet,View,FlatList,Dimensions,ActivityIndicator } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
 import ExerciseEntrollmentRow from '../../../components/teacher/ExerciseEntrollmentRow';
-import { 
-  getDBConnection,
-  getExerciseEnrollmentByExercise,
-  insertExerciseEnrollment,
-  deleteExerciseEnrollment,
- } from "../../../services/database";
+import { firestore } from '../../../../firebase';
 
 
 const DEVICE_HEIGHT = Dimensions.get('window').height
@@ -17,10 +12,14 @@ const ExerciseEnrollmentPage = ({route, navigation}) => {
 
   const practice_plan = route.params.practice_plan;
   const exercise = route.params.exercise;
-  const [exerciseEnrollment, setExerciseEnrollment] = useState([]);
-  const [availableStudents, setAvailableStudents] = useState([]);
+  const [exerciseEnrollment, setExerciseEnrollment] = useState({});
+  const [studentsEnrolledToPracticePlan, setStudentsEnrolledToPracticePlan] = useState([]);
+  const [userSettingsLookup, setUserSettingsLookup] = useState({});
 
- 
+  const [isLoadingPart1, setIsLoadingPart1] = useState(true);
+  const [isLoadingPart2, setIsLoadingPart2] = useState(true);
+  const [isLoadingPart3, setIsLoadingPart3] = useState(true);
+
   useEffect(() => {
     /*
     This feature is used to ensure that each time the page is loaded,
@@ -37,74 +36,119 @@ const ExerciseEnrollmentPage = ({route, navigation}) => {
     This function is used to populate athis exercises Student
     Enrollment.
     */
-    const db = await getDBConnection();
-    const ee = await getExerciseEnrollmentByExercise(db, exercise);
-    setExerciseEnrollment(ee);
-    const students = await getUsers(db);
-    setAvailableStudents(students);
+    firestoreStudentsEnrolledToPlan();
+    firestoreStudentsEnrolledToExercise();
+    firestoreUserSettings();
   }, []);
+
+  const firestoreStudentsEnrolledToPlan =  () => {
+    firestore.collection('practice_plan_enrollments')
+    .where('practice_plan_doc', '==', practice_plan.key)
+    .get()
+    .then( querySnapshot => {
+        const data = [];
+        querySnapshot.forEach(documentSnapshot => {
+            data.push({
+                ...documentSnapshot.data(),
+                key: documentSnapshot.id,
+            });
+        });
+        setStudentsEnrolledToPracticePlan(data);
+        setIsLoadingPart1(false);
+    });
+  }
+
+  const firestoreStudentsEnrolledToExercise =  () => {
+    firestore.collection('exercise_enrollments')
+    .get()
+    .then( querySnapshot => {
+        const data = [];
+        querySnapshot.forEach(documentSnapshot => {
+            data.push({
+                ...documentSnapshot.data(),
+                key: documentSnapshot.id,
+            });
+        });
+        const lookup = {};
+        data.forEach(dict => {
+          lookup[dict.user_uid] = dict;
+        });
+        setExerciseEnrollment(lookup);
+        setIsLoadingPart2(false);
+    });
+  }
+
+  const firestoreUserSettings =  () => {
+    firestore.collection('user_settings')
+    .get()
+    .then( querySnapshot => {
+        const data = [];
+        querySnapshot.forEach(documentSnapshot => {
+            data.push({
+                ...documentSnapshot.data(),
+                key: documentSnapshot.id,
+            });
+        });
+        const lookup = {};
+        data.forEach(dict => {
+          lookup[dict.uid] = dict;
+        });
+        setUserSettingsLookup(lookup);
+        setIsLoadingPart3(false);
+    });
+  }
   
   const navigateToRowSelect = async (item) => {
     /*
     Toggle Exercise Enrollment (Enroll/Unenroll)
     */
-    const db = await getDBConnection();
     if (item.is_enrolled == false){
-      const ee = {
-        'exercise_id': exercise.id,
-        'user_id': item.id,
-      }
-      await insertExerciseEnrollment(db, ee);
+      // console.log('enroll', exercise.key, item.user_uid, );
+      firestore.collection('exercise_enrollments')
+      .add({
+          exercise_doc: exercise.key,
+          user_uid: item.user_uid
+      }).then( () => {
+        setIsLoadingPart2(true);
+        firestoreStudentsEnrolledToExercise();
+      });
     } else {
-      const ee = getExerciceEnrollment(item);
-      await deleteExerciseEnrollment(db, ee);
+       const ee = exerciseEnrollment[item.user_uid];
+      //  console.log('unenroll', ee)
+      firestore.collection('exercise_enrollments')
+        .doc(ee.key)
+        .delete().then( ()=>{
+          setIsLoadingPart2(true);
+          firestoreStudentsEnrolledToExercise();
+        });
     }
-    const ee = await getExerciseEnrollmentByExercise(db, exercise);
-    setExerciseEnrollment(ee);
   }
 
-  const getAvailableStudentList = () => {
+  const getStudentsEnrolledToPlan = () => {
     /*
     Returns a list of Students enrolled to an Exercise.
     */
-    for (let index = 0; index < availableStudents.length; index++) {
-      const is_enrolled = isStudentEnrolled(availableStudents[index]);
-      availableStudents[index].is_enrolled = is_enrolled;
+    for (let index = 0; index < studentsEnrolledToPracticePlan.length; index++) {
+      let student_settings = userSettingsLookup[studentsEnrolledToPracticePlan[index].user_uid]
+      studentsEnrolledToPracticePlan[index].name = student_settings.display_name;
+      studentsEnrolledToPracticePlan[index].email = student_settings.email;
+      studentsEnrolledToPracticePlan[index].is_enrolled = exerciseEnrollment[student_settings.uid] != undefined && exerciseEnrollment[student_settings.uid].exercise_doc == exercise.key;
     }
-    return availableStudents;
+    return studentsEnrolledToPracticePlan;
   }
-
-  const isStudentEnrolled = (user) => {
-    /*
-    Checks if a student is enrolled in the exercise.
-    */
-   var is_enrolled = false;
-   exerciseEnrollment.forEach(ee => {
-      if (ee.user_id == user.id){
-        is_enrolled = true;
-      }
-    });
-    return is_enrolled;
-  }
-
-  const getExerciceEnrollment = (user) => {
-    /*
-    Checks if a student is enrolled in the exercise.
-    */
-   var response = NaN;
-   exerciseEnrollment.forEach(ee => {
-      if (ee.user_id == user.id){
-        response = ee;
-      }
-    });
-    return response;
-  }
-
+  
+  if (isLoadingPart1 || isLoadingPart2 || isLoadingPart3){
+    return (
+    <View style={styles.container}>
+        <ActivityIndicator></ActivityIndicator>
+    </View>
+    );
+  } else {
   return (
       <View style={styles.container}>
         <View style={styles.sectionItems}>
           <FlatList
-          data={getAvailableStudentList()}
+          data={getStudentsEnrolledToPlan()}
           renderItem={({item}) =>
               <TouchableOpacity 
               onPress={() => navigateToRowSelect(item)}  >
@@ -122,6 +166,7 @@ const ExerciseEnrollmentPage = ({route, navigation}) => {
         </View>
       </View>
   )
+}
 };
 
 export default ExerciseEnrollmentPage;

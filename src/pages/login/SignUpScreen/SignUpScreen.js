@@ -1,12 +1,10 @@
 import React, { useState } from 'react'
 import { View, Text, StyleSheet, useWindowDimensions, SafeAreaView } from 'react-native'
 import CustomButton from '../../../components/login/CustomButton';
-import CustomInput from '../../../components/login/CustomInput';
 import FormTextInput from '../../../components/form/FormTextInput';
 import { useNavigation } from '@react-navigation/native';
-import { auth, firebase } from '../../../../firebase';
+import { auth, firestore } from '../../../../firebase';
 import { Alert } from 'react-native';
-import { getDBConnection, insertDefaultPracticeTypes } from '../../../services/database';
 
 const SignUpScreen = () => {
     const studentEmail = "@students.kennesaw.edu"
@@ -29,27 +27,27 @@ const SignUpScreen = () => {
         } else if(passwordRepeat != password) {
             Alert.alert("Passwords are not matching. Please ensure the passwords match.")
         } else if(email.includes(studentEmail) || email.includes(facultyEmail)) {
-        auth.createUserWithEmailAndPassword(email, password)
-        .then(userCredentials => {
-            const user = userCredentials.user;
-            console.log(user.email);
-            // Create DB User Attribute that references email and additional
-            // attribute "Display Name"
-            createUserArributeOnDB(user);
-        })
-        .catch(error => alert(error.message))
-       } else {
-        Alert.alert("Only Kennesaw State students and faculty can use this application.")
-       }
-       
+            auth.createUserWithEmailAndPassword(email, password)
+            .then(userCredentials => {
+                const user = userCredentials.user;
+                console.log(user.email);
+                // Create DB User Attribute that references email and additional
+                // attribute "Display Name"
+                createUserArributeOnDB(user);
+                navigation.navigate('Sign In Screen');
+            })
+            .catch(error => alert(error.message))
+        } else {
+            Alert.alert("Only Kennesaw State students and faculty can use this application.")
+        }
+        navigation.navigate('Sign In Screen');
     }
 
     const createUserArributeOnDB = async (user) => {
         /**
          * Table ties the ser UID to an email and a display name.
          */
-        firebase.firestore()
-        .collection('user_settings')
+        firestore.collection('user_settings')
         .add({
             display_name: displayName,
             uid: user.uid,
@@ -60,13 +58,13 @@ const SignUpScreen = () => {
         });
 
         if (user.email.includes(facultyEmail) ){
-            await firebase.firestore().collection('practice_types').add({user_uid: user.uid, name: 'Fundamental', sub_type: 'Flow'});
-            await firebase.firestore().collection('practice_types').add({user_uid: user.uid, name: 'Fundamental', sub_type: 'Fingers'});
-            await firebase.firestore().collection('practice_types').add({user_uid: user.uid, name: 'Fundamental', sub_type: 'Freedom'});
-            await firebase.firestore().collection('practice_types').add({user_uid: user.uid, name: 'Fundamental', sub_type: 'Fronts'});
-            await firebase.firestore().collection('practice_types').add({user_uid: user.uid, name: 'Fundamental', sub_type: 'Flex'});
-            await firebase.firestore().collection('practice_types').add({user_uid: user.uid, name: 'Solo', sub_type: ''});
-            await firebase.firestore().collection('practice_types').add({user_uid: user.uid, name: 'Etude', sub_type: ''});
+            firestore.collection('practice_types').add({user_uid: user.uid, name: 'Fundamental', sub_type: 'Flow'});
+            firestore.collection('practice_types').add({user_uid: user.uid, name: 'Fundamental', sub_type: 'Fingers'});
+            firestore.collection('practice_types').add({user_uid: user.uid, name: 'Fundamental', sub_type: 'Freedom'});
+            firestore.collection('practice_types').add({user_uid: user.uid, name: 'Fundamental', sub_type: 'Fronts'});
+            firestore.collection('practice_types').add({user_uid: user.uid, name: 'Fundamental', sub_type: 'Flex'});
+            firestore.collection('practice_types').add({user_uid: user.uid, name: 'Solo', sub_type: ''});
+            firestore.collection('practice_types').add({user_uid: user.uid, name: 'Etude', sub_type: ''});
         }
     }
 

@@ -1,17 +1,21 @@
 import React, { useState, useCallback, useEffect } from 'react'
-import { StyleSheet,View,FlatList,Dimensions } from 'react-native';
+import { StyleSheet,View,FlatList,Dimensions, ActivityIndicator } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
 import PracticeTypeRow from '../../../components/teacher/PracticeTypeRow'; 
 import FloatingPlusButton from '../../../components/teacher/FloatingPlusButton';
-import { getDBConnection, getPracticeTypes } from "../../../services/database";
+import { auth, firestore } from '../../../../firebase';
 
 
 const DEVICE_HEIGHT = Dimensions.get('window').height
 
 const PracticeTypeHomePage = ({navigation}) => {
 
+  const user = auth.currentUser;
+
   const [practiceTypes, setPracticeTypes] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+
  
   useEffect(() => {
     /*
@@ -24,15 +28,31 @@ const PracticeTypeHomePage = ({navigation}) => {
     return unsubscribe;
   }, []);
 
-  const loadDataCallback = useCallback(async () => {
+  const loadDataCallback = useCallback( () => {
     /*
     Pulls data required to load this page.
     */
-    const db = await getDBConnection();
-    const pt = await getPracticeTypes(db);
-    setPracticeTypes(pt);
+    firestoreGetPracticeTypes();
   }, []);
   
+  const firestoreGetPracticeTypes =  () => {
+    firestore.collection('practice_types')
+    .where('user_uid', '==', user.uid)
+    .get()
+    .then( querySnapshot => {
+        const data = [];
+        querySnapshot.forEach(documentSnapshot => {
+            data.push({
+                ...documentSnapshot.data(),
+                key: documentSnapshot.id,
+            });
+        });
+        sortArrayOfDictByName(data);
+        setPracticeTypes(data);
+        setIsLoading(false);
+    });
+  }
+
   const getPracticeTypeList = () => {
     /*
     Returns an array of practice type(s).
@@ -58,31 +78,51 @@ const PracticeTypeHomePage = ({navigation}) => {
     });
   }
 
-  return (
-      <View style={styles.container}>
-        <View style={styles.sectionItems}>
-          <FlatList
-          data={getPracticeTypeList()}
-          renderItem={({item}) =>
-              <TouchableOpacity 
-              onLongPress={navigateToUpdateOrDelete(item)} 
-              >
-                  <PracticeTypeRow 
-                  name={item.name} 
-                  sub_type={item.sub_type}/>
-              </TouchableOpacity> 
-            }
-            maintainVisibleContentPosition={{
-              minIndexForVisible: 0,
-            }}
-          />
+  const sortArrayOfDictByName = (data) => {
+    /* Auxillary Function to Sort a List of Dict */
+    data.sort(function(a,b){
+      var nameA=a.name.toLowerCase(), nameB=b.name.toLowerCase()
+      if (nameA < nameB) //sort string ascending
+          return -1 
+      if (nameA > nameB)
+          return 1
+      return 0
+    }); 
+  }
+
+  if (isLoading){
+    return (
+    <View style={styles.container}>
+        <ActivityIndicator></ActivityIndicator>
+    </View>
+    );
+  } else{
+    return (
+        <View style={styles.container}>
+          <View style={styles.sectionItems}>
+            <FlatList
+            data={getPracticeTypeList()}
+            renderItem={({item}) =>
+                <TouchableOpacity 
+                onLongPress={navigateToUpdateOrDelete(item)} 
+                >
+                    <PracticeTypeRow 
+                    name={item.name} 
+                    sub_type={item.sub_type}/>
+                </TouchableOpacity> 
+              }
+              maintainVisibleContentPosition={{
+                minIndexForVisible: 0,
+              }}
+            />
+          </View>
+          <View style={styles.fab}>
+              <FloatingPlusButton 
+              onPress={navigateToCreate()} />
+          </View>
         </View>
-        <View style={styles.fab}>
-            <FloatingPlusButton 
-            onPress={navigateToCreate()} />
-        </View>
-      </View>
-  )
+    )
+  }
 };
 
 export default PracticeTypeHomePage;

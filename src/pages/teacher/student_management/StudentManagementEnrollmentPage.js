@@ -3,20 +3,14 @@ import { StyleSheet,View,FlatList,Dimensions } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
 import StudentManagementEnrollmentRow from '../../../components/teacher/StudentManagementEnrollmentRow';
-import { 
-  getDBConnection, 
-  getExercises, 
-  getExerciseEnrollmentByUser,
-  getPracticePlans,
-  getPracticeTypes
-} from "../../../services/database";
+import { auth, firestore } from '../../../../firebase';
 
 
 const device_height = Dimensions.get('window').height
 
 const StudentManagementEnrollmentPage = ({route, navigation}) => {
 
-  const user = route.params.user;
+  const student = route.params.student;
   const [available_exercises, setAvailableExercises] = useState([]);
   const [available_practice_plans, setAvailablePracticePlans] = useState([]);
   const [available_practice_types, setAvailablePracticeTypes] = useState([]);
@@ -38,15 +32,15 @@ const StudentManagementEnrollmentPage = ({route, navigation}) => {
     /*
     Pulls data required to load this page.
     */
-    const db = await getDBConnection();
-    const exercises = await getExercises(db);
-    setAvailableExercises(exercises);
-    const pp = await getPracticePlans(db);
-    setAvailablePracticePlans(pp);
-    const pt = await getPracticeTypes(db);
-    setAvailablePracticeTypes(pt);
-    const ee = await getExerciseEnrollmentByUser(db, user);
-    setExerciseEnrollment(ee);
+    // const db = await getDBConnection();
+    // const exercises = await getExercises(db);
+    // setAvailableExercises(exercises);
+    // const pp = await getPracticePlans(db);
+    // setAvailablePracticePlans(pp);
+    // const pt = await getPracticeTypes(db);
+    // setAvailablePracticeTypes(pt);
+    // const ee = await getExerciseEnrollmentByUser(db, user);
+    // setExerciseEnrollment(ee);
   }, []);
   
   const getExerciseList = () => {
@@ -56,57 +50,15 @@ const StudentManagementEnrollmentPage = ({route, navigation}) => {
       - practice_plan_type
     */
    const exercises = [];
-    for (let index = 0; index < available_exercises.length; index++) {
-      if (isStudentEnrolledInExercise(available_exercises[index]) == true){
-        var practice_plan = getPracticePlanByExerciseId(available_exercises[index]);
-        available_exercises[index].practice_plan_name = practice_plan.name;
-        available_exercises[index].practice_plan_type = getPracticeTypeNameByPracticePlanId(practice_plan);
-        exercises.push(available_exercises[index]);
-      }
-    }
+    // for (let index = 0; index < available_exercises.length; index++) {
+    //   if (isStudentEnrolledInExercise(available_exercises[index]) == true){
+    //     var practice_plan = getPracticePlanByExerciseId(available_exercises[index]);
+    //     available_exercises[index].practice_plan_name = practice_plan.name;
+    //     available_exercises[index].practice_plan_type = getPracticeTypeNameByPracticePlanId(practice_plan);
+    //     exercises.push(available_exercises[index]);
+    //   }
+    // }
     return exercises;
-  }
-
-  const getPracticePlanByExerciseId = (exercise) => {
-    /*
-    Given an Exercise, returns the Practice Plan Object
-    */
-    var n = NaN;
-    available_practice_plans.forEach(pp => {
-      if (pp.id == exercise.practice_plan_id){
-        n = pp;
-        return false; // BREAK
-      }
-    });
-    return n;
-  }
-
-  const getPracticeTypeNameByPracticePlanId = (practice_plan) => {
-    /*
-    Given a PracticePlan, returns the Practice Type Name
-    */
-    var n = '';
-    available_practice_types.forEach(pt => {
-      if (pt.id == practice_plan.practice_type_id){
-        n = pt.sub_type == "" ? pt.name : pt.name + ": " + pt.sub_type
-        return false; // BREAK
-      }
-    });
-    return n;
-  }
-
-  const isStudentEnrolledInExercise = (exercise) => {
-    /*
-    Checks if the Student on this page is enrolled to the
-    exercise provided as a parameter.
-    */
-   var response = false;
-    exercise_entrollment.forEach(ee => {
-      if (ee.exercise_id == exercise.id){
-        response = true;
-      }
-    });
-    return response;
   }
 
   const navigateToRowSelect = (item) => {

@@ -3,43 +3,47 @@ import { View, StyleSheet } from 'react-native'
 import FormTextInput from '../../../components/form/FormTextInput'
 import FormButton from '../../../components/form/FormButton'
 import FormSelectInput from '../../../components/form/FormSelectInput'
-import { getDBConnection, deletePracticePlanRow, updatePracticePlanRow } from "../../../services/database";
+import { auth, firestore } from '../../../../firebase';
 
 
 const UpdateOrDeletePracticePlanForm = ({route, navigation}) => {
+   
+    const user = auth.currentUser;
 
-    const [practicePlanName, setPracticePlanName] = useState(route.params.name);
-    const [practicePlanDurationDays, setPracticePlanDurationDays] = useState(route.params.duration_days.toString());
-    const [practicePlanType, setPracticePlanType] = useState('');
+    const [name, setName] = useState(route.params.practice_plan.name);
+    const [durationDays, setDurationDays] = useState(route.params.practice_plan.duration_days.toString());
+    const [practicePlanTypeDocID, setPracticePlanTypeDocID] = useState('');
 
-    const getSelectOptions = () => {
+    const generateSelectOptions = () => {
         /*
         Return a list of Practice Plan Type(s) for the SelectList Dropdown.
         This option takes as input a list of dict such as [{'key': '', 'value': ''} ...]
         */
         const types = [];
         route.params.availablePracticePlanTypes.forEach(dict => types.push({
-            'key': dict.id,
+            'key': dict.key,
             'value': dict.sub_type == "" ? dict.name : dict.name + ": " + dict.sub_type
         }));
         return types;
     }
 
-    const onDeletePressed = async () => {
+    const onDeletePressed = () => {
         /*
         Function that implements the DELETE functionality.
         */
-        const practice_plan = {
-            'id': route.params.id,
-            'name': practicePlanName,
-            'duration_days': Number(practicePlanDurationDays.trim()),
-            'code': route.params.code,
-            'practice_type_id': practicePlanType,
-            'user_uid': route.params.user_uid,
-        };
-        const db = await getDBConnection();
-        await deletePracticePlanRow(db, practice_plan);
-        navigation.navigate('Practice Plans');
+        firestoreDelete();  
+    }
+
+    const firestoreDelete = () => {
+        /*
+        Function that implements the DELETE functionality.
+        */
+        firestore.collection('practice_plans')
+        .doc(route.params.practice_plan.key)
+        .delete()
+        .then(() => {
+            navigation.navigate('Practice Plans');
+        });
     }
 
     const onUpdatePressed = async () => {
@@ -49,52 +53,52 @@ const UpdateOrDeletePracticePlanForm = ({route, navigation}) => {
             2. Makes DB call to update the Practice Plan
             3. Redirects back to Parent page
         */
-        if (validationEmptyValues() == false) {
+        if (validateEmptyValues() == false) {
             alert('Please fill all fields!');
-        } else if (validationDurationIsNumber() == false) {
+        } else if (validateDurationIsNumber() == false) {
             alert('Durations (days) must be a number!');
         } else {
-            await updatePracticePlan();
-            navigation.navigate('Practice Plans');
+            firestoreUpdate();
         }
     }
 
-    const validationEmptyValues= () => {
+    const validateEmptyValues= () => {
         /*
         Checks if any of the inputs are empty (ie = '').
         */
-        if (practicePlanName.trim() == "") {
+        if (name.trim() == "") {
             return false;
-        } else if (practicePlanDurationDays.trim() == "") {
+        } else if (durationDays.trim() == "") {
             return false;
-        }else if (practicePlanType.toString().trim() == "") {
+        }else if (practicePlanTypeDocID.trim() == "") {
             return false;
         } else {
             return true;
         }
     }
 
-    const validationDurationIsNumber = () => {
+    const validateDurationIsNumber = () => {
         /*
         Checks that Durations (days) is numeric.
         */
-        return !isNaN(Number(practicePlanDurationDays.trim()));
+        return !isNaN(Number(durationDays.trim()));
     }
 
-    const updatePracticePlan = async () => {
+    const firestoreUpdate = () => {
         /*
-        Calls a database function to create a new Practice Plan.
+        Calls a database function to UPDATE a Practice Plan.
         */
-       const practice_plan = {
-            'id': route.params.id,
-            'name': practicePlanName,
-            'duration_days': Number(practicePlanDurationDays.trim()),
-            'code': route.params.code,
-            'practice_type_id': practicePlanType,
-            'user_uid': route.params.user_uid,
-       };
-       const db = await getDBConnection();
-       await updatePracticePlanRow(db, practice_plan);
+        firestore.collection('practice_plans')
+        .doc(route.params.practice_plan.key)
+        .update({
+            user_uid: user.uid,
+            name: name,
+            duration_days: Number(durationDays.trim()),
+            code: route.params.practice_plan.code,
+            practice_type_doc: practicePlanTypeDocID,
+        }).then(()=>{
+            navigation.navigate('Practice Plans');
+        });
     }
 
     const setPracticePlanCode= () => {
@@ -108,22 +112,22 @@ const UpdateOrDeletePracticePlanForm = ({route, navigation}) => {
         <View style={styles.container}>
             <FormTextInput 
             fieldName="Name"
-            value={practicePlanName} 
-            setValue={setPracticePlanName} />
+            value={name} 
+            setValue={setName} />
             <FormTextInput 
             fieldName="Duration (days)"
-            value={practicePlanDurationDays} 
-            setValue={setPracticePlanDurationDays} />
+            value={durationDays} 
+            setValue={setDurationDays} />
             <FormTextInput 
             fieldName="Code (used by student to register)"
-            value={route.params.code} 
+            value={route.params.practice_plan.code} 
             setValue={(setPracticePlanCode)}
             editable={false} />
             <FormSelectInput 
             fieldName="Type"
             defaultOption={route.params.practice_type} 
-            setValue={setPracticePlanType}
-            options={getSelectOptions()} />
+            setValue={setPracticePlanTypeDocID}
+            options={generateSelectOptions()} />
             <FormButton 
             text="Update"
             onPress={onUpdatePressed} />

@@ -13,7 +13,7 @@ const CreatePracticePlanForm = ({route, navigation}) => {
     const [name, setName] = useState('');
     const [durationDays, setDurationDays] = useState('');
     const [code, setCode] = useState('');
-    const [practicePlanTypeDocID, setPracticePlanTypeDocID] = useState(''); // This will be the Numerical ID as a String
+    const [practicePlanTypeDocID, setPracticePlanTypeDocID] = useState('');
 
     const getSelectOptions = () => {
         /*
@@ -35,19 +35,15 @@ const CreatePracticePlanForm = ({route, navigation}) => {
             2. Makes DB call to create the Practice Plan
             3. Redirects back to Parent page
         */
-        if (validationEmptyValues() == false) {
+        if (validateEmptyValues() == false) {
             alert('Please fill all fields!');
-        } else if (validationDurationIsNumber() == false) {
+        } else if (validateDurationIsNumber() == false) {
             alert('Durations (days) must be a number!');
-        } else if (await validationPPCode() == false) {
-            alert('Practice Plan Code already in use! Try another one.');
-        } else {
-            createPracticePlan();
-            navigation.navigate('Practice Plans');
-        }
+        } 
+        firestoreValidateCodeIsUnique();
     }
 
-    const validationEmptyValues= () => {
+    const validateEmptyValues= () => {
         /*
         Checks if any of the inputs are empty (ie = '').
         */
@@ -64,32 +60,47 @@ const CreatePracticePlanForm = ({route, navigation}) => {
         }
     }
 
-    const validationDurationIsNumber = () => {
+    const validateDurationIsNumber = () => {
         /*
         Checks that Durations (days) is numeric.
         */
         return !isNaN(Number(durationDays.trim()));
     }
 
-    const validationPPCode = async () => {
-        /*
-        Checks that the Practice Plan Code is unique.
-        */
-        let ppRef = firestore.collection('practice_plans');
-        let ptStore = await ppRef.where('code', '==', code).get();
-        return ptStore.docs.length == 0;
+    const firestoreValidateCodeIsUnique = () => {
+        firestore.collection('practice_plans')
+        .where('code', '==', code.trim())
+        .limit(1)
+        .get()
+        .then( querySnapshot => {
+            const data = [];
+            querySnapshot.forEach(documentSnapshot => {
+                data.push({
+                    ...documentSnapshot.data(),
+                    key: documentSnapshot.id,
+                });
+            });
+            if (data.length > 0) {
+                alert('Practice Plan Code already in use! Try another one.');
+            } else {
+                firestoreCreate();
+            }
+        });
     }
 
-    const createPracticePlan = async () => {
+    const firestoreCreate = () => {
         /*
         Calls a database function to create a new Practice Plan.
         */
-        await firestore.collection('practice_plans').add({
+        firestore.collection('practice_plans')
+        .add({
             user_uid: user.uid,
             name: name,
             duration_days: Number(durationDays.trim()),
             code: code,
             practice_type_doc: practicePlanTypeDocID,
+        }).then(()=>{
+            navigation.navigate('Practice Plans');
         });
     }
 

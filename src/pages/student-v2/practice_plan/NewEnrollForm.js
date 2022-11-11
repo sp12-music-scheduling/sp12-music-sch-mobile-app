@@ -2,55 +2,75 @@ import React, { useState } from 'react'
 import { View, StyleSheet } from 'react-native'
 import FormTextInput from '../../../components/form/FormTextInput'
 import FormButton from '../../../components/form/FormButton'
-import { getDBConnection, getPracticePlanByCode, insertPracticePlanEnrollment} from "../../../services/database";
-import { auth } from '../../../../firebase';
+import { auth, firestore } from '../../../../firebase';
 
 
 const NewEnrollForm = ({navigation}) => {
 
     const user = auth.currentUser;
-
     const [code, setCode] = useState('');
 
-    const onCreatePressed = async () => {
+    const onCreatePressed = () => {
+        firebaseValidateCode();
+    }
+    
+    const firebaseValidateCode = () => {
         /*
-        Function that action(s) the CREATE functionality.
-            1. Performs validations
-            2. Makes DB call to Enroll User to Practice Plan
-            3. Redirects back to Parent page
         */
-        if (await validationPPCodeExists() == false) {
-            alert('Practice Plan Code does not exist!');
-        } else {
-            await enrollUserToPracticePlan();
+        firestore.collection('practice_plans')
+        .where('code', '==', code.trim())
+        .limit(1)
+        .get()
+        .then( querySnapshot => {
+            const data = [];
+            querySnapshot.forEach(documentSnapshot => {
+                data.push({
+                    ...documentSnapshot.data(),
+                    key: documentSnapshot.id,
+                });
+            });
+            if (data.length == 0) {
+                alert('Practice Plan Code does not exist!');
+            } else {
+                firestoreCheckUserEnrollment(data[0].key);
+            }
+        });
+    }
+    
+    const firestoreCheckUserEnrollment = (practicePlanDocID) => {
+        /*
+        */
+        firestore.collection('practice_plan_enrollments')
+        .where('user_uid', '==', user.uid)
+        .where('practice_plan_doc', '==', practicePlanDocID)
+        .limit(1)
+        .get()
+        .then( querySnapshot => {
+            const data = [];
+            querySnapshot.forEach(documentSnapshot => {
+                data.push({
+                    ...documentSnapshot.data(),
+                    key: documentSnapshot.id,
+                });
+            });
+            if (data.length > 0) {
+                alert('Student already enrolled in Practice Plan!');
+            } else {
+                firestoreCreateEnrollment(practicePlanDocID);
+            }
+        });
+    }
+
+    const firestoreCreateEnrollment = (practicePlanDocID) => {
+        /*
+        */
+        firestore.collection('practice_plan_enrollments')
+        .add({
+            user_uid: user.uid,
+            practice_plan_doc: practicePlanDocID,
+        }).then( () => {
             navigation.navigate('Practice Plans');
-        }
-    }
-
-    const validationPPCodeExists = async () => {
-        /*
-        Checks that the Practice Plan Code is exists.
-        */
-        const db = await getDBConnection();
-        const pp = await getPracticePlanByCode(db, code.trim());
-        if (pp.length == 0){
-            return false;
-        } else {
-            return true;
-        }
-    }
-
-    const enrollUserToPracticePlan = async () => {
-        /*
-        Calls a database function to create a new Practice Plan.
-        */
-        const db = await getDBConnection();
-        const pp = await getPracticePlanByCode(db, code.trim());
-        const ppe = {
-            'practice_plan_id': pp[0].id,
-            'user_uid': user.uid
-        };
-        await insertPracticePlanEnrollment(db, ppe);
+        });
     }
 
     return (
