@@ -31,6 +31,8 @@ import UpdateEnrollmentForm from "../../pages/student-v2/practice_plan/UpdateEnr
 
 import StudentExerciseHomePage from "../../pages/student-v2/exercise/StudentExerciseHomePage";
 
+import UserSettingsPage from "../../pages/shared/UserSettingsPage";
+
 const Stack = createStackNavigator();
 
 const screenOptionStyle = {
@@ -105,6 +107,14 @@ const StudentMainStackNavigator = () => {
   );
 }
 
+const UserSettingsStackNavigator = () => {
+  return (
+    <Stack.Navigator screenOptions={screenOptionStyle}>
+      <Stack.Screen name="User Settings" component={UserSettingsPage} />
+    </Stack.Navigator>
+  );
+}
+
 export { 
   LoginStackNavigator,
   ProfessorMainStackNavigator, 
@@ -112,4 +122,5 @@ export {
   ProfessortManageStudentStackNavigator, 
   ProfessorManagePracticeTypeStackNavigator,
   StudentMainStackNavigator,
+  UserSettingsStackNavigator,
 };
