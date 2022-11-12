@@ -14,6 +14,7 @@ import ExerciseHomePage from '../../pages/teacher/exercise/ExerciseHomePage';
 import CreateExerciseForm from '../../pages/teacher/exercise/CreateExerciseForm';
 import UpdateOrDeleteExerciseForm from "../../pages/teacher/exercise/UpdateOrDeleteExerciseForm";
 import ExerciseEnrollmentPage from "../../pages/teacher/exercise/ExerciseEnrollmentPage";
+import EnrollmentCalendarPage from "../../pages/teacher/exercise/EnrollmentCalendarPage";
 
 import PracticeTypeHomePage from "../../pages/teacher/practice_type/PracticeTypeHomePage";
 import CreatePracticeTypeForm from "../../pages/teacher/practice_type/CreatePracticeTypeForm";
@@ -69,6 +70,7 @@ const ProfessorMainStackNavigator = () => {
       <Stack.Screen name="Create Exercise" component={CreateExerciseForm} />
       <Stack.Screen name="Update or Delete Exercise" component={UpdateOrDeleteExerciseForm} />
       <Stack.Screen name="Exercise Entrollment" component={ExerciseEnrollmentPage} />
+      <Stack.Screen name="Select Start Date" component={EnrollmentCalendarPage} />
     </Stack.Navigator>
   );
 }

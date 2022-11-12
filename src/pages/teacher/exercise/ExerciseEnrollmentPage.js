@@ -103,18 +103,15 @@ const ExerciseEnrollmentPage = ({route, navigation}) => {
     Toggle Exercise Enrollment (Enroll/Unenroll)
     */
     if (item.is_enrolled == false){
-      // console.log('enroll', exercise.key, item.user_uid, );
-      firestore.collection('exercise_enrollments')
-      .add({
-          exercise_doc: exercise.key,
-          user_uid: item.user_uid
-      }).then( () => {
+      navigation.navigate('Select Start Date', {
+        'exercise_enrollment': item,
+        'exercise': exercise,
+        'practice_plan': practice_plan,
+      });
         setIsLoadingPart2(true);
         firestoreStudentsEnrolledToExercise();
-      });
     } else {
        const ee = exerciseEnrollment[item.user_uid];
-      //  console.log('unenroll', ee)
       firestore.collection('exercise_enrollments')
         .doc(ee.key)
         .delete().then( ()=>{
@@ -133,6 +130,7 @@ const ExerciseEnrollmentPage = ({route, navigation}) => {
       studentsEnrolledToPracticePlan[index].name = student_settings.display_name;
       studentsEnrolledToPracticePlan[index].email = student_settings.email;
       studentsEnrolledToPracticePlan[index].is_enrolled = exerciseEnrollment[student_settings.uid] != undefined && exerciseEnrollment[student_settings.uid].exercise_doc == exercise.key;
+      studentsEnrolledToPracticePlan[index].start_date = studentsEnrolledToPracticePlan[index].is_enrolled == true ? exerciseEnrollment[student_settings.uid].start_date : ''
     }
     return studentsEnrolledToPracticePlan;
   }
@@ -155,6 +153,7 @@ const ExerciseEnrollmentPage = ({route, navigation}) => {
                   <ExerciseEntrollmentRow 
                   name={item.name} 
                   email={item.email}
+                  startDate={item.start_date}
                   is_selected={item.is_enrolled}
                   />
               </TouchableOpacity> 
