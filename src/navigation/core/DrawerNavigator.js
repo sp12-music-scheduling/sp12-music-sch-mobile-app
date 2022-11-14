@@ -3,14 +3,8 @@ import { createDrawerNavigator } from "@react-navigation/drawer";
 import { DrawerContentScrollView, DrawerItemList, DrawerItem } from "@react-navigation/drawer";
 import ProfessorTabNavigator from './ProfessorTabNavigator';
 import StudentTabNavigator from './StudentTabNavigator';
-import { ProfessorManagePracticeTypeStackNavigator, LoginStackNavigator } from "./StackNavigator";
+import { ProfessorManagePracticeTypeStackNavigator, LoginStackNavigator, UserSettingsStackNavigator } from "./StackNavigator";
 import { auth } from '../../../firebase';
-
-import {
-  getDBConnection,
-  createTables,
-  clearDatabase,
- } from "../../services/database";
 
 function SignOutDrawerContent(props) {
   return (
@@ -33,16 +27,8 @@ const DrawerNavigator = () => {
 
   useEffect(() => {
     const subscriber = auth.onAuthStateChanged(onAuthStateChanged);
-    createDatabaseDefaults();
-
     return subscriber; // unsubscribe on unmount
   }, []);
-
-  const createDatabaseDefaults = async () => {
-    const db = await getDBConnection();
-    // await clearDatabase(db);
-    await createTables(db);
-  }
 
   const getUserViews = () => {
     if (user.email.endsWith('@kennesaw.edu')){
@@ -84,6 +70,10 @@ const DrawerNavigator = () => {
         name="Manage Practice Types" 
         component={ProfessorManagePracticeTypeStackNavigator} 
         />
+        <Drawer.Screen 
+        name="Settings" 
+        component={UserSettingsStackNavigator} 
+        />
       </Drawer.Navigator>
     );
   }
@@ -108,6 +98,10 @@ const DrawerNavigator = () => {
         name="Home" 
         component={StudentTabNavigator} 
         initialParams={{screen:'PracticePlanHome'}} />
+        <Drawer.Screen 
+        name="Settings" 
+        component={UserSettingsStackNavigator} 
+        />
         {/* <Drawer.Screen 
         name="Videos" 
         component={StudentTabNavigator} 

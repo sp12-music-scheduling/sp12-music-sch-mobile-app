@@ -14,6 +14,7 @@ import ExerciseHomePage from '../../pages/teacher/exercise/ExerciseHomePage';
 import CreateExerciseForm from '../../pages/teacher/exercise/CreateExerciseForm';
 import UpdateOrDeleteExerciseForm from "../../pages/teacher/exercise/UpdateOrDeleteExerciseForm";
 import ExerciseEnrollmentPage from "../../pages/teacher/exercise/ExerciseEnrollmentPage";
+import EnrollmentCalendarPage from "../../pages/teacher/exercise/EnrollmentCalendarPage";
 
 import PracticeTypeHomePage from "../../pages/teacher/practice_type/PracticeTypeHomePage";
 import CreatePracticeTypeForm from "../../pages/teacher/practice_type/CreatePracticeTypeForm";
@@ -30,6 +31,12 @@ import NewEnrollForm from "../../pages/student-v2/practice_plan/NewEnrollForm";
 import UpdateEnrollmentForm from "../../pages/student-v2/practice_plan/UpdateEnrollmentForm";
 
 import StudentExerciseHomePage from "../../pages/student-v2/exercise/StudentExerciseHomePage";
+
+import UserSettingsPage from "../../pages/shared/UserSettingsPage";
+
+import StudentVideosHomePage from "../../pages/student-v2/video/StudentVideosHomePage";
+
+import StudentProgressHomePage from "../../pages/student-v2/progress/StudentProgressHomePage";
 
 const Stack = createStackNavigator();
 
@@ -63,6 +70,7 @@ const ProfessorMainStackNavigator = () => {
       <Stack.Screen name="Create Exercise" component={CreateExerciseForm} />
       <Stack.Screen name="Update or Delete Exercise" component={UpdateOrDeleteExerciseForm} />
       <Stack.Screen name="Exercise Entrollment" component={ExerciseEnrollmentPage} />
+      <Stack.Screen name="Select Start Date" component={EnrollmentCalendarPage} />
     </Stack.Navigator>
   );
 }
@@ -105,6 +113,30 @@ const StudentMainStackNavigator = () => {
   );
 }
 
+const StudentVideosStackNavigator = () => {
+  return (
+    <Stack.Navigator screenOptions={screenOptionStyle}>
+      <Stack.Screen name="Videos" component={StudentVideosHomePage} />
+    </Stack.Navigator>
+  );
+}
+
+const StudentProgressStackNavigator = () => {
+  return (
+    <Stack.Navigator screenOptions={screenOptionStyle}>
+      <Stack.Screen name="Progress" component={StudentProgressHomePage} />
+    </Stack.Navigator>
+  );
+}
+
+const UserSettingsStackNavigator = () => {
+  return (
+    <Stack.Navigator screenOptions={screenOptionStyle}>
+      <Stack.Screen name="User Settings" component={UserSettingsPage} />
+    </Stack.Navigator>
+  );
+}
+
 export { 
   LoginStackNavigator,
   ProfessorMainStackNavigator, 
@@ -112,4 +144,7 @@ export {
   ProfessortManageStudentStackNavigator, 
   ProfessorManagePracticeTypeStackNavigator,
   StudentMainStackNavigator,
+  StudentVideosStackNavigator,
+  StudentProgressStackNavigator,
+  UserSettingsStackNavigator,
 };

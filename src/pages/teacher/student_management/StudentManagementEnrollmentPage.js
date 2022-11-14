@@ -1,9 +1,9 @@
 import React, { useState, useCallback, useEffect } from 'react'
-import { StyleSheet,View,FlatList,Dimensions } from 'react-native';
+import { StyleSheet,View,FlatList,Dimensions, ActivityIndicator } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
 import StudentManagementEnrollmentRow from '../../../components/teacher/StudentManagementEnrollmentRow';
-import { auth, firestore } from '../../../../firebase';
+import { firestore } from '../../../../firebase';
 
 
 const device_height = Dimensions.get('window').height
@@ -11,10 +11,16 @@ const device_height = Dimensions.get('window').height
 const StudentManagementEnrollmentPage = ({route, navigation}) => {
 
   const student = route.params.student;
-  const [available_exercises, setAvailableExercises] = useState([]);
-  const [available_practice_plans, setAvailablePracticePlans] = useState([]);
-  const [available_practice_types, setAvailablePracticeTypes] = useState([]);
-  const [exercise_entrollment, setExerciseEnrollment] = useState([]);
+  
+  const [exerciseLookup, setExerciseLookup] = useState({});
+  const [practiceTypeLookup, setPracticeTypeLookup] = useState({});
+  const [practicePlanLookup, setPracticePlanLookup] = useState({});
+  const [exerciseEntrollment, setExerciseEnrollment] = useState([]);
+
+  const [isLoadingPart1, setIsLoadingPart1] = useState(true);
+  const [isLoadingPart2, setIsLoadingPart2] = useState(true);
+  const [isLoadingPart3, setIsLoadingPart3] = useState(true);
+  const [isLoadingPart4, setIsLoadingPart4] = useState(true);
 
  
   useEffect(() => {
@@ -32,61 +38,139 @@ const StudentManagementEnrollmentPage = ({route, navigation}) => {
     /*
     Pulls data required to load this page.
     */
-    // const db = await getDBConnection();
-    // const exercises = await getExercises(db);
-    // setAvailableExercises(exercises);
-    // const pp = await getPracticePlans(db);
-    // setAvailablePracticePlans(pp);
-    // const pt = await getPracticeTypes(db);
-    // setAvailablePracticeTypes(pt);
-    // const ee = await getExerciseEnrollmentByUser(db, user);
-    // setExerciseEnrollment(ee);
+    firestoreGetExerciseEnrollment();
+    firestoreGetExercises();
+    firestoreGetPracticePlans();
+    firestoreGetPracticeTypes();
   }, []);
   
+  const firestoreGetExerciseEnrollment =  () => {
+    firestore.collection('exercise_enrollments')
+    .where('user_uid', '==', student.uid)
+    .get()
+    .then( querySnapshot => {
+        const data = [];
+        querySnapshot.forEach(documentSnapshot => {
+            data.push({
+                ...documentSnapshot.data(),
+                key: documentSnapshot.id,
+            });
+        });
+        setExerciseEnrollment(data);
+        setIsLoadingPart1(false);
+    });
+  }
+
+  const firestoreGetExercises =  () => {
+    firestore.collection('exercises')
+    .get()
+    .then( querySnapshot => {
+        const data = [];
+        querySnapshot.forEach(documentSnapshot => {
+            data.push({
+                ...documentSnapshot.data(),
+                key: documentSnapshot.id,
+            });
+        });
+        const lookup = {};
+        data.forEach(dict => {
+          lookup[dict.key] = dict;
+        });
+        setExerciseLookup(lookup);
+        setIsLoadingPart2(false);
+    });
+  }
+
+  const firestoreGetPracticeTypes =  () => {
+    firestore.collection('practice_types')
+    .get()
+    .then( querySnapshot => {
+        const data = [];
+        querySnapshot.forEach(documentSnapshot => {
+            data.push({
+                ...documentSnapshot.data(),
+                key: documentSnapshot.id,
+            });
+        });
+        const lookup = {};
+        data.forEach(dict => {
+          lookup[dict.key] = dict;
+        });
+        setPracticeTypeLookup(lookup);
+        setIsLoadingPart3(false);
+    });
+  }
+
+  const firestoreGetPracticePlans =  () => {
+    firestore.collection('practice_plans')
+    .get()
+    .then( querySnapshot => {
+        const data = [];
+        querySnapshot.forEach(documentSnapshot => {
+            data.push({
+                ...documentSnapshot.data(),
+                key: documentSnapshot.id,
+            });
+        });
+        const lookup = {};
+        data.forEach(dict => {
+          lookup[dict.key] = dict;
+        });
+        setPracticePlanLookup(lookup);
+        setIsLoadingPart4(false);
+    });
+  }
+
   const getExerciseList = () => {
-    /*
-    Returns a list of exercises, and injects the following:
-      - practice_plan_name
-      - practice_plan_type
-    */
-   const exercises = [];
-    // for (let index = 0; index < available_exercises.length; index++) {
-    //   if (isStudentEnrolledInExercise(available_exercises[index]) == true){
-    //     var practice_plan = getPracticePlanByExerciseId(available_exercises[index]);
-    //     available_exercises[index].practice_plan_name = practice_plan.name;
-    //     available_exercises[index].practice_plan_type = getPracticeTypeNameByPracticePlanId(practice_plan);
-    //     exercises.push(available_exercises[index]);
-    //   }
-    // }
-    return exercises;
+   const data = [];
+   exerciseEntrollment.forEach(ee => {
+    const exercise = exerciseLookup[ee.exercise_doc];
+    const practice_plan = practicePlanLookup[exercise.practice_plan_doc]
+    const practice_type = practiceTypeLookup[practice_plan.practice_type_doc]
+    data.push({
+      'ee': ee,
+      'exercise': exercise,
+      'practice_plan': practice_plan,
+      'practice_type': practice_type,
+    })
+  })
+    return data;
   }
 
   const navigateToRowSelect = (item) => {
    /* RESERVED FOR POSSIBLE FUTURE USE */ 
   }
 
-  return (
-      <View style={styles.container}>
-        <View style={styles.sectionItems}>
-          <FlatList
-          data={getExerciseList()}
-          renderItem={({item}) =>
-              <TouchableOpacity 
-              onPress={navigateToRowSelect(item)}  >
-                  <StudentManagementEnrollmentRow 
-                  exercise_name={item.name}
-                  practice_plan_name={item.practice_plan_name}
-                  practice_plan_type={item.practice_plan_type}
-                  />
-              </TouchableOpacity> 
-            }
-            maintainVisibleContentPosition={{
-              minIndexForVisible: 0,
-            }}
-          />
+  if (isLoadingPart1 || isLoadingPart2 || isLoadingPart3 || isLoadingPart4){
+    return (
+    <View style={styles.container}>
+        <ActivityIndicator></ActivityIndicator>
+    </View>
+    );
+  } else {
+    return (
+        <View style={styles.container}>
+          <View style={styles.sectionItems}>
+            <FlatList
+            data={getExerciseList()}
+            renderItem={({item}) =>
+                <TouchableOpacity 
+                onPress={navigateToRowSelect(item)}  >
+                    <StudentManagementEnrollmentRow 
+                    exercise_name={item.exercise.name}
+                    practice_plan_name={item.practice_plan.name}
+                    practice_plan_type={item.practice_type.name}
+                    />
+                </TouchableOpacity> 
+              }
+              maintainVisibleContentPosition={{
+                minIndexForVisible: 0,
+              }}
+            />
+          </View>
         </View>
-      </View>
-  )
+    )
+  }
 };
 
 export default StudentManagementEnrollmentPage;

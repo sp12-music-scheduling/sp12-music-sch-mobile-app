@@ -3,8 +3,8 @@ import { StyleSheet, View, Image } from 'react-native';
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { 
   StudentMainStackNavigator, 
-  ProfessorVideosStackNavigator, 
-  ProfessortManageStudentStackNavigator 
+  StudentVideosStackNavigator, 
+  StudentProgressStackNavigator 
 } from "./StackNavigator";
 
 const Tab = createBottomTabNavigator();
@@ -30,8 +30,8 @@ const BottomTabNavigator = () => {
       }}
     >
       <Tab.Screen 
-        name="StudentManagement" 
-        component={ProfessortManageStudentStackNavigator} 
+        name="StudentProgress" 
+        component={StudentProgressStackNavigator} 
         options={{
           tabBarIcon: ({focused}) => (
               <View
@@ -77,7 +77,7 @@ const BottomTabNavigator = () => {
       />
       <Tab.Screen 
         name="Video" 
-        component={ProfessorVideosStackNavigator} 
+        component={StudentVideosStackNavigator} 
         options={{
           tabBarIcon: ({focused}) => (
               <View
