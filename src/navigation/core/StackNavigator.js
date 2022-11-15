@@ -30,7 +30,11 @@ import StudentPracticePlanHomePage from "../../pages/student-v2/practice_plan/St
 import NewEnrollForm from "../../pages/student-v2/practice_plan/NewEnrollForm";
 import UpdateEnrollmentForm from "../../pages/student-v2/practice_plan/UpdateEnrollmentForm";
 
+
 import StudentExerciseHomePage from "../../pages/student-v2/exercise/StudentExerciseHomePage";
+import WklyPracticePage from "../../pages/student-v2/exercise/WklyPracticePage";
+import DailyPracticePage from '../../pages/student-v2/exercise/DailyPractice'
+import CelebrationPage from '../../pages/student-v2/progress/CelebrationPage';
 
 import UserSettingsPage from "../../pages/shared/UserSettingsPage";
 
@@ -109,6 +113,8 @@ const StudentMainStackNavigator = () => {
       <Stack.Screen name="Enroll" component={NewEnrollForm} />
       <Stack.Screen name="Update Enrollment" component={UpdateEnrollmentForm} />
       <Stack.Screen name="Exercises" component={StudentExerciseHomePage} />
+      <Stack.Screen name="Weekly Practice" component={WklyPracticePage} />
+      <Stack.Screen name = "Daily Practice" component= {DailyPracticePage} />
     </Stack.Navigator>
   );
 }
@@ -125,10 +131,10 @@ const StudentProgressStackNavigator = () => {
   return (
     <Stack.Navigator screenOptions={screenOptionStyle}>
       <Stack.Screen name="Progress" component={StudentProgressHomePage} />
-    </Stack.Navigator>
+      <Stack.Screen name="Celebration Page" component={CelebrationPage} />
+     </Stack.Navigator>
   );
 }
-
 const UserSettingsStackNavigator = () => {
   return (
     <Stack.Navigator screenOptions={screenOptionStyle}>
@@ -146,5 +152,6 @@ export {
   StudentMainStackNavigator,
   StudentVideosStackNavigator,
   StudentProgressStackNavigator,
+  WklyPracticePage,
   UserSettingsStackNavigator,
 };
