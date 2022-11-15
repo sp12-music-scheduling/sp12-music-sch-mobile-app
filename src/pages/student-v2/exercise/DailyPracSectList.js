@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {StyleSheet, Text, View, SafeAreaView, SectionList, TouchableOpacity, Alert} from 'react-native';
+import {StyleSheet, Text, View, SafeAreaView, SectionList, TouchableOpacity, Linking} from 'react-native';
 import CustomStyles from './DailyPracticeStyles'
 import Roundbutton from './button-round'
 import {description, goalTempoNum, startTempoNum} from './DummyExerciseValues'
@@ -31,7 +31,7 @@ const Item = ({item}) => (
     {isValidLink(link)}
     <View style = {CustomStyles.content}>
       <Text style= {CustomStyles.ExerciseItems}>{item.videoLabel}</Text>
-      <Text style= {CustomStyles.ExerciseItems}>{item.videoLink} </Text>
+      <Text style={[CustomStyles.ExerciseItems, CustomStyles.YTlink]} onPress= {() => Linking.openURL(item.videoLink)}>{item.videoLink} </Text>
       <Text style= {CustomStyles.ExerciseItems}>{item.descLabel}</Text>
        <Text style= {CustomStyles.ExerciseItems}>{item.desc}</Text>
       <Text style= {CustomStyles.ExerciseItems}>{item.startTempoLabel}{item.startTempo}</Text>

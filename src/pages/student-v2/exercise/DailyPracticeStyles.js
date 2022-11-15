@@ -15,5 +15,9 @@ fontSize: 20,
 margin: 10,
 marginTop: 0
 },
+YTlink:{
+textDecoration: 'underline',
+color:'blue'
+}
 });
 export default custom_styles;
