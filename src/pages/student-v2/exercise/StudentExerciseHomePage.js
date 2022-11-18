@@ -79,14 +79,15 @@ const StudentExerciseHomePage = ({route, navigation}) => {
   }
 
   const navigateToRowSelect = (item) => {
-    // TODO
+    return () =>  navigation.push('Practice', {
+      'exercise': item,
+    });
   }
 
   const getExerciseList = () => {
     const data = [];
     exercises.forEach(exercise => {
       if (exercisesEntrollmentLookup[exercise.key] != undefined){
-        console.log(exercise);
         data.push(exercise);
       }
     })
