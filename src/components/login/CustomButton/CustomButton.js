@@ -36,6 +36,14 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
     },
 
+    container_QUARTARY : {
+        backgroundColor: '#1fc710',
+        width: '92%',
+        marginLeft: 15,
+        marginTop: 30,
+        borderRadius: 0,
+    },
+
     text: {
         fontWeight: 'bold',
         color: 'white',

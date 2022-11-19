@@ -3,8 +3,10 @@ import { createDrawerNavigator } from "@react-navigation/drawer";
 import { DrawerContentScrollView, DrawerItemList, DrawerItem } from "@react-navigation/drawer";
 import ProfessorTabNavigator from './ProfessorTabNavigator';
 import StudentTabNavigator from './StudentTabNavigator';
-import { ProfessorManagePracticeTypeStackNavigator, LoginStackNavigator, UserSettingsStackNavigator} from "./StackNavigator";
+import { ProfessorManagePracticeTypeStackNavigator, LoginStackNavigator, UserSettingsStackNavigator, PracticeHomePage} from "./StackNavigator";
 import { auth } from '../../../firebase';
+// import PracticeHomePage from "./StackNavigator";
+import StudentExerciseHomePage from "./StackNavigator";
 
 function SignOutDrawerContent(props) {
   return (
@@ -98,14 +100,15 @@ const DrawerNavigator = () => {
         name="Home" 
         component={StudentTabNavigator} 
         initialParams={{screen:'PracticePlanHome'}} />
-        {/* <Drawer.Screen
-         name="Weekly Practice"
-         component={WklyPracticePage}
-         /> */}
+        
         <Drawer.Screen 
         name="Settings" 
         component={UserSettingsStackNavigator} 
         />
+        {/* <Drawer.Screen
+         name="Practice"
+         component={PracticeHomePage}
+         />  */}
         {/* <Drawer.Screen 
         name="Videos" 
         component={StudentTabNavigator} 

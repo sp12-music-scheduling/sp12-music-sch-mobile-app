@@ -154,4 +154,6 @@ export {
   StudentVideosStackNavigator,
   StudentProgressStackNavigator,
   UserSettingsStackNavigator,
+  StudentExerciseHomePage,
+  PracticeHomePage
 };

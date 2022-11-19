@@ -1,8 +1,11 @@
 import React, { useState, useCallback, useEffect } from 'react'
 import { StyleSheet, View, FlatList, Dimensions, Text } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import YouTubePlayer from'react-native-youtube-iframe';
-import { auth } from '../../../../firebase';
+// import YouTubePlayer from'react-native-youtube-iframe';
+import { auth, firestore } from '../../../../firebase';
+import { ExpandableListView } from 'react-native-expandable-listview';
+import CustomButton from '../../../components/login/CustomButton';
+import { Alert } from 'react-native';
 
 // https://www.npmjs.com/package/react-native-expandable-listview
 
@@ -15,6 +18,43 @@ const PracticeHomePage = ({route, navigation}) => {
 
     const exercise = route.params.exercise;
     console.log(exercise);
+
+    const DROPDOWN_CONTENT = [
+      {
+        id: '1',
+        categoryName: 'Description',
+        subCategory: [
+          {
+            id: '2',
+            name: "This is the description"
+        }
+        ]
+      },
+      {
+        id: '3',
+        categoryName: 'Start Tempo',
+        subCategory: [
+          {
+            id: '4',
+            name: "60"
+        }
+        ]
+      },
+      {
+        id: '5',
+        categoryName: 'Goal Tempo',
+        subCategory: [
+          {
+            id: '6',
+            name: "120"
+        }
+        ]
+      }
+    ]
+
+    const onMarkAsDonePressed = () => {
+      Alert.alert('Exercise Complete!')
+    }
 
     const getYoutubeVideoID = (link) => {
         /**
@@ -38,6 +78,10 @@ const PracticeHomePage = ({route, navigation}) => {
         return videoLink.toString()
     }
 
+    function handleItemClick({index}) {
+      console.log(index);
+    }
+
     return (
         <View style={styles.container}>
             <Text style = {styles.DayTitle}>Day 1</Text>
@@ -51,7 +95,17 @@ const PracticeHomePage = ({route, navigation}) => {
                 />
                 </View> 
             <View style={styles.sectionItems}>
-
+              <ExpandableListView
+              data={DROPDOWN_CONTENT}
+              onItemClick={handleItemClick}
+              itemContainerStyle={{margin: 15, backgroundColor: '#C3AAAA'}}
+              itemLabelStyle={{color: 'white'}}
+              />
+              <CustomButton
+              text="Mark as Done"
+              type="QUARTARY"
+              onPress={onMarkAsDonePressed}
+              />
             </View>
         </View>
     )
