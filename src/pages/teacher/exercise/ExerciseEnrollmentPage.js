@@ -2,7 +2,7 @@ import React, { useState, useCallback, useEffect } from 'react'
 import { StyleSheet,View,FlatList,Dimensions,ActivityIndicator } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
-import ExerciseEntrollmentRow from '../../../components/teacher/ExerciseEntrollmentRow';
+import ExerciseEnrollmentRow from '../../../components/teacher/ExerciseEnrollmentRow';
 import { firestore } from '../../../../firebase';
 
 
@@ -150,7 +150,7 @@ const ExerciseEnrollmentPage = ({route, navigation}) => {
           renderItem={({item}) =>
               <TouchableOpacity 
               onPress={() => navigateToRowSelect(item)}  >
-                  <ExerciseEntrollmentRow 
+                  <ExerciseEnrollmentRow
                   name={item.name} 
                   email={item.email}
                   startDate={item.start_date}

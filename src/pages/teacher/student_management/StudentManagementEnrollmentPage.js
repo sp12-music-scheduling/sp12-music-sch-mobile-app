@@ -15,7 +15,7 @@ const StudentManagementEnrollmentPage = ({route, navigation}) => {
   const [exerciseLookup, setExerciseLookup] = useState({});
   const [practiceTypeLookup, setPracticeTypeLookup] = useState({});
   const [practicePlanLookup, setPracticePlanLookup] = useState({});
-  const [exerciseEntrollment, setExerciseEnrollment] = useState([]);
+  const [exerciseEnrollment, setExerciseEnrollment] = useState([]);
 
   const [isLoadingPart1, setIsLoadingPart1] = useState(true);
   const [isLoadingPart2, setIsLoadingPart2] = useState(true);
@@ -123,7 +123,7 @@ const StudentManagementEnrollmentPage = ({route, navigation}) => {
 
   const getExerciseList = () => {
    const data = [];
-   exerciseEntrollment.forEach(ee => {
+   exerciseEnrollment.forEach(ee => {
     const exercise = exerciseLookup[ee.exercise_doc];
     const practice_plan = practicePlanLookup[exercise.practice_plan_doc]
     const practice_type = practiceTypeLookup[practice_plan.practice_type_doc]

@@ -3,7 +3,7 @@ import { StyleSheet, Text, View, Dimensions, FlatList, ActivityIndicator } from 
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import SwitchSelector from 'react-native-switch-selector';
 
-import StudentRow from '../../../components/teacher/ExerciseEntrollmentRow';
+import StudentRow from '../../../components/teacher/ExerciseEnrollmentRow';
 import { auth, firestore } from '../../../../firebase';
 
 

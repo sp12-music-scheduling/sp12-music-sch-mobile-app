@@ -1,7 +1,7 @@
 import React from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 
-const ExerciseEntrollmentRow = ({name, email, is_selected = false, startDate = ''}) => {
+const ExerciseEnrollmentRow = ({name, email, is_selected = false, startDate = ''}) => {
 
     const withStartDate = () => {
        return ( 
@@ -57,4 +57,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default ExerciseEntrollmentRow;
+export default ExerciseEnrollmentRow;

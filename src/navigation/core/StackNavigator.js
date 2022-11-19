@@ -74,7 +74,7 @@ const ProfessorMainStackNavigator = () => {
       <Stack.Screen name="Exercises" component={ExerciseHomePage} />
       <Stack.Screen name="Create Exercise" component={CreateExerciseForm} />
       <Stack.Screen name="Update or Delete Exercise" component={UpdateOrDeleteExerciseForm} />
-      <Stack.Screen name="Exercise Entrollment" component={ExerciseEnrollmentPage} />
+      <Stack.Screen name="Exercise Enrollment" component={ExerciseEnrollmentPage} />
       <Stack.Screen name="Select Start Date" component={EnrollmentCalendarPage} />
     </Stack.Navigator>
   );

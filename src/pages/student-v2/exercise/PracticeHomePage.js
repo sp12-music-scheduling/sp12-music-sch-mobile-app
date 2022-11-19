@@ -1,13 +1,12 @@
 import React, { useState, useCallback, useEffect } from 'react'
-import { StyleSheet, View, FlatList, Dimensions, Text } from 'react-native';
+import { StyleSheet, View, FlatList, Dimensions, Text, SafeAreaView, ScrollView} from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-// import YouTubePlayer from'react-native-youtube-iframe';
+import YouTubePlayer from'react-native-youtube-iframe';
 import { auth, firestore } from '../../../../firebase';
 import { ExpandableListView } from 'react-native-expandable-listview';
 import CustomButton from '../../../components/login/CustomButton';
 import { Alert } from 'react-native';
 
-// https://www.npmjs.com/package/react-native-expandable-listview
 
 
 const DEVICE_HEIGHT = Dimensions.get('window').height
@@ -16,9 +15,9 @@ const PracticeHomePage = ({route, navigation}) => {
 
     const user = auth.currentUser;
 
-    const exercise = route.params.exercise;
-    console.log(exercise);
-
+//    const exercise = route.params.exercise;
+//    console.log(exercise);
+// TO DO Have to replace name key with exercise values
     const DROPDOWN_CONTENT = [
       {
         id: '1',
@@ -83,31 +82,34 @@ const PracticeHomePage = ({route, navigation}) => {
     }
 
     return (
-        <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
+
             <Text style = {styles.DayTitle}>Day 1</Text>
-            <Text style = {styles.ExerciseName}>{exercise.name}</Text>
+            <Text style = {styles.ExerciseName}>Exercise Name</Text>
+            {/* <Text style = {styles.ExerciseName}>exercise.name</Text> */}
             {/* <Text style={[styles.ExerciseItems, styles.YTlink]} onPress= {() => Linking.openURL(exercise.video_link)}>{exercise.video_link} </Text> */}
             <View style = {styles.videoplayer}>
                 <YouTubePlayer
                 play = {false}
                 height = {200}
-                videoId = {(getYoutubeVideoID(exercise.video_link))}
+                videoId = {(getYoutubeVideoID('https://youtu.be/MAlSjtxy5ak'))}
                 />
-                </View> 
-            <View style={styles.sectionItems}>
-              <ExpandableListView
+
+            <ExpandableListView
               data={DROPDOWN_CONTENT}
               onItemClick={handleItemClick}
-              itemContainerStyle={{margin: 15, backgroundColor: '#C3AAAA'}}
+              itemContainerStyle={{margin: 15, backgroundColor: '#C3AAAA', flex: 1}}
               itemLabelStyle={{color: 'white'}}
               />
-              <CustomButton
+             <View>
+            <CustomButton
               text="Mark as Done"
               type="QUARTARY"
               onPress={onMarkAsDonePressed}
               />
+              </View>
             </View>
-        </View>
+        </SafeAreaView>
     )
 };
 
@@ -115,10 +117,10 @@ export default PracticeHomePage;
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     backgroundColor: 'white',
     paddingTop: 20,
     paddingHorizontal: 20,
-    height: DEVICE_HEIGHT - 210
   },
   sectionItems: {
     marginTop: -30,    
@@ -133,7 +135,7 @@ const styles = StyleSheet.create({
     // textAlign: 'center',
     fontSize: 30,
     color: '#754747',
-    margin: 20,
+    margin: 10,
   },
 //   ExerciseItems:{
 //     fontSize: 20,
@@ -145,7 +147,6 @@ const styles = StyleSheet.create({
 //     color:'blue'
 //   },
   videoplayer:{
-    flex: 0.5,
-    // margin: 10
+
     },
 });

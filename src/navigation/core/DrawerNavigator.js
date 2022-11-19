@@ -108,7 +108,7 @@ const DrawerNavigator = () => {
         {/* <Drawer.Screen
          name="Practice"
          component={PracticeHomePage}
-         />  */}
+         /> */}
         {/* <Drawer.Screen 
         name="Videos" 
         component={StudentTabNavigator} 

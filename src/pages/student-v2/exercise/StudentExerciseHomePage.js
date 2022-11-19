@@ -15,7 +15,7 @@ const StudentExerciseHomePage = ({route, navigation}) => {
   const practice_plan_doc = route.params.practice_plan.practice_plan_doc;
 
   const [exercises, setExercises] = useState([]);
-  const [exercisesEntrollmentLookup, setExercisesEnrollmentLookup] = useState({});
+  const [exercisesEnrollmentLookup, setExercisesEnrollmentLookup] = useState({});
 
   const [isLoadingPart1, setIsLoadingPart1] = useState(true);
   const [isLoadingPart2, setIsLoadingPart2] = useState(true);
@@ -87,7 +87,7 @@ const StudentExerciseHomePage = ({route, navigation}) => {
   const getExerciseList = () => {
     const data = [];
     exercises.forEach(exercise => {
-      if (exercisesEntrollmentLookup[exercise.key] != undefined){
+      if (exercisesEnrollmentLookup[exercise.key] != undefined){
         data.push(exercise);
       }
     })

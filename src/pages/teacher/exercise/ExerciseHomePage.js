@@ -13,7 +13,7 @@ const ExerciseHomePage = ({route, navigation}) => {
 
   const practice_plan = route.params.practice_plan;
   const [exercises, setExercises] = useState([]);
-  const [exercisesEntrollment, setExercisesEnrollment] = useState([]);
+  const [exercisesEnrollment, setExercisesEnrollment] = useState([]);
 
   const [isLoadingPart1, setIsLoadingPart1] = useState(true);
   const [isLoadingPart2, setIsLoadingPart2] = useState(true);
@@ -110,7 +110,7 @@ const ExerciseHomePage = ({route, navigation}) => {
     Function to navigate to Student Enrollment of selected
     exercise.
     */
-    return () =>  navigation.push('Exercise Entrollment', {
+    return () =>  navigation.push('Exercise Enrollment', {
       'practice_plan': practice_plan,
       "exercise": item,
     });
@@ -128,7 +128,7 @@ const ExerciseHomePage = ({route, navigation}) => {
     Returns a list of available Exercises by Practife Plan
     */   
     var count = 0;
-    exercisesEntrollment.forEach(ee => {
+    exercisesEnrollment.forEach(ee => {
       if (ee.exercise_doc == item.key){
         count++;
       } 

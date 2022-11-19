@@ -26,7 +26,7 @@ const EnrollmentCalendarPage = ({route, navigation}) => {
             user_uid: exercise_enrollment.user_uid,
             start_date: day.dateString,
         }).then( () => {
-            navigation.push('Exercise Entrollment', {
+            navigation.push('Exercise Enrollment', {
                 'practice_plan': practice_plan,
                 "exercise": exercise,
               });
