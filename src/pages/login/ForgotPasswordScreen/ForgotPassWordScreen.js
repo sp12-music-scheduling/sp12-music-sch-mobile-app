@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
-import { View, Text, StyleSheet, useWindowDimensions } from 'react-native'
+import { View, Text, StyleSheet,SafeAreaView } from 'react-native'
 import CustomButton from '../../../components/login/CustomButton';
-import CustomInput from '../../../components/login/CustomInput';
+import FormTextInput from '../../../components/form/FormTextInput';
 import { useNavigation } from '@react-navigation/native';
 import { auth } from '../../../../firebase';
 
@@ -28,13 +28,13 @@ const ForgotPasswordScreen = () => {
     }
 
     return (
+        <SafeAreaView>
         <View style={styles.root}>
-            <Text styles={styles.title}>Enter username here to receive email with a password reset code</Text>
-
-            <CustomInput 
-             placeholder="Email" 
-             value={email} 
-             setValue={setEmail} />
+            
+            <FormTextInput 
+            fieldName="Email"
+            value={email} 
+            setValue={setEmail} />
 
              <CustomButton text="Send" onPress={onSendPressed} />
 
@@ -49,6 +49,7 @@ const ForgotPasswordScreen = () => {
              type="TERTIARY" />
 
         </View>
+        </SafeAreaView>
     )
 }
 
