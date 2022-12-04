@@ -26,22 +26,22 @@ import ConfirmEmailScreen from '../../pages/login/ConfirmEmailScreen';
 import ForgotPasswordScreen from '../../pages/login/ForgotPasswordScreen';
 import ResetPasswordScreen from '../../pages/login/ResetPasswordScreen';
 
-import StudentPracticePlanHomePage from "../../pages/student-v2/practice_plan/StudentPracticePlanHomePage";
-import NewEnrollForm from "../../pages/student-v2/practice_plan/NewEnrollForm";
-import UpdateEnrollmentForm from "../../pages/student-v2/practice_plan/UpdateEnrollmentForm";
+import StudentPracticePlanHomePage from "../../pages/student/practice_plan/StudentPracticePlanHomePage";
+import NewEnrollForm from "../../pages/student/practice_plan/NewEnrollForm";
+import UpdateEnrollmentForm from "../../pages/student/practice_plan/UpdateEnrollmentForm";
 
 
-import StudentExerciseHomePage from "../../pages/student-v2/exercise/StudentExerciseHomePage";
-import PracticeHomePage from "../../pages/student-v2/exercise/PracticeHomePage";
+import StudentExerciseHomePage from "../../pages/student/exercise/StudentExerciseHomePage";
+import PracticeHomePage from "../../pages/student/exercise/PracticeHomePage";
 // import WklyPracticePage from "../../pages/student-v2/exercise/WklyPracticePage";
 // import DailyPracticePage from '../../pages/student-v2/exercise/DailyPractice'
 // import CelebrationPage from '../../pages/student-v2/exercise/legacy/CelebrationPage';
 
 import UserSettingsPage from "../../pages/shared/UserSettingsPage";
 
-import StudentVideosHomePage from "../../pages/student-v2/video/StudentVideosHomePage";
+import StudentVideosHomePage from "../../pages/student/video/StudentVideosHomePage";
 
-import StudentProgressHomePage from "../../pages/student-v2/progress/StudentProgressHomePage";
+import StudentProgressHomePage from "../../pages/student/progress/StudentProgressHomePage";
 
 const Stack = createStackNavigator();
 
