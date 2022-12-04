@@ -15,7 +15,7 @@ const PracticeHomePage = ({route, navigation}) => {
 
     const user = auth.currentUser;
 
-//    const exercise = route.params.exercise;
+   const exercise = route.params.exercise;
 //    console.log(exercise);
 // TO DO Have to replace name key with exercise values
     const DROPDOWN_CONTENT = [
@@ -25,7 +25,7 @@ const PracticeHomePage = ({route, navigation}) => {
         subCategory: [
           {
             id: '2',
-            name: "This is the description"
+            name: exercise.descr
         }
         ]
       },
@@ -35,7 +35,7 @@ const PracticeHomePage = ({route, navigation}) => {
         subCategory: [
           {
             id: '4',
-            name: "60"
+            name: exercise.start_tempo.toString(),
         }
         ]
       },
@@ -45,7 +45,7 @@ const PracticeHomePage = ({route, navigation}) => {
         subCategory: [
           {
             id: '6',
-            name: "120"
+            name: exercise.goal_tempo.toString(),
         }
         ]
       }
@@ -92,7 +92,7 @@ const PracticeHomePage = ({route, navigation}) => {
                 <YouTubePlayer
                 play = {false}
                 height = {200}
-                videoId = {(getYoutubeVideoID('https://youtu.be/MAlSjtxy5ak'))}
+                videoId = {(getYoutubeVideoID(exercise.video_link))}
                 />
 
             <ExpandableListView
