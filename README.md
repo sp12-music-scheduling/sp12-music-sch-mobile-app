@@ -13,6 +13,7 @@ Visit the following [<u>link</u>](https://reactnative.dev/docs/environment-setup
 5. Once Metro successfully started, (you should see the Metro logo) open a new powershell window. <br/>
 
 ![](https://i.imgur.com/1Wi34kh.png)
+
 6. On the new powershell window, navigate to the directory where project is located.
 7. Run the command: npx react-native run-android.
 
